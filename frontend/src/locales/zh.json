@@ -1,0 +1,166 @@
+{
+  "nav": {
+    "markets": "市场",
+    "history": "历史",
+    "leaderboard": "排行榜",
+    "myBets": "我的投注",
+    "profile": "个人资料",
+    "admin": "管理员"
+  },
+  "wallet": {
+    "connect": "连接钱包",
+    "connecting": "连接中...",
+    "disconnect": "断开连接",
+    "wrongNetwork": "网络错误，请切换到Metadium网络。",
+    "switchNetwork": "切换网络",
+    "notInstalled": "未安装MetaMask",
+    "install": "安装MetaMask"
+  },
+  "markets": {
+    "title": "活跃市场",
+    "subtitle": "参与正在进行的预测市场",
+    "empty": "没有市场",
+    "emptyFiltered": "该分类暂无市场",
+    "count": "{{count}}个市场",
+    "sortLabel": "排序",
+    "searchPlaceholder": "搜索市场...",
+    "noSearchResults": "没有匹配\"{{query}}\"的市场",
+    "sortOptions": {
+      "deadline": "即将截止",
+      "pool": "奖池规模",
+      "recent": "最新",
+      "popular": "最热门"
+    }
+  },
+  "market": {
+    "totalPool": "总奖池",
+    "participants": "参与者",
+    "deadline": "截止时间",
+    "closed": "投注已截止",
+    "resolved": "已结算",
+    "voided": "已作废",
+    "yesOdds": "是的赔率",
+    "noOdds": "否的赔率",
+    "beFirst": "成为第一个投注者",
+    "poolChart": "奖池历史",
+    "noChartData": "暂无投注记录"
+  },
+  "betting": {
+    "yes": "是",
+    "no": "否",
+    "amount": "金额",
+    "potentialWinnings": "预期收益",
+    "confirm": "确认投注",
+    "cancel": "取消",
+    "sign": "签名并投注",
+    "processing": "处理中...",
+    "success": "投注成功！",
+    "insufficientBalance": "余额不足",
+    "minBet": "最低投注：{{amount}} META",
+    "maxBet": "最高投注：{{amount}} META"
+  },
+  "myBets": {
+    "title": "我的投注",
+    "subtitle": "参与的市场列表和结算记录",
+    "empty": "暂无投注记录",
+    "emptyClaimable": "没有可领取的奖励",
+    "goToMarkets": "浏览市场 →",
+    "tabs": {
+      "all": "全部",
+      "active": "进行中",
+      "resolved": "已结算",
+      "claimable": "可领取"
+    },
+    "direction": "方向",
+    "amount": "投注金额",
+    "timeLeft": "剩余时间",
+    "expectedPayout": "预期收益",
+    "loss": "亏损",
+    "claim": "领取奖励",
+    "refund": "退款",
+    "claiming": "处理中...",
+    "claimed": "已领取！",
+    "status": {
+      "active": "进行中",
+      "closed": "已截止",
+      "resolved": "已结算",
+      "voided": "已作废",
+      "paused": "暂停"
+    },
+    "result": {
+      "win": "胜",
+      "loss": "负",
+      "void": "作废",
+      "claimed": "已领取",
+      "pending": "待定"
+    }
+  },
+  "profile": {
+    "title": "个人资料",
+    "subtitle": "您的预测历史和收益统计",
+    "connectPrompt": "请连接钱包查看个人资料",
+    "stats": {
+      "totalBets": "总投注次数",
+      "totalWagered": "总投注金额",
+      "totalWinnings": "总收益",
+      "netProfit": "净利润",
+      "winRate": "胜率",
+      "avgBet": "平均投注",
+      "maxWin": "最高单笔收益",
+      "wins": "胜",
+      "losses": "负",
+      "voids": "作废"
+    },
+    "history": {
+      "title": "投注历史",
+      "empty": "暂无投注历史",
+      "filters": {
+        "all": "全部",
+        "win": "胜",
+        "loss": "负",
+        "void": "作废"
+      }
+    }
+  },
+  "leaderboard": {
+    "title": "排行榜",
+    "subtitle": "按收益率排名的顶级预测者",
+    "loading": "加载排名中...",
+    "empty": "暂无数据",
+    "rank": "排名",
+    "address": "地址",
+    "winRate": "胜率",
+    "totalProfit": "总收益",
+    "markets": "市场数",
+    "tabs": {
+      "profit": "按收益",
+      "winrate": "按胜率"
+    },
+    "you": "我"
+  },
+  "common": {
+    "loading": "加载中...",
+    "error": "出现错误",
+    "retry": "重试",
+    "back": "返回",
+    "yes": "是",
+    "no": "否",
+    "meta": "META",
+    "currency": {
+      "usd": "USD",
+      "krw": "KRW",
+      "cny": "CNY",
+      "jpy": "JPY"
+    }
+  },
+  "history": {
+    "title": "市场历史",
+    "subtitle": "已关闭的市场档案",
+    "empty": "暂无历史市场",
+    "filters": {
+      "all": "全部",
+      "resolved": "已结算",
+      "voided": "已作废"
+    }
+  }
+}

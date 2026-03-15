@@ -1,0 +1,166 @@
+{
+  "nav": {
+    "markets": "마켓",
+    "history": "히스토리",
+    "leaderboard": "리더보드",
+    "myBets": "내 베팅",
+    "profile": "프로필",
+    "admin": "관리자"
+  },
+  "wallet": {
+    "connect": "지갑 연결",
+    "connecting": "연결 중...",
+    "disconnect": "연결 해제",
+    "wrongNetwork": "잘못된 네트워크입니다. Metadium으로 전환해 주세요.",
+    "switchNetwork": "네트워크 전환",
+    "notInstalled": "MetaMask가 설치되지 않았습니다",
+    "install": "MetaMask 설치"
+  },
+  "markets": {
+    "title": "활성 마켓",
+    "subtitle": "진행 중인 예측 마켓에 참여하세요",
+    "empty": "마켓이 없습니다",
+    "emptyFiltered": "해당 카테고리에 마켓이 없습니다",
+    "count": "{{count}}개 마켓",
+    "sortLabel": "정렬",
+    "searchPlaceholder": "마켓 검색...",
+    "noSearchResults": "\"{{query}}\"에 해당하는 마켓이 없습니다",
+    "sortOptions": {
+      "deadline": "마감 임박순",
+      "pool": "풀 규모순",
+      "recent": "최신순",
+      "popular": "인기순"
+    }
+  },
+  "market": {
+    "totalPool": "총 풀",
+    "participants": "참여자",
+    "deadline": "마감",
+    "closed": "베팅 마감",
+    "resolved": "결과 확정",
+    "voided": "무효 처리됨",
+    "yesOdds": "YES 배당률",
+    "noOdds": "NO 배당률",
+    "beFirst": "첫 번째 베터가 되세요",
+    "poolChart": "풀 변화",
+    "noChartData": "아직 베팅 내역이 없습니다"
+  },
+  "betting": {
+    "yes": "YES",
+    "no": "NO",
+    "amount": "금액",
+    "potentialWinnings": "예상 수익",
+    "confirm": "베팅 확인",
+    "cancel": "취소",
+    "sign": "서명 & 베팅",
+    "processing": "처리 중...",
+    "success": "베팅이 완료되었습니다!",
+    "insufficientBalance": "잔액 부족",
+    "minBet": "최소 베팅: {{amount}} META",
+    "maxBet": "최대 베팅: {{amount}} META"
+  },
+  "myBets": {
+    "title": "내 베팅",
+    "subtitle": "참여한 마켓 목록과 정산 내역",
+    "empty": "베팅 내역이 없습니다",
+    "emptyClaimable": "클레임 가능한 베팅이 없습니다",
+    "goToMarkets": "마켓 참여하기 →",
+    "tabs": {
+      "all": "전체",
+      "active": "진행중",
+      "resolved": "완료",
+      "claimable": "클레임 가능"
+    },
+    "direction": "방향",
+    "amount": "베팅 금액",
+    "timeLeft": "마감까지",
+    "expectedPayout": "예상 수령액",
+    "loss": "손실",
+    "claim": "보상 클레임",
+    "refund": "원금 환불",
+    "claiming": "처리 중...",
+    "claimed": "클레임 완료!",
+    "status": {
+      "active": "진행중",
+      "closed": "마감",
+      "resolved": "확정",
+      "voided": "무효",
+      "paused": "일시중단"
+    },
+    "result": {
+      "win": "승리",
+      "loss": "패배",
+      "void": "무효",
+      "claimed": "수령완료",
+      "pending": "대기중"
+    }
+  },
+  "profile": {
+    "title": "프로필",
+    "subtitle": "나의 예측 이력 및 수익률 통계",
+    "connectPrompt": "프로필을 보려면 지갑을 연결해 주세요",
+    "stats": {
+      "totalBets": "총 베팅 횟수",
+      "totalWagered": "총 베팅 금액",
+      "totalWinnings": "총 수익",
+      "netProfit": "순이익",
+      "winRate": "승률",
+      "avgBet": "평균 베팅",
+      "maxWin": "최대 단일 수익",
+      "wins": "승리",
+      "losses": "패배",
+      "voids": "무효"
+    },
+    "history": {
+      "title": "참여 이력",
+      "empty": "아직 베팅 이력이 없습니다",
+      "filters": {
+        "all": "전체",
+        "win": "승리",
+        "loss": "패배",
+        "void": "무효"
+      }
+    }
+  },
+  "leaderboard": {
+    "title": "리더보드",
+    "subtitle": "수익률 기준 상위 예측자 랭킹",
+    "loading": "랭킹 로딩 중...",
+    "empty": "아직 데이터가 없습니다",
+    "rank": "순위",
+    "address": "주소",
+    "winRate": "승률",
+    "totalProfit": "총 수익",
+    "markets": "마켓 수",
+    "tabs": {
+      "profit": "수익률 기준",
+      "winrate": "정확도 기준"
+    },
+    "you": "나"
+  },
+  "common": {
+    "loading": "로딩 중...",
+    "error": "오류가 발생했습니다",
+    "retry": "다시 시도",
+    "back": "뒤로",
+    "yes": "YES",
+    "no": "NO",
+    "meta": "META",
+    "currency": {
+      "usd": "USD",
+      "krw": "KRW",
+      "cny": "CNY",
+      "jpy": "JPY"
+    }
+  },
+  "history": {
+    "title": "마켓 히스토리",
+    "subtitle": "종료된 마켓 아카이브",
+    "empty": "종료된 마켓이 없습니다",
+    "filters": {
+      "all": "전체",
+      "resolved": "결과 확정",
+      "voided": "무효"
+    }
+  }
+}

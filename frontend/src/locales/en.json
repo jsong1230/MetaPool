@@ -1,0 +1,166 @@
+{
+  "nav": {
+    "markets": "Markets",
+    "history": "History",
+    "leaderboard": "Leaderboard",
+    "myBets": "My Bets",
+    "profile": "Profile",
+    "admin": "Admin"
+  },
+  "wallet": {
+    "connect": "Connect Wallet",
+    "connecting": "Connecting...",
+    "disconnect": "Disconnect",
+    "wrongNetwork": "Wrong network. Please switch to Metadium.",
+    "switchNetwork": "Switch Network",
+    "notInstalled": "MetaMask not installed",
+    "install": "Install MetaMask"
+  },
+  "markets": {
+    "title": "Active Markets",
+    "subtitle": "Participate in ongoing prediction markets",
+    "empty": "No markets found",
+    "emptyFiltered": "No markets in this category",
+    "count": "{{count}} markets",
+    "sortLabel": "Sort",
+    "searchPlaceholder": "Search markets...",
+    "noSearchResults": "No markets match \"{{query}}\"",
+    "sortOptions": {
+      "deadline": "Closing Soon",
+      "pool": "Pool Size",
+      "recent": "Latest",
+      "popular": "Popular"
+    }
+  },
+  "market": {
+    "totalPool": "Total Pool",
+    "participants": "Participants",
+    "deadline": "Deadline",
+    "closed": "Betting Closed",
+    "resolved": "Resolved",
+    "voided": "Voided",
+    "yesOdds": "YES Odds",
+    "noOdds": "NO Odds",
+    "beFirst": "Be the first bettor",
+    "poolChart": "Pool History",
+    "noChartData": "No betting history yet"
+  },
+  "betting": {
+    "yes": "YES",
+    "no": "NO",
+    "amount": "Amount",
+    "potentialWinnings": "Potential Winnings",
+    "confirm": "Confirm Bet",
+    "cancel": "Cancel",
+    "sign": "Sign & Bet",
+    "processing": "Processing...",
+    "success": "Bet placed successfully!",
+    "insufficientBalance": "Insufficient balance",
+    "minBet": "Minimum bet: {{amount}} META",
+    "maxBet": "Maximum bet: {{amount}} META"
+  },
+  "myBets": {
+    "title": "My Bets",
+    "subtitle": "Your participated markets and settlement history",
+    "empty": "No bets found",
+    "emptyClaimable": "No claimable bets",
+    "goToMarkets": "Browse Markets →",
+    "tabs": {
+      "all": "All",
+      "active": "Active",
+      "resolved": "Settled",
+      "claimable": "Claimable"
+    },
+    "direction": "Direction",
+    "amount": "Amount",
+    "timeLeft": "Time Left",
+    "expectedPayout": "Expected Payout",
+    "loss": "Loss",
+    "claim": "Claim Winnings",
+    "refund": "Get Refund",
+    "claiming": "Processing...",
+    "claimed": "Claimed!",
+    "status": {
+      "active": "Active",
+      "closed": "Closed",
+      "resolved": "Resolved",
+      "voided": "Voided",
+      "paused": "Paused"
+    },
+    "result": {
+      "win": "WIN",
+      "loss": "LOSS",
+      "void": "VOID",
+      "claimed": "CLAIMED",
+      "pending": "PENDING"
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "subtitle": "Your prediction history and performance stats",
+    "connectPrompt": "Connect wallet to view your profile",
+    "stats": {
+      "totalBets": "Total Bets",
+      "totalWagered": "Total Wagered",
+      "totalWinnings": "Total Winnings",
+      "netProfit": "Net Profit",
+      "winRate": "Win Rate",
+      "avgBet": "Avg Bet",
+      "maxWin": "Best Win",
+      "wins": "Wins",
+      "losses": "Losses",
+      "voids": "Voids"
+    },
+    "history": {
+      "title": "Betting History",
+      "empty": "No betting history yet",
+      "filters": {
+        "all": "All",
+        "win": "Wins",
+        "loss": "Losses",
+        "void": "Voided"
+      }
+    }
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "subtitle": "Top predictors ranked by performance",
+    "loading": "Loading rankings...",
+    "empty": "No data available yet",
+    "rank": "Rank",
+    "address": "Address",
+    "winRate": "Win Rate",
+    "totalProfit": "Total Profit",
+    "markets": "Markets",
+    "tabs": {
+      "profit": "By Profit",
+      "winrate": "By Win Rate"
+    },
+    "you": "You"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Retry",
+    "back": "Back",
+    "yes": "YES",
+    "no": "NO",
+    "meta": "META",
+    "currency": {
+      "usd": "USD",
+      "krw": "KRW",
+      "cny": "CNY",
+      "jpy": "JPY"
+    }
+  },
+  "history": {
+    "title": "Market History",
+    "subtitle": "Closed and resolved markets",
+    "empty": "No historical markets",
+    "filters": {
+      "all": "All",
+      "resolved": "Resolved",
+      "voided": "Voided"
+    }
+  }
+}

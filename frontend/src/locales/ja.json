@@ -1,0 +1,166 @@
+{
+  "nav": {
+    "markets": "マーケット",
+    "history": "履歴",
+    "leaderboard": "リーダーボード",
+    "myBets": "マイベット",
+    "profile": "プロフィール",
+    "admin": "管理者"
+  },
+  "wallet": {
+    "connect": "ウォレット接続",
+    "connecting": "接続中...",
+    "disconnect": "切断",
+    "wrongNetwork": "ネットワークが違います。Metadiumに切り替えてください。",
+    "switchNetwork": "ネットワーク切替",
+    "notInstalled": "MetaMaskがインストールされていません",
+    "install": "MetaMaskをインストール"
+  },
+  "markets": {
+    "title": "アクティブマーケット",
+    "subtitle": "進行中の予測マーケットに参加しましょう",
+    "empty": "マーケットがありません",
+    "emptyFiltered": "このカテゴリにマーケットはありません",
+    "count": "{{count}}件のマーケット",
+    "sortLabel": "並び替え",
+    "searchPlaceholder": "マーケットを検索...",
+    "noSearchResults": "「{{query}}」に一致するマーケットはありません",
+    "sortOptions": {
+      "deadline": "締切間近",
+      "pool": "プール規模",
+      "recent": "最新",
+      "popular": "人気順"
+    }
+  },
+  "market": {
+    "totalPool": "総プール",
+    "participants": "参加者",
+    "deadline": "締切",
+    "closed": "ベット締切",
+    "resolved": "結果確定",
+    "voided": "無効",
+    "yesOdds": "YESオッズ",
+    "noOdds": "NOオッズ",
+    "beFirst": "最初のベッターになろう",
+    "poolChart": "プール推移",
+    "noChartData": "まだベット履歴がありません"
+  },
+  "betting": {
+    "yes": "YES",
+    "no": "NO",
+    "amount": "金額",
+    "potentialWinnings": "予想利益",
+    "confirm": "ベット確認",
+    "cancel": "キャンセル",
+    "sign": "署名してベット",
+    "processing": "処理中...",
+    "success": "ベット完了！",
+    "insufficientBalance": "残高不足",
+    "minBet": "最小ベット：{{amount}} META",
+    "maxBet": "最大ベット：{{amount}} META"
+  },
+  "myBets": {
+    "title": "マイベット",
+    "subtitle": "参加したマーケットと清算履歴",
+    "empty": "ベット履歴がありません",
+    "emptyClaimable": "クレーム可能なベットはありません",
+    "goToMarkets": "マーケットを見る →",
+    "tabs": {
+      "all": "全て",
+      "active": "進行中",
+      "resolved": "確定済",
+      "claimable": "クレーム可能"
+    },
+    "direction": "方向",
+    "amount": "ベット金額",
+    "timeLeft": "残り時間",
+    "expectedPayout": "予想受取額",
+    "loss": "損失",
+    "claim": "報酬を受取",
+    "refund": "払い戻し",
+    "claiming": "処理中...",
+    "claimed": "受取完了！",
+    "status": {
+      "active": "進行中",
+      "closed": "締切済",
+      "resolved": "確定済",
+      "voided": "無効",
+      "paused": "一時停止"
+    },
+    "result": {
+      "win": "勝ち",
+      "loss": "負け",
+      "void": "無効",
+      "claimed": "受取済",
+      "pending": "保留中"
+    }
+  },
+  "profile": {
+    "title": "プロフィール",
+    "subtitle": "予測履歴とパフォーマンス統計",
+    "connectPrompt": "プロフィールを見るにはウォレットを接続してください",
+    "stats": {
+      "totalBets": "総ベット数",
+      "totalWagered": "総ベット金額",
+      "totalWinnings": "総利益",
+      "netProfit": "純利益",
+      "winRate": "勝率",
+      "avgBet": "平均ベット",
+      "maxWin": "最高単一利益",
+      "wins": "勝ち",
+      "losses": "負け",
+      "voids": "無効"
+    },
+    "history": {
+      "title": "参加履歴",
+      "empty": "まだベット履歴がありません",
+      "filters": {
+        "all": "全て",
+        "win": "勝ち",
+        "loss": "負け",
+        "void": "無効"
+      }
+    }
+  },
+  "leaderboard": {
+    "title": "リーダーボード",
+    "subtitle": "利益率上位の予測者ランキング",
+    "loading": "ランキング読み込み中...",
+    "empty": "データがありません",
+    "rank": "順位",
+    "address": "アドレス",
+    "winRate": "勝率",
+    "totalProfit": "総利益",
+    "markets": "マーケット数",
+    "tabs": {
+      "profit": "利益順",
+      "winrate": "勝率順"
+    },
+    "you": "あなた"
+  },
+  "common": {
+    "loading": "読み込み中...",
+    "error": "エラーが発生しました",
+    "retry": "再試行",
+    "back": "戻る",
+    "yes": "YES",
+    "no": "NO",
+    "meta": "META",
+    "currency": {
+      "usd": "USD",
+      "krw": "KRW",
+      "cny": "CNY",
+      "jpy": "JPY"
+    }
+  },
+  "history": {
+    "title": "マーケット履歴",
+    "subtitle": "終了したマーケットのアーカイブ",
+    "empty": "終了したマーケットはありません",
+    "filters": {
+      "all": "全て",
+      "resolved": "確定済",
+      "voided": "無効"
+    }
+  }
+}

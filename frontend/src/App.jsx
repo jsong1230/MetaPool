@@ -1,121 +1,82 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+/**
+ * App — BrowserRouter + Routes 설정
+ * navigation.md URL 구조 기준
+ */
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { WalletProvider } from './contexts/WalletContext.jsx';
+import { ToastProvider } from './components/common/Toast.jsx';
+import { Header } from './components/layout/Header.jsx';
+import { Footer } from './components/layout/Footer.jsx';
+import { MobileNav } from './components/layout/MobileNav.jsx';
+import { HomePage } from './pages/HomePage.jsx';
+import { MarketDetailPage } from './pages/MarketDetailPage.jsx';
+import { MyBetsPage } from './pages/MyBetsPage.jsx';
+import { ProfilePage } from './pages/ProfilePage.jsx';
+import { LeaderboardPage } from './pages/LeaderboardPage.jsx';
 
-function App() {
-  const [count, setCount] = useState(0)
-
+// 아직 미구현 페이지 placeholder
+function PlaceholderPage({ title }) {
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+    <main className="max-w-7xl mx-auto px-4 lg:px-6 py-6">
+      <div className="
+        bg-bg-surface border border-border-default rounded-lg p-8
+        flex flex-col items-center justify-center text-center
+        min-h-[300px]
+      ">
+        <p className="text-text-secondary text-lg font-medium">{title}</p>
+        <p className="text-text-muted text-sm mt-2">추후 구현 예정</p>
+      </div>
+    </main>
+  );
 }
 
-export default App
+export default function App() {
+  return (
+    <BrowserRouter>
+      <WalletProvider>
+        <ToastProvider>
+          <div className="flex flex-col min-h-screen bg-bg-primary">
+            <Header />
+
+            <div className="flex-1">
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/market/:id" element={<MarketDetailPage />} />
+                <Route path="/my-bets" element={<MyBetsPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/leaderboard" element={<LeaderboardPage />} />
+                <Route
+                  path="/history"
+                  element={<PlaceholderPage title="히스토리 (F-21)" />}
+                />
+                <Route
+                  path="/admin"
+                  element={<PlaceholderPage title="관리자 패널" />}
+                />
+                <Route
+                  path="/admin/create"
+                  element={<PlaceholderPage title="마켓 생성 (F-01)" />}
+                />
+                <Route
+                  path="/admin/resolve/:id"
+                  element={<PlaceholderPage title="결과 확정 (F-03)" />}
+                />
+                <Route
+                  path="/admin/settings"
+                  element={<PlaceholderPage title="설정 관리 (F-12)" />}
+                />
+                <Route
+                  path="*"
+                  element={<PlaceholderPage title="페이지를 찾을 수 없습니다" />}
+                />
+              </Routes>
+            </div>
+
+            <Footer />
+            <MobileNav />
+          </div>
+        </ToastProvider>
+      </WalletProvider>
+    </BrowserRouter>
+  );
+}
