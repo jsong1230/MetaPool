@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MetaPool User Manual</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#0b0d1a;--bg2:#111328;--bg3:#181b33;--bg4:#1f234a;
+  --primary:#6366f1;--purple:#8b5cf6;--cyan:#06b6d4;
+  --yes:#10b981;--no:#ef4444;--gold:#f59e0b;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#1e293b;--radius:12px;--radius-sm:8px;
+}
+body{background:var(--bg);color:var(--text);font-family:'Inter','Noto Sans KR',sans-serif;line-height:1.7;}
+.container{max-width:800px;margin:0 auto;padding:24px 20px 80px;}
+
+/* Header */
+.manual-header{text-align:center;padding:48px 0 40px;border-bottom:1px solid var(--border);margin-bottom:40px;}
+.manual-header .logo{display:inline-flex;align-items:center;gap:10px;margin-bottom:16px;}
+.manual-header .logo-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--purple));display:flex;align-items:center;justify-content:center;font-size:1.3rem;}
+.manual-header .logo-text{font-weight:800;font-size:1.5rem;background:linear-gradient(135deg,var(--primary),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.manual-header h1{font-size:1.8rem;font-weight:800;margin-bottom:8px;}
+.manual-header p{color:var(--text2);font-size:1rem;}
+
+/* Language */
+.lang-bar{display:flex;justify-content:center;gap:8px;margin-bottom:32px;}
+.lang-bar button{padding:6px 16px;border-radius:20px;border:1px solid var(--border);background:none;color:var(--text3);cursor:pointer;font-size:.85rem;font-weight:500;transition:.2s;}
+.lang-bar button.active{background:var(--primary);border-color:var(--primary);color:#fff;}
+.lang-bar button:hover{border-color:var(--text3);}
+
+/* TOC */
+.toc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:40px;}
+.toc h3{font-size:1rem;font-weight:700;margin-bottom:12px;color:var(--primary);}
+.toc ol{padding-left:20px;}
+.toc li{margin-bottom:6px;}
+.toc a{color:var(--text2);font-size:.9rem;transition:.15s;}
+.toc a:hover{color:var(--primary);}
+
+/* Sections */
+.section{margin-bottom:40px;}
+.section h2{font-size:1.3rem;font-weight:800;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--primary);display:inline-block;}
+.section h3{font-size:1.05rem;font-weight:700;margin:20px 0 10px;color:var(--text);}
+.section p{font-size:.95rem;color:var(--text2);margin-bottom:12px;}
+
+/* Info Box */
+.info-box{background:var(--bg2);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:var(--radius-sm);padding:16px 20px;margin:16px 0;font-size:.9rem;}
+.info-box.warning{border-left-color:var(--gold);}
+.info-box.success{border-left-color:var(--yes);}
+.info-box strong{color:var(--text);}
+
+/* Network Config */
+.network-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin:16px 0;}
+.network-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.9rem;}
+.network-row:last-child{border:none;}
+.network-row .label{color:var(--text3);}
+.network-row .value{color:var(--cyan);font-family:monospace;font-weight:500;}
+
+/* Exchange Table */
+.ex-table{width:100%;border-collapse:collapse;margin:16px 0;}
+.ex-table th{text-align:left;padding:10px 12px;font-size:.8rem;color:var(--text3);font-weight:600;text-transform:uppercase;border-bottom:1px solid var(--border);}
+.ex-table td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:.9rem;}
+.ex-table td:first-child{font-weight:600;}
+
+/* Steps */
+.steps{counter-reset:step;margin:16px 0;}
+.step-item{position:relative;padding:12px 0 12px 48px;border-left:2px solid var(--border);margin-left:16px;}
+.step-item::before{counter-increment:step;content:counter(step);position:absolute;left:-15px;top:10px;width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--purple));color:#fff;font-weight:700;font-size:.8rem;display:flex;align-items:center;justify-content:center;}
+.step-item:last-child{border-left-color:transparent;}
+.step-item strong{color:var(--text);display:block;margin-bottom:4px;}
+.step-item span{color:var(--text2);font-size:.9rem;}
+
+/* Calc Example */
+.calc-box{background:var(--bg3);border-radius:var(--radius);padding:20px;margin:16px 0;font-family:monospace;font-size:.9rem;line-height:1.8;}
+.calc-box .line{display:flex;justify-content:space-between;padding:2px 0;}
+.calc-box .divider{border-top:1px solid var(--border);margin:8px 0;}
+.calc-box .result{color:var(--yes);font-weight:700;}
+
+/* Odds Visual */
+.odds-visual{display:flex;height:48px;border-radius:var(--radius-sm);overflow:hidden;margin:16px 0;font-weight:700;font-size:.95rem;}
+.odds-visual .ov-yes{background:linear-gradient(90deg,var(--yes),#059669);display:flex;align-items:center;justify-content:center;color:#fff;}
+.odds-visual .ov-no{background:linear-gradient(90deg,#dc2626,var(--no));display:flex;align-items:center;justify-content:center;color:#fff;flex:1;}
+
+/* Category Grid */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:16px 0;}
+.cat-card{background:var(--bg3);border-radius:var(--radius-sm);padding:16px;text-align:center;}
+.cat-card .cat-icon{font-size:1.8rem;margin-bottom:6px;}
+.cat-card .cat-name{font-weight:600;font-size:.9rem;margin-bottom:4px;}
+.cat-card .cat-desc{font-size:.8rem;color:var(--text3);}
+
+/* FAQ */
+details{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:10px;overflow:hidden;}
+details summary{padding:14px 18px;cursor:pointer;font-weight:600;font-size:.95rem;list-style:none;}
+details summary::-webkit-details-marker{display:none;}
+details summary::before{content:'▸';margin-right:8px;color:var(--primary);transition:.2s;}
+details[open] summary::before{content:'▾';}
+details .faq-body{padding:0 18px 14px;font-size:.9rem;color:var(--text2);}
+
+/* Footer */
+.manual-footer{text-align:center;padding:24px;font-size:.8rem;color:var(--text3);border-top:1px solid var(--border);margin-top:40px;}
+
+@media(max-width:640px){
+  .manual-header h1{font-size:1.4rem;}
+  .cat-grid{grid-template-columns:1fr;}
+}
+@media print{
+  body{background:#fff;color:#333;}
+  .lang-bar{display:none;}
+  .section h2{border-color:#6366f1;}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header class="manual-header">
+  <div class="logo">
+    <div class="logo-icon">&#x1F52E;</div>
+    <span class="logo-text">MetaPool</span>
+  </div>
+  <h1 data-i18n="manualTitle">사용자 매뉴얼</h1>
+  <p data-i18n="manualSub">Metadium 블록체인 기반 온체인 예측 마켓 이용 가이드</p>
+</header>
+
+<!-- Language Selector -->
+<div class="lang-bar">
+  <button class="active" onclick="setLang('ko')">한국어</button>
+  <button onclick="setLang('en')">English</button>
+  <button onclick="setLang('zh')">中文</button>
+  <button onclick="setLang('ja')">日本語</button>
+</div>
+
+<!-- TOC -->
+<nav class="toc">
+  <h3 data-i18n="tocTitle">목차</h3>
+  <ol>
+    <li><a href="#s1" data-i18n="toc1">MetaPool이란?</a></li>
+    <li><a href="#s2" data-i18n="toc2">시작하기 — 지갑 설정</a></li>
+    <li><a href="#s3" data-i18n="toc3">META 토큰 구매</a></li>
+    <li><a href="#s4" data-i18n="toc4">마켓 탐색 & 베팅</a></li>
+    <li><a href="#s5" data-i18n="toc5">배당률과 보상 구조</a></li>
+    <li><a href="#s6" data-i18n="toc6">결과 확정 & 클레임</a></li>
+    <li><a href="#s7" data-i18n="toc7">마켓 카테고리</a></li>
+    <li><a href="#s8" data-i18n="toc8">자주 묻는 질문</a></li>
+  </ol>
+</nav>
+
+<!-- Section 1 -->
+<div class="section" id="s1">
+  <h2 data-i18n="s1Title">1. MetaPool이란?</h2>
+  <p data-i18n="s1P1">MetaPool은 Metadium 블록체인 위에서 운영되는 탈중앙화 예측 마켓 플랫폼입니다. 암호화폐 가격, 스포츠 경기, 날씨, 정치 등 다양한 주제에 대해 Yes 또는 No로 예측하고, 정확한 예측을 한 참여자가 보상을 받는 구조입니다.</p>
+  <p data-i18n="s1P2">모든 베팅과 보상은 스마트 컨트랙트를 통해 투명하게 처리되며, META 토큰(Metadium의 네이티브 토큰)을 사용합니다.</p>
+  <div class="info-box" data-i18n="s1Info"><strong>핵심 특징:</strong> Binary(Yes/No) 구조로 간단한 참여 / 블록체인 기반 완전 투명 / 낮은 가스비 / 최소 100 META부터 참여 가능</div>
+</div>
+
+<!-- Section 2 -->
+<div class="section" id="s2">
+  <h2 data-i18n="s2Title">2. 시작하기 — 지갑 설정</h2>
+  <p data-i18n="s2P1">MetaPool을 이용하려면 MetaMask 지갑에 Metadium 네트워크를 추가해야 합니다.</p>
+
+  <h3 data-i18n="s2Step">MetaMask 네트워크 설정</h3>
+  <div class="network-card">
+    <div class="network-row"><span class="label">Network Name</span><span class="value">Metadium Mainnet</span></div>
+    <div class="network-row"><span class="label">RPC URL</span><span class="value">https://api.metadium.com/prod</span></div>
+    <div class="network-row"><span class="label">Chain ID</span><span class="value">11</span></div>
+    <div class="network-row"><span class="label">Symbol</span><span class="value">META</span></div>
+    <div class="network-row"><span class="label">Block Explorer</span><span class="value">https://explorer.metadium.com</span></div>
+  </div>
+
+  <div class="steps">
+    <div class="step-item"><strong data-i18n="s2St1T">MetaMask 설치</strong><span data-i18n="s2St1D">Chrome Web Store에서 MetaMask 확장 프로그램을 설치하고 지갑을 생성합니다.</span></div>
+    <div class="step-item"><strong data-i18n="s2St2T">네트워크 추가</strong><span data-i18n="s2St2D">MetaMask → 설정 → 네트워크 → 네트워크 추가 → 위의 정보를 입력합니다.</span></div>
+    <div class="step-item"><strong data-i18n="s2St3T">네트워크 전환</strong><span data-i18n="s2St3D">네트워크 선택 드롭다운에서 "Metadium Mainnet"을 선택합니다.</span></div>
+  </div>
+</div>
+
+<!-- Section 3 -->
+<div class="section" id="s3">
+  <h2 data-i18n="s3Title">3. META 토큰 구매</h2>
+  <p data-i18n="s3P1">MetaPool에서 베팅하려면 META 토큰이 필요합니다. 아래 거래소에서 구매할 수 있습니다.</p>
+
+  <table class="ex-table">
+    <thead><tr><th data-i18n="exName">거래소</th><th data-i18n="exPair">거래 페어</th><th data-i18n="exNote">특징</th></tr></thead>
+    <tbody>
+      <tr><td>Coinone</td><td>META/KRW</td><td data-i18n="exCoinone">한국 원화 직거래</td></tr>
+      <tr><td>Gate.io</td><td>META/USDT</td><td data-i18n="exGate">글로벌 거래소</td></tr>
+      <tr><td>MEXC</td><td>META/USDT</td><td data-i18n="exMexc">글로벌 거래소</td></tr>
+    </tbody>
+  </table>
+
+  <h3 data-i18n="s3BuyTitle">구매 후 출금 절차</h3>
+  <div class="steps">
+    <div class="step-item"><strong data-i18n="s3St1T">거래소 회원가입 & KYC</strong><span data-i18n="s3St1D">위 거래소 중 하나에 가입하고 본인인증(KYC)을 완료합니다.</span></div>
+    <div class="step-item"><strong data-i18n="s3St2T">입금 & META 구매</strong><span data-i18n="s3St2D">원화(Coinone) 또는 USDT(Gate.io/MEXC)를 입금한 후 META를 구매합니다.</span></div>
+    <div class="step-item"><strong data-i18n="s3St3T">MetaMask로 출금</strong><span data-i18n="s3St3D">출금 시 MetaMask 지갑 주소를 입력하고, 반드시 Metadium 네트워크를 선택합니다.</span></div>
+  </div>
+
+  <div class="info-box warning" data-i18n="s3Warning"><strong>⚠️ 중요:</strong> 출금 시 반드시 <strong>Metadium 네트워크</strong>를 선택하세요! ERC-20(Ethereum)을 선택하면 META를 영구적으로 잃을 수 있습니다.</div>
+</div>
+
+<!-- Section 4 -->
+<div class="section" id="s4">
+  <h2 data-i18n="s4Title">4. 마켓 탐색 & 베팅</h2>
+
+  <h3 data-i18n="s4BrowseTitle">마켓 탐색</h3>
+  <p data-i18n="s4BrowseP">메인 화면에서 활성 마켓 목록을 볼 수 있습니다. 카테고리 필터(Crypto, Sports, Weather 등)를 사용하여 관심 있는 주제를 빠르게 찾으세요. 각 마켓 카드에는 질문, 현재 배당률, 풀 규모, 마감 시간이 표시됩니다.</p>
+
+  <h3 data-i18n="s4BetTitle">베팅 방법</h3>
+  <div class="steps">
+    <div class="step-item"><strong data-i18n="s4St1T">방향 선택</strong><span data-i18n="s4St1D">마켓 카드에서 "Yes 베팅" 또는 "No 베팅" 버튼을 클릭합니다.</span></div>
+    <div class="step-item"><strong data-i18n="s4St2T">금액 입력</strong><span data-i18n="s4St2D">슬라이더 또는 직접 입력, 퀵 버튼(100/500/1K/5K/10K META)으로 베팅 금액을 설정합니다.</span></div>
+    <div class="step-item"><strong data-i18n="s4St3T">정보 확인</strong><span data-i18n="s4St3D">현재 배당률과 예상 수익을 확인합니다. 배당률은 실시간으로 변동합니다.</span></div>
+    <div class="step-item"><strong data-i18n="s4St4T">트랜잭션 서명</strong><span data-i18n="s4St4D">"베팅 확인" → MetaMask에서 트랜잭션을 서명합니다. 가스비는 극소량입니다.</span></div>
+  </div>
+
+  <div class="info-box" data-i18n="s4Info"><strong>참고:</strong> 하나의 마켓에서는 한 방향(Yes 또는 No)만 선택할 수 있습니다. 같은 방향으로 추가 베팅은 가능하지만, 반대 방향으로는 베팅할 수 없습니다.</div>
+</div>
+
+<!-- Section 5 -->
+<div class="section" id="s5">
+  <h2 data-i18n="s5Title">5. 배당률과 보상 구조</h2>
+
+  <h3 data-i18n="s5OddsTitle">배당률 계산</h3>
+  <p data-i18n="s5OddsP">배당률은 Yes 풀과 No 풀의 비율로 결정됩니다. 적은 사람이 선택한 방향일수록 배당률이 높습니다.</p>
+
+  <div class="odds-visual">
+    <div class="ov-yes" style="width:40%">Yes 40%</div>
+    <div class="ov-no">No 60%</div>
+  </div>
+
+  <div class="calc-box">
+    <div class="line"><span data-i18n="calcYesPool">Yes 풀</span><span>40,000 META</span></div>
+    <div class="line"><span data-i18n="calcNoPool">No 풀</span><span>60,000 META</span></div>
+    <div class="line"><span data-i18n="calcTotal">총 풀</span><span>100,000 META</span></div>
+    <div class="divider"></div>
+    <div class="line"><span data-i18n="calcYesOdds">Yes 배당률</span><span>100,000 / 40,000 = <strong>2.50x</strong></span></div>
+    <div class="line"><span data-i18n="calcNoOdds">No 배당률</span><span>100,000 / 60,000 = <strong>1.67x</strong></span></div>
+  </div>
+
+  <h3 data-i18n="s5RewardTitle">보상 계산 예시</h3>
+  <p data-i18n="s5RewardP">결과가 Yes로 확정된 경우:</p>
+
+  <div class="calc-box">
+    <div class="line"><span data-i18n="calcYesPoolR">Yes 풀 (승리)</span><span>10,000 META</span></div>
+    <div class="line"><span data-i18n="calcNoPoolR">No 풀 (패배)</span><span>15,000 META</span></div>
+    <div class="line"><span data-i18n="calcFee">플랫폼 수수료 (2%)</span><span>15,000 × 2% = 300 META</span></div>
+    <div class="line"><span data-i18n="calcDist">분배 가능 금액</span><span>14,700 META</span></div>
+    <div class="divider"></div>
+    <div class="line"><span data-i18n="calcUserA">A (6,000 META 베팅)</span><span class="result">6,000 + 8,820 = 14,820 META</span></div>
+    <div class="line"><span data-i18n="calcUserB">B (4,000 META 베팅)</span><span class="result">4,000 + 5,880 = 9,880 META</span></div>
+  </div>
+</div>
+
+<!-- Section 6 -->
+<div class="section" id="s6">
+  <h2 data-i18n="s6Title">6. 결과 확정 & 클레임</h2>
+
+  <h3 data-i18n="s6ResTitle">결과 확정</h3>
+  <p data-i18n="s6ResP">이벤트가 종료되면 관리자가 공식 데이터 소스를 기반으로 결과(Yes/No/Void)를 확정합니다. 결과는 블록체인에 영구 기록됩니다.</p>
+
+  <h3 data-i18n="s6ClaimTitle">보상 클레임</h3>
+  <div class="steps">
+    <div class="step-item"><strong data-i18n="s6St1T">"내 베팅" 탭 확인</strong><span data-i18n="s6St1D">결과가 확정된 마켓에 "적중" 표시가 됩니다.</span></div>
+    <div class="step-item"><strong data-i18n="s6St2T">"보상 클레임" 클릭</strong><span data-i18n="s6St2D">클레임 버튼을 눌러 보상을 수령합니다.</span></div>
+    <div class="step-item"><strong data-i18n="s6St3T">MetaMask 서명</strong><span data-i18n="s6St3D">트랜잭션을 서명하면 보상이 지갑으로 입금됩니다.</span></div>
+  </div>
+
+  <div class="info-box success" data-i18n="s6VoidInfo"><strong>무효(Void) 마켓:</strong> 이벤트 취소 등으로 마켓이 무효 처리되면, 모든 참여자에게 베팅 원금이 전액 환불됩니다.</div>
+</div>
+
+<!-- Section 7 -->
+<div class="section" id="s7">
+  <h2 data-i18n="s7Title">7. 마켓 카테고리</h2>
+  <p data-i18n="s7P">MetaPool은 6가지 카테고리의 예측 마켓을 지원합니다.</p>
+
+  <div class="cat-grid">
+    <div class="cat-card"><div class="cat-icon">📈</div><div class="cat-name">Crypto</div><div class="cat-desc" data-i18n="catDescCrypto">BTC, ETH 등 암호화폐 가격 예측</div></div>
+    <div class="cat-card"><div class="cat-icon">⚽</div><div class="cat-name">Sports</div><div class="cat-desc" data-i18n="catDescSports">축구, 야구 등 경기 결과 예측</div></div>
+    <div class="cat-card"><div class="cat-icon">🌤️</div><div class="cat-name">Weather</div><div class="cat-desc" data-i18n="catDescWeather">기온, 강수량 등 날씨 예측</div></div>
+    <div class="cat-card"><div class="cat-icon">🏛️</div><div class="cat-name">Politics</div><div class="cat-desc" data-i18n="catDescPolitics">선거, 정책 등 정치 이벤트 예측</div></div>
+    <div class="cat-card"><div class="cat-icon">🎬</div><div class="cat-name">Entertainment</div><div class="cat-desc" data-i18n="catDescEnt">영화, 음악, 방송 관련 예측</div></div>
+    <div class="cat-card"><div class="cat-icon">🔮</div><div class="cat-name">Other</div><div class="cat-desc" data-i18n="catDescOther">기타 모든 주제의 자유 예측</div></div>
+  </div>
+</div>
+
+<!-- Section 8 -->
+<div class="section" id="s8">
+  <h2 data-i18n="s8Title">8. 자주 묻는 질문</h2>
+
+  <details><summary data-i18n="fq1Q">MetaPool은 안전한가요?</summary><div class="faq-body" data-i18n="fq1A">모든 베팅과 보상은 스마트 컨트랙트로 처리되며, 블록체인에 투명하게 기록됩니다. 관리자도 사용자의 자금을 임의로 인출할 수 없습니다.</div></details>
+  <details><summary data-i18n="fq2Q">최소/최대 베팅 금액은?</summary><div class="faq-body" data-i18n="fq2A">최소 100 META (~$0.11), 최대 100,000 META (~$110)입니다.</div></details>
+  <details><summary data-i18n="fq3Q">양쪽 모두에 베팅할 수 있나요?</summary><div class="faq-body" data-i18n="fq3A">아니요. 하나의 마켓에서는 Yes 또는 No 중 한 방향만 선택 가능합니다. 같은 방향 추가 베팅은 허용됩니다.</div></details>
+  <details><summary data-i18n="fq4Q">베팅을 취소할 수 있나요?</summary><div class="faq-body" data-i18n="fq4A">블록체인에 기록된 트랜잭션은 취소할 수 없습니다. 베팅 전 신중하게 결정하세요.</div></details>
+  <details><summary data-i18n="fq5Q">수수료 구조는?</summary><div class="faq-body" data-i18n="fq5A">베팅 시 수수료는 없습니다 (가스비만 부담). 정산 시 패배 풀의 2%만 플랫폼 수수료로 차감됩니다.</div></details>
+  <details><summary data-i18n="fq6Q">결과에 동의하지 않으면?</summary><div class="faq-body" data-i18n="fq6A">1,000 META를 스테이킹하고 이의를 제출할 수 있습니다. 이의가 인정되면 스테이킹 반환, 기각 시 몰수됩니다.</div></details>
+  <details><summary data-i18n="fq7Q">보상을 클레임하지 않으면?</summary><div class="faq-body" data-i18n="fq7A">보상은 스마트 컨트랙트에 안전하게 보관됩니다. 기한 제한 없이 언제든 클레임 가능합니다.</div></details>
+  <details><summary data-i18n="fq8Q">MetaLotto와 같이 쓸 수 있나요?</summary><div class="faq-body" data-i18n="fq8A">네! 같은 MetaMask 지갑, 같은 Metadium 네트워크, 같은 META 토큰을 사용합니다. 별도의 추가 설정 없이 바로 이용 가능합니다.</div></details>
+</div>
+
+</div>
+
+<footer class="manual-footer">
+  <p>© 2026 MetaPool — <span data-i18n="footerText">Metadium 블록체인 기반 예측 마켓</span></p>
+</footer>
+
+<script>
+var currentLang=localStorage.getItem('metapool-manual-lang')||'ko';
+var langFonts={ko:"'Noto Sans KR','Inter',sans-serif",en:"'Inter',sans-serif",zh:"'Noto Sans SC','Inter',sans-serif",ja:"'Noto Sans JP','Inter',sans-serif"};
+
+var i18n={
+  ko:{
+    manualTitle:'사용자 매뉴얼',manualSub:'Metadium 블록체인 기반 온체인 예측 마켓 이용 가이드',
+    tocTitle:'목차',toc1:'MetaPool이란?',toc2:'시작하기 — 지갑 설정',toc3:'META 토큰 구매',toc4:'마켓 탐색 & 베팅',toc5:'배당률과 보상 구조',toc6:'결과 확정 & 클레임',toc7:'마켓 카테고리',toc8:'자주 묻는 질문',
+    s1Title:'1. MetaPool이란?',s1P1:'MetaPool은 Metadium 블록체인 위에서 운영되는 탈중앙화 예측 마켓 플랫폼입니다. 암호화폐 가격, 스포츠 경기, 날씨, 정치 등 다양한 주제에 대해 Yes 또는 No로 예측하고, 정확한 예측을 한 참여자가 보상을 받는 구조입니다.',s1P2:'모든 베팅과 보상은 스마트 컨트랙트를 통해 투명하게 처리되며, META 토큰(Metadium의 네이티브 토큰)을 사용합니다.',s1Info:'<strong>핵심 특징:</strong> Binary(Yes/No) 구조로 간단한 참여 / 블록체인 기반 완전 투명 / 낮은 가스비 / 최소 100 META부터 참여 가능',
+    s2Title:'2. 시작하기 — 지갑 설정',s2P1:'MetaPool을 이용하려면 MetaMask 지갑에 Metadium 네트워크를 추가해야 합니다.',s2Step:'MetaMask 네트워크 설정',s2St1T:'MetaMask 설치',s2St1D:'Chrome Web Store에서 MetaMask 확장 프로그램을 설치하고 지갑을 생성합니다.',s2St2T:'네트워크 추가',s2St2D:'MetaMask → 설정 → 네트워크 → 네트워크 추가 → 위의 정보를 입력합니다.',s2St3T:'네트워크 전환',s2St3D:'네트워크 선택 드롭다운에서 "Metadium Mainnet"을 선택합니다.',
+    s3Title:'3. META 토큰 구매',s3P1:'MetaPool에서 베팅하려면 META 토큰이 필요합니다. 아래 거래소에서 구매할 수 있습니다.',exName:'거래소',exPair:'거래 페어',exNote:'특징',exCoinone:'한국 원화 직거래',exGate:'글로벌 거래소',exMexc:'글로벌 거래소',s3BuyTitle:'구매 후 출금 절차',s3St1T:'거래소 회원가입 & KYC',s3St1D:'위 거래소 중 하나에 가입하고 본인인증(KYC)을 완료합니다.',s3St2T:'입금 & META 구매',s3St2D:'원화(Coinone) 또는 USDT(Gate.io/MEXC)를 입금한 후 META를 구매합니다.',s3St3T:'MetaMask로 출금',s3St3D:'출금 시 MetaMask 지갑 주소를 입력하고, 반드시 Metadium 네트워크를 선택합니다.',s3Warning:'<strong>⚠️ 중요:</strong> 출금 시 반드시 <strong>Metadium 네트워크</strong>를 선택하세요! ERC-20(Ethereum)을 선택하면 META를 영구적으로 잃을 수 있습니다.',
+    s4Title:'4. 마켓 탐색 & 베팅',s4BrowseTitle:'마켓 탐색',s4BrowseP:'메인 화면에서 활성 마켓 목록을 볼 수 있습니다. 카테고리 필터(Crypto, Sports, Weather 등)를 사용하여 관심 있는 주제를 빠르게 찾으세요. 각 마켓 카드에는 질문, 현재 배당률, 풀 규모, 마감 시간이 표시됩니다.',s4BetTitle:'베팅 방법',s4St1T:'방향 선택',s4St1D:'마켓 카드에서 "Yes 베팅" 또는 "No 베팅" 버튼을 클릭합니다.',s4St2T:'금액 입력',s4St2D:'슬라이더 또는 직접 입력, 퀵 버튼(100/500/1K/5K/10K META)으로 베팅 금액을 설정합니다.',s4St3T:'정보 확인',s4St3D:'현재 배당률과 예상 수익을 확인합니다. 배당률은 실시간으로 변동합니다.',s4St4T:'트랜잭션 서명',s4St4D:'"베팅 확인" → MetaMask에서 트랜잭션을 서명합니다. 가스비는 극소량입니다.',s4Info:'<strong>참고:</strong> 하나의 마켓에서는 한 방향(Yes 또는 No)만 선택할 수 있습니다. 같은 방향으로 추가 베팅은 가능하지만, 반대 방향으로는 베팅할 수 없습니다.',
+    s5Title:'5. 배당률과 보상 구조',s5OddsTitle:'배당률 계산',s5OddsP:'배당률은 Yes 풀과 No 풀의 비율로 결정됩니다. 적은 사람이 선택한 방향일수록 배당률이 높습니다.',calcYesPool:'Yes 풀',calcNoPool:'No 풀',calcTotal:'총 풀',calcYesOdds:'Yes 배당률',calcNoOdds:'No 배당률',s5RewardTitle:'보상 계산 예시',s5RewardP:'결과가 Yes로 확정된 경우:',calcYesPoolR:'Yes 풀 (승리)',calcNoPoolR:'No 풀 (패배)',calcFee:'플랫폼 수수료 (2%)',calcDist:'분배 가능 금액',calcUserA:'A (6,000 META 베팅)',calcUserB:'B (4,000 META 베팅)',
+    s6Title:'6. 결과 확정 & 클레임',s6ResTitle:'결과 확정',s6ResP:'이벤트가 종료되면 관리자가 공식 데이터 소스를 기반으로 결과(Yes/No/Void)를 확정합니다. 결과는 블록체인에 영구 기록됩니다.',s6ClaimTitle:'보상 클레임',s6St1T:'"내 베팅" 탭 확인',s6St1D:'결과가 확정된 마켓에 "적중" 표시가 됩니다.',s6St2T:'"보상 클레임" 클릭',s6St2D:'클레임 버튼을 눌러 보상을 수령합니다.',s6St3T:'MetaMask 서명',s6St3D:'트랜잭션을 서명하면 보상이 지갑으로 입금됩니다.',s6VoidInfo:'<strong>무효(Void) 마켓:</strong> 이벤트 취소 등으로 마켓이 무효 처리되면, 모든 참여자에게 베팅 원금이 전액 환불됩니다.',
+    s7Title:'7. 마켓 카테고리',s7P:'MetaPool은 6가지 카테고리의 예측 마켓을 지원합니다.',catDescCrypto:'BTC, ETH 등 암호화폐 가격 예측',catDescSports:'축구, 야구 등 경기 결과 예측',catDescWeather:'기온, 강수량 등 날씨 예측',catDescPolitics:'선거, 정책 등 정치 이벤트 예측',catDescEnt:'영화, 음악, 방송 관련 예측',catDescOther:'기타 모든 주제의 자유 예측',
+    s8Title:'8. 자주 묻는 질문',
+    fq1Q:'MetaPool은 안전한가요?',fq1A:'모든 베팅과 보상은 스마트 컨트랙트로 처리되며, 블록체인에 투명하게 기록됩니다. 관리자도 사용자의 자금을 임의로 인출할 수 없습니다.',
+    fq2Q:'최소/최대 베팅 금액은?',fq2A:'최소 100 META (~$0.11), 최대 100,000 META (~$110)입니다.',
+    fq3Q:'양쪽 모두에 베팅할 수 있나요?',fq3A:'아니요. 하나의 마켓에서는 Yes 또는 No 중 한 방향만 선택 가능합니다. 같은 방향 추가 베팅은 허용됩니다.',
+    fq4Q:'베팅을 취소할 수 있나요?',fq4A:'블록체인에 기록된 트랜잭션은 취소할 수 없습니다. 베팅 전 신중하게 결정하세요.',
+    fq5Q:'수수료 구조는?',fq5A:'베팅 시 수수료는 없습니다 (가스비만 부담). 정산 시 패배 풀의 2%만 플랫폼 수수료로 차감됩니다.',
+    fq6Q:'결과에 동의하지 않으면?',fq6A:'1,000 META를 스테이킹하고 이의를 제출할 수 있습니다. 이의가 인정되면 스테이킹 반환, 기각 시 몰수됩니다.',
+    fq7Q:'보상을 클레임하지 않으면?',fq7A:'보상은 스마트 컨트랙트에 안전하게 보관됩니다. 기한 제한 없이 언제든 클레임 가능합니다.',
+    fq8Q:'MetaLotto와 같이 쓸 수 있나요?',fq8A:'네! 같은 MetaMask 지갑, 같은 Metadium 네트워크, 같은 META 토큰을 사용합니다. 별도의 추가 설정 없이 바로 이용 가능합니다.',
+    footerText:'Metadium 블록체인 기반 예측 마켓'
+  },
+  en:{
+    manualTitle:'User Manual',manualSub:'Guide to the on-chain prediction market on Metadium blockchain',
+    tocTitle:'Contents',toc1:'What is MetaPool?',toc2:'Getting Started — Wallet Setup',toc3:'Buying META Tokens',toc4:'Browsing Markets & Betting',toc5:'Odds & Reward Structure',toc6:'Results & Claiming',toc7:'Market Categories',toc8:'FAQ',
+    s1Title:'1. What is MetaPool?',s1P1:'MetaPool is a decentralized prediction market platform on the Metadium blockchain. You can predict Yes or No on various topics — crypto prices, sports, weather, politics — and earn rewards for accurate predictions.',s1P2:'All bets and rewards are transparently processed through smart contracts using META tokens (Metadium\'s native token).',s1Info:'<strong>Key Features:</strong> Simple Binary (Yes/No) structure / Fully transparent on-chain / Ultra-low gas fees / Start from just 100 META',
+    s2Title:'2. Getting Started — Wallet Setup',s2P1:'To use MetaPool, you need to add the Metadium network to your MetaMask wallet.',s2Step:'MetaMask Network Setup',s2St1T:'Install MetaMask',s2St1D:'Install the MetaMask extension from Chrome Web Store and create a wallet.',s2St2T:'Add Network',s2St2D:'MetaMask → Settings → Networks → Add Network → Enter the information above.',s2St3T:'Switch Network',s2St3D:'Select "Metadium Mainnet" from the network dropdown.',
+    s3Title:'3. Buying META Tokens',s3P1:'You need META tokens to bet on MetaPool. You can purchase them from the following exchanges.',exName:'Exchange',exPair:'Trading Pair',exNote:'Notes',exCoinone:'Korean Won direct trading',exGate:'Global exchange',exMexc:'Global exchange',s3BuyTitle:'Withdrawal Process',s3St1T:'Sign up & KYC',s3St1D:'Register at one of the exchanges above and complete identity verification (KYC).',s3St2T:'Deposit & Buy META',s3St2D:'Deposit KRW (Coinone) or USDT (Gate.io/MEXC) and purchase META.',s3St3T:'Withdraw to MetaMask',s3St3D:'Enter your MetaMask wallet address and make sure to select the Metadium network.',s3Warning:'<strong>⚠️ Important:</strong> Always select <strong>Metadium network</strong> when withdrawing! Selecting ERC-20 (Ethereum) may result in permanent loss of your META.',
+    s4Title:'4. Browsing Markets & Betting',s4BrowseTitle:'Browse Markets',s4BrowseP:'View active markets on the main screen. Use category filters (Crypto, Sports, Weather, etc.) to quickly find topics you\'re interested in. Each market card shows the question, current odds, pool size, and deadline.',s4BetTitle:'How to Bet',s4St1T:'Choose Direction',s4St1D:'Click "Bet Yes" or "Bet No" on the market card.',s4St2T:'Enter Amount',s4St2D:'Set your bet amount using the slider, direct input, or quick buttons (100/500/1K/5K/10K META).',s4St3T:'Review Info',s4St3D:'Check current odds and expected return. Odds change in real-time.',s4St4T:'Sign Transaction',s4St4D:'Click "Confirm Bet" → Sign the transaction in MetaMask. Gas fees are minimal.',s4Info:'<strong>Note:</strong> You can only choose one direction (Yes or No) per market. Additional bets in the same direction are allowed, but you cannot bet on the opposite side.',
+    s5Title:'5. Odds & Reward Structure',s5OddsTitle:'How Odds Work',s5OddsP:'Odds are determined by the ratio of the Yes pool to the No pool. The less popular the side, the higher the potential payout.',calcYesPool:'Yes Pool',calcNoPool:'No Pool',calcTotal:'Total Pool',calcYesOdds:'Yes Odds',calcNoOdds:'No Odds',s5RewardTitle:'Reward Calculation Example',s5RewardP:'When the result is confirmed as Yes:',calcYesPoolR:'Yes Pool (Winners)',calcNoPoolR:'No Pool (Losers)',calcFee:'Platform Fee (2%)',calcDist:'Distributable Amount',calcUserA:'User A (bet 6,000 META)',calcUserB:'User B (bet 4,000 META)',
+    s6Title:'6. Results & Claiming',s6ResTitle:'Result Settlement',s6ResP:'After an event concludes, the admin settles the result (Yes/No/Void) based on official data sources. Results are permanently recorded on the blockchain.',s6ClaimTitle:'Claiming Rewards',s6St1T:'Check "My Bets" Tab',s6St1D:'Markets you won will show a "Won" status.',s6St2T:'Click "Claim Reward"',s6St2D:'Click the claim button to withdraw your reward.',s6St3T:'Sign in MetaMask',s6St3D:'Sign the transaction and your reward will be deposited to your wallet.',s6VoidInfo:'<strong>Void Markets:</strong> If an event is canceled or the result cannot be determined, the market is voided and all participants receive a full refund.',
+    s7Title:'7. Market Categories',s7P:'MetaPool supports 6 categories of prediction markets.',catDescCrypto:'BTC, ETH and other crypto price predictions',catDescSports:'Football, baseball and other match results',catDescWeather:'Temperature, precipitation and weather forecasts',catDescPolitics:'Elections, policies and political events',catDescEnt:'Movies, music and entertainment predictions',catDescOther:'Free predictions on any other topic',
+    s8Title:'8. FAQ',
+    fq1Q:'Is MetaPool safe?',fq1A:'All bets and rewards are processed through smart contracts and transparently recorded on the blockchain. Even admins cannot withdraw user funds arbitrarily.',
+    fq2Q:'What are the min/max bet amounts?',fq2A:'Minimum 100 META (~$0.11), maximum 100,000 META (~$110).',
+    fq3Q:'Can I bet on both sides?',fq3A:'No. You can only choose one direction (Yes or No) per market. Additional bets in the same direction are allowed.',
+    fq4Q:'Can I cancel a bet?',fq4A:'Transactions recorded on the blockchain cannot be reversed. Please decide carefully before betting.',
+    fq5Q:'What are the fees?',fq5A:'No fees when betting (only gas). Only 2% of the losing pool is taken as a platform fee at settlement.',
+    fq6Q:'What if I disagree with the result?',fq6A:'You can stake 1,000 META and submit a dispute. If upheld, your stake is returned; if rejected, it\'s forfeited.',
+    fq7Q:'What if I don\'t claim my reward?',fq7A:'Rewards are safely stored in the smart contract. You can claim them at any time with no deadline.',
+    fq8Q:'Can I use it with MetaLotto?',fq8A:'Yes! Same MetaMask wallet, same Metadium network, same META token. No additional setup needed.',
+    footerText:'On-chain prediction market on Metadium blockchain'
+  },
+  zh:{
+    manualTitle:'用户手册',manualSub:'基于Metadium区块链的链上预测市场使用指南',
+    tocTitle:'目录',toc1:'什么是MetaPool？',toc2:'入门 — 钱包设置',toc3:'购买META代币',toc4:'浏览市场 & 投注',toc5:'赔率与奖励结构',toc6:'结果确定 & 领取',toc7:'市场类别',toc8:'常见问题',
+    s1Title:'1. 什么是MetaPool？',s1P1:'MetaPool是运行在Metadium区块链上的去中心化预测市场平台。您可以对加密货币价格、体育比赛、天气、政治等各种话题进行Yes或No预测，准确预测的参与者将获得奖励。',s1P2:'所有投注和奖励都通过智能合约透明处理，使用META代币（Metadium的原生代币）。',s1Info:'<strong>核心特点：</strong>简单的Binary（Yes/No）结构 / 区块链完全透明 / 极低gas费 / 最低100 META起投',
+    s2Title:'2. 入门 — 钱包设置',s2P1:'使用MetaPool需要在MetaMask钱包中添加Metadium网络。',s2Step:'MetaMask网络设置',s2St1T:'安装MetaMask',s2St1D:'从Chrome Web Store安装MetaMask扩展程序并创建钱包。',s2St2T:'添加网络',s2St2D:'MetaMask → 设置 → 网络 → 添加网络 → 输入上述信息。',s2St3T:'切换网络',s2St3D:'在网络下拉菜单中选择"Metadium Mainnet"。',
+    s3Title:'3. 购买META代币',s3P1:'在MetaPool投注需要META代币。您可以在以下交易所购买。',exName:'交易所',exPair:'交易对',exNote:'特点',exCoinone:'韩元直接交易',exGate:'全球交易所',exMexc:'全球交易所',s3BuyTitle:'购买后提现流程',s3St1T:'注册 & KYC',s3St1D:'在上述交易所之一注册并完成身份验证。',s3St2T:'充值 & 购买META',s3St2D:'充值韩元（Coinone）或USDT（Gate.io/MEXC）后购买META。',s3St3T:'提现到MetaMask',s3St3D:'输入MetaMask钱包地址，务必选择Metadium网络。',s3Warning:'<strong>⚠️ 重要：</strong>提现时务必选择<strong>Metadium网络</strong>！选择ERC-20（Ethereum）可能导致META永久丢失。',
+    s4Title:'4. 浏览市场 & 投注',s4BrowseTitle:'浏览市场',s4BrowseP:'在主页面查看活跃市场列表。使用类别过滤器（Crypto、Sports、Weather等）快速找到感兴趣的话题。每个市场卡片显示问题、当前赔率、池规模和截止时间。',s4BetTitle:'如何投注',s4St1T:'选择方向',s4St1D:'在市场卡片上点击"投注Yes"或"投注No"。',s4St2T:'输入金额',s4St2D:'使用滑块、直接输入或快捷按钮(100/500/1K/5K/10K META)设置投注金额。',s4St3T:'确认信息',s4St3D:'查看当前赔率和预期收益。赔率实时变动。',s4St4T:'签名交易',s4St4D:'点击"确认投注" → 在MetaMask中签名交易。gas费极低。',s4Info:'<strong>注意：</strong>每个市场只能选择一个方向（Yes或No）。允许同方向追加投注，但不能投注相反方向。',
+    s5Title:'5. 赔率与奖励结构',s5OddsTitle:'赔率计算',s5OddsP:'赔率由Yes池和No池的比率决定。选择人数越少的方向，赔率越高。',calcYesPool:'Yes池',calcNoPool:'No池',calcTotal:'总池',calcYesOdds:'Yes赔率',calcNoOdds:'No赔率',s5RewardTitle:'奖励计算示例',s5RewardP:'结果确定为Yes时：',calcYesPoolR:'Yes池（获胜）',calcNoPoolR:'No池（失败）',calcFee:'平台手续费（2%）',calcDist:'可分配金额',calcUserA:'A（投注6,000 META）',calcUserB:'B（投注4,000 META）',
+    s6Title:'6. 结果确定 & 领取',s6ResTitle:'结果确定',s6ResP:'事件结束后，管理员根据官方数据源确定结果（Yes/No/Void）。结果永久记录在区块链上。',s6ClaimTitle:'领取奖励',s6St1T:'查看"我的投注"标签',s6St1D:'已确定结果的市场会显示"命中"状态。',s6St2T:'点击"领取奖励"',s6St2D:'点击领取按钮提取奖励。',s6St3T:'MetaMask签名',s6St3D:'签名交易后奖励将存入您的钱包。',s6VoidInfo:'<strong>无效市场：</strong>如果事件取消或无法确定结果，市场将被判定为无效，所有参与者将获得全额退款。',
+    s7Title:'7. 市场类别',s7P:'MetaPool支持6个类别的预测市场。',catDescCrypto:'BTC、ETH等加密货币价格预测',catDescSports:'足球、棒球等比赛结果预测',catDescWeather:'气温、降水量等天气预测',catDescPolitics:'选举、政策等政治事件预测',catDescEnt:'电影、音乐、综艺相关预测',catDescOther:'其他所有主题的自由预测',
+    s8Title:'8. 常见问题',
+    fq1Q:'MetaPool安全吗？',fq1A:'所有投注和奖励都通过智能合约处理并透明记录在区块链上。管理员也无法任意提取用户资金。',
+    fq2Q:'最低/最高投注金额是多少？',fq2A:'最低100 META（约$0.11），最高100,000 META（约$110）。',
+    fq3Q:'可以两边都投注吗？',fq3A:'不可以。每个市场只能选择一个方向（Yes或No）。允许同方向追加投注。',
+    fq4Q:'可以取消投注吗？',fq4A:'区块链上记录的交易无法撤销。请在投注前谨慎决定。',
+    fq5Q:'手续费结构是什么？',fq5A:'投注时无手续费（仅gas费）。结算时仅从败方池收取2%的平台手续费。',
+    fq6Q:'如果不同意结果怎么办？',fq6A:'您可以质押1,000 META提交异议。异议被接受则退还质押，被驳回则没收。',
+    fq7Q:'不领取奖励会怎样？',fq7A:'奖励安全保存在智能合约中。没有时间限制，随时可以领取。',
+    fq8Q:'可以和MetaLotto一起用吗？',fq8A:'可以！使用相同的MetaMask钱包、相同的Metadium网络、相同的META代币。无需额外设置。',
+    footerText:'基于Metadium区块链的链上预测市场'
+  },
+  ja:{
+    manualTitle:'ユーザーマニュアル',manualSub:'Metadiumブロックチェーン基盤のオンチェーン予測マーケット利用ガイド',
+    tocTitle:'目次',toc1:'MetaPoolとは？',toc2:'はじめに — ウォレット設定',toc3:'METAトークンの購入',toc4:'マーケット閲覧 & ベット',toc5:'オッズと報酬構造',toc6:'結果確定 & 請求',toc7:'マーケットカテゴリ',toc8:'よくある質問',
+    s1Title:'1. MetaPoolとは？',s1P1:'MetaPoolはMetadiumブロックチェーン上で運営される分散型予測マーケットプラットフォームです。暗号通貨価格、スポーツ、天気、政治など様々なトピックについてYesまたはNoで予測し、正確な予測をした参加者が報酬を受け取る仕組みです。',s1P2:'すべてのベットと報酬はスマートコントラクトを通じて透明に処理され、METAトークン（Metadiumのネイティブトークン）を使用します。',s1Info:'<strong>主な特徴：</strong>シンプルなBinary（Yes/No）構造 / ブロックチェーン基盤の完全透明性 / 超低ガス代 / 最低100 METAから参加可能',
+    s2Title:'2. はじめに — ウォレット設定',s2P1:'MetaPoolを利用するには、MetaMaskウォレットにMetadiumネットワークを追加する必要があります。',s2Step:'MetaMaskネットワーク設定',s2St1T:'MetaMaskのインストール',s2St1D:'Chrome Web StoreからMetaMask拡張機能をインストールし、ウォレットを作成します。',s2St2T:'ネットワーク追加',s2St2D:'MetaMask → 設定 → ネットワーク → ネットワーク追加 → 上記の情報を入力します。',s2St3T:'ネットワーク切替',s2St3D:'ネットワーク選択ドロップダウンから「Metadium Mainnet」を選択します。',
+    s3Title:'3. METAトークンの購入',s3P1:'MetaPoolでベットするにはMETAトークンが必要です。以下の取引所で購入できます。',exName:'取引所',exPair:'取引ペア',exNote:'特徴',exCoinone:'韓国ウォン直接取引',exGate:'グローバル取引所',exMexc:'グローバル取引所',s3BuyTitle:'購入後の出金手順',s3St1T:'取引所登録 & KYC',s3St1D:'上記の取引所のいずれかに登録し、本人確認（KYC）を完了します。',s3St2T:'入金 & META購入',s3St2D:'韓国ウォン（Coinone）またはUSDT（Gate.io/MEXC）を入金してMETAを購入します。',s3St3T:'MetaMaskへ出金',s3St3D:'MetaMaskウォレットアドレスを入力し、必ずMetadiumネットワークを選択します。',s3Warning:'<strong>⚠️ 重要：</strong>出金時は必ず<strong>Metadiumネットワーク</strong>を選択してください！ERC-20（Ethereum）を選択するとMETAを永久に失う可能性があります。',
+    s4Title:'4. マーケット閲覧 & ベット',s4BrowseTitle:'マーケット閲覧',s4BrowseP:'メイン画面でアクティブなマーケット一覧を確認できます。カテゴリフィルター（Crypto、Sports、Weatherなど）を使って興味のあるトピックをすぐに見つけましょう。各マーケットカードには質問、現在のオッズ、プール規模、締切時間が表示されます。',s4BetTitle:'ベット方法',s4St1T:'方向を選択',s4St1D:'マーケットカードで「Yesにベット」または「Noにベット」ボタンをクリックします。',s4St2T:'金額を入力',s4St2D:'スライダーまたは直接入力、クイックボタン（100/500/1K/5K/10K META）でベット金額を設定します。',s4St3T:'情報を確認',s4St3D:'現在のオッズと予想リターンを確認します。オッズはリアルタイムで変動します。',s4St4T:'トランザクション署名',s4St4D:'「ベット確認」→ MetaMaskでトランザクションに署名します。ガス代は極少量です。',s4Info:'<strong>注意：</strong>1つのマーケットでは1方向（YesまたはNo）のみ選択できます。同方向への追加ベットは可能ですが、反対方向にはベットできません。',
+    s5Title:'5. オッズと報酬構造',s5OddsTitle:'オッズの計算',s5OddsP:'オッズはYesプールとNoプールの比率で決まります。選択者が少ない方向ほどオッズが高くなります。',calcYesPool:'Yesプール',calcNoPool:'Noプール',calcTotal:'合計プール',calcYesOdds:'Yesオッズ',calcNoOdds:'Noオッズ',s5RewardTitle:'報酬計算例',s5RewardP:'結果がYesと確定した場合：',calcYesPoolR:'Yesプール（勝利）',calcNoPoolR:'Noプール（敗北）',calcFee:'プラットフォーム手数料（2%）',calcDist:'分配可能金額',calcUserA:'A（6,000 METAベット）',calcUserB:'B（4,000 METAベット）',
+    s6Title:'6. 結果確定 & 請求',s6ResTitle:'結果確定',s6ResP:'イベント終了後、管理者が公式データソースに基づいて結果（Yes/No/Void）を確定します。結果はブロックチェーンに永久記録されます。',s6ClaimTitle:'報酬の請求',s6St1T:'「マイベット」タブを確認',s6St1D:'結果が確定したマーケットに「的中」表示が出ます。',s6St2T:'「報酬請求」をクリック',s6St2D:'請求ボタンを押して報酬を受け取ります。',s6St3T:'MetaMask署名',s6St3D:'トランザクションに署名すると報酬がウォレットに入金されます。',s6VoidInfo:'<strong>無効（Void）マーケット：</strong>イベントキャンセル等でマーケットが無効となった場合、全参加者にベット原金が全額返金されます。',
+    s7Title:'7. マーケットカテゴリ',s7P:'MetaPoolは6つのカテゴリの予測マーケットをサポートしています。',catDescCrypto:'BTC、ETHなど暗号通貨価格予測',catDescSports:'サッカー、野球など試合結果予測',catDescWeather:'気温、降水量など天気予測',catDescPolitics:'選挙、政策など政治イベント予測',catDescEnt:'映画、音楽、放送関連予測',catDescOther:'その他すべてのトピックの自由予測',
+    s8Title:'8. よくある質問',
+    fq1Q:'MetaPoolは安全ですか？',fq1A:'すべてのベットと報酬はスマートコントラクトで処理され、ブロックチェーンに透明に記録されます。管理者もユーザーの資金を任意に引き出すことはできません。',
+    fq2Q:'最小/最大ベット金額は？',fq2A:'最小100 META（約$0.11）、最大100,000 META（約$110）です。',
+    fq3Q:'両方にベットできますか？',fq3A:'いいえ。1つのマーケットではYesまたはNoの1方向のみ選択可能です。同方向への追加ベットは許可されています。',
+    fq4Q:'ベットをキャンセルできますか？',fq4A:'ブロックチェーンに記録されたトランザクションは取り消せません。ベット前に慎重に判断してください。',
+    fq5Q:'手数料構造は？',fq5A:'ベット時の手数料はありません（ガス代のみ）。精算時に敗北プールの2%のみがプラットフォーム手数料として差し引かれます。',
+    fq6Q:'結果に同意できない場合は？',fq6A:'1,000 METAをステーキングして異議を提出できます。異議が認められればステーキング返還、却下されれば没収されます。',
+    fq7Q:'報酬を請求しなかったら？',fq7A:'報酬はスマートコントラクトに安全に保管されます。期限制限なく、いつでも請求可能です。',
+    fq8Q:'MetaLottoと一緒に使えますか？',fq8A:'はい！同じMetaMaskウォレット、同じMetadiumネットワーク、同じMETAトークンを使用します。追加設定は不要です。',
+    footerText:'Metadiumブロックチェーン基盤の予測マーケット'
+  }
+};
+
+function setLang(lang){
+  currentLang=lang;
+  localStorage.setItem('metapool-manual-lang',lang);
+  document.documentElement.lang=lang==='zh'?'zh-CN':lang;
+  document.body.style.fontFamily=langFonts[lang];
+  document.querySelectorAll('.lang-bar button').forEach(function(b){b.classList.remove('active');});
+  event.target.classList.add('active');
+  var dict=i18n[lang];
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var key=el.getAttribute('data-i18n');
+    if(dict[key]!==undefined) el.innerHTML=dict[key];
+  });
+}
+
+setLang(currentLang);
+document.querySelectorAll('.lang-bar button').forEach(function(b,i){
+  var langs=['ko','en','zh','ja'];
+  if(langs[i]===currentLang)b.classList.add('active');
+  else b.classList.remove('active');
+});
+</script>
+</body>
+</html>

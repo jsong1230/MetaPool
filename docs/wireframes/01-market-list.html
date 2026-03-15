@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MetaPool — 마켓 목록</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --bg: #0b0d1a;
+    --bg-card: #131525;
+    --bg-card-hover: #1a1d35;
+    --primary: #6366f1;
+    --secondary: #8b5cf6;
+    --accent: #06b6d4;
+    --yes: #10b981;
+    --no: #ef4444;
+    --text: #e2e8f0;
+    --text-dim: #94a3b8;
+    --border: #1e2140;
+    --radius: 12px;
+  }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, sans-serif; min-height: 100vh; }
+
+  /* Header */
+  .header { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; border-bottom: 1px solid var(--border); background: rgba(11,13,26,0.95); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 100; }
+  .logo { font-size: 22px; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px; }
+  .logo span { font-weight: 400; opacity: 0.7; }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  .lang-select { background: var(--bg-card); border: 1px solid var(--border); color: var(--text-dim); padding: 8px 12px; border-radius: 8px; font-size: 13px; cursor: pointer; }
+  .wallet-btn { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; border: none; padding: 10px 20px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity .2s; }
+  .wallet-btn:hover { opacity: 0.9; }
+  .wallet-connected { background: var(--bg-card); border: 1px solid var(--border); color: var(--text); padding: 8px 16px; border-radius: 10px; font-size: 13px; display: flex; align-items: center; gap: 8px; }
+  .wallet-dot { width: 8px; height: 8px; background: var(--yes); border-radius: 50%; }
+  .wallet-balance { color: var(--accent); font-weight: 600; }
+
+  /* Nav Tabs */
+  .nav-tabs { display: flex; gap: 4px; padding: 12px 24px; border-bottom: 1px solid var(--border); background: var(--bg); }
+  .nav-tab { padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 500; color: var(--text-dim); cursor: pointer; transition: all .2s; border: none; background: none; }
+  .nav-tab.active { background: var(--primary); color: #fff; }
+  .nav-tab:hover:not(.active) { background: var(--bg-card); color: var(--text); }
+
+  /* Category Filter */
+  .filter-bar { display: flex; gap: 8px; padding: 16px 24px; overflow-x: auto; }
+  .filter-chip { padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 500; border: 1px solid var(--border); background: transparent; color: var(--text-dim); cursor: pointer; white-space: nowrap; transition: all .2s; }
+  .filter-chip.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .filter-chip:hover:not(.active) { border-color: var(--primary); color: var(--text); }
+  .filter-emoji { margin-right: 4px; }
+
+  /* Sort & Search */
+  .toolbar { display: flex; align-items: center; justify-content: space-between; padding: 0 24px 16px; }
+  .sort-select { background: var(--bg-card); border: 1px solid var(--border); color: var(--text-dim); padding: 8px 12px; border-radius: 8px; font-size: 13px; }
+  .search-input { background: var(--bg-card); border: 1px solid var(--border); color: var(--text); padding: 8px 16px; border-radius: 8px; font-size: 13px; width: 240px; }
+  .search-input::placeholder { color: var(--text-dim); }
+  .market-count { color: var(--text-dim); font-size: 13px; }
+
+  /* Market Grid */
+  .market-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 16px; padding: 0 24px 24px; }
+
+  /* Market Card */
+  .market-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; transition: all .2s; cursor: pointer; }
+  .market-card:hover { background: var(--bg-card-hover); border-color: var(--primary); transform: translateY(-2px); }
+  .card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .category-tag { font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .cat-crypto { background: rgba(99,102,241,0.15); color: var(--primary); }
+  .cat-sports { background: rgba(16,185,129,0.15); color: var(--yes); }
+  .cat-weather { background: rgba(6,182,212,0.15); color: var(--accent); }
+  .cat-politics { background: rgba(239,68,68,0.15); color: var(--no); }
+  .cat-entertainment { background: rgba(139,92,246,0.15); color: var(--secondary); }
+  .cat-other { background: rgba(148,163,184,0.15); color: var(--text-dim); }
+  .deadline { font-size: 12px; color: var(--text-dim); display: flex; align-items: center; gap: 4px; }
+  .deadline-urgent { color: var(--no); font-weight: 600; }
+  .card-question { font-size: 16px; font-weight: 600; line-height: 1.4; margin-bottom: 16px; }
+
+  /* Pool Bar */
+  .pool-bar-wrap { margin-bottom: 12px; }
+  .pool-labels { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; }
+  .pool-yes { color: var(--yes); font-weight: 600; }
+  .pool-no { color: var(--no); font-weight: 600; }
+  .pool-bar { height: 8px; border-radius: 4px; background: var(--no); overflow: hidden; }
+  .pool-bar-fill { height: 100%; background: var(--yes); border-radius: 4px; transition: width .3s; }
+
+  /* Card Stats */
+  .card-stats { display: flex; gap: 16px; margin-bottom: 16px; font-size: 13px; color: var(--text-dim); }
+  .stat-value { color: var(--text); font-weight: 600; }
+
+  /* Odds */
+  .odds-row { display: flex; gap: 8px; margin-bottom: 16px; }
+  .odds-box { flex: 1; text-align: center; padding: 10px; border-radius: 8px; font-size: 13px; }
+  .odds-yes { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.2); }
+  .odds-no { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); }
+  .odds-label { color: var(--text-dim); font-size: 11px; display: block; margin-bottom: 2px; }
+  .odds-value-yes { color: var(--yes); font-weight: 700; font-size: 16px; }
+  .odds-value-no { color: var(--no); font-weight: 700; font-size: 16px; }
+
+  /* Bet Buttons */
+  .bet-buttons { display: flex; gap: 8px; }
+  .bet-btn { flex: 1; padding: 12px; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all .2s; text-transform: uppercase; letter-spacing: 0.5px; }
+  .bet-yes { background: var(--yes); color: #fff; }
+  .bet-yes:hover { background: #0d9668; }
+  .bet-no { background: var(--no); color: #fff; }
+  .bet-no:hover { background: #dc2626; }
+
+  /* Footer */
+  .footer { text-align: center; padding: 24px; color: var(--text-dim); font-size: 12px; border-top: 1px solid var(--border); margin-top: 40px; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .market-grid { grid-template-columns: 1fr; padding: 0 16px 16px; }
+    .header { padding: 12px 16px; }
+    .filter-bar { padding: 12px 16px; }
+    .toolbar { padding: 0 16px 12px; flex-direction: column; gap: 8px; align-items: stretch; }
+    .search-input { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <div class="logo">Meta<span>Pool</span></div>
+  <div class="header-right">
+    <select class="lang-select">
+      <option>🇰🇷 한국어</option>
+      <option>🇺🇸 English</option>
+      <option>🇨🇳 中文</option>
+      <option>🇯🇵 日本語</option>
+    </select>
+    <!-- 미연결 상태 -->
+    <!-- <button class="wallet-btn">🦊 지갑 연결</button> -->
+    <!-- 연결 상태 -->
+    <div class="wallet-connected">
+      <span class="wallet-dot"></span>
+      <span>0x1a2B...9cDe</span>
+      <span class="wallet-balance">12,450 META</span>
+    </div>
+  </div>
+</header>
+
+<!-- Navigation Tabs -->
+<nav class="nav-tabs">
+  <button class="nav-tab active">🔥 활성 마켓</button>
+  <button class="nav-tab">📋 내 베팅</button>
+  <button class="nav-tab">📊 히스토리</button>
+  <button class="nav-tab">🏆 리더보드</button>
+</nav>
+
+<!-- Category Filter -->
+<div class="filter-bar">
+  <button class="filter-chip active">전체</button>
+  <button class="filter-chip"><span class="filter-emoji">₿</span>Crypto</button>
+  <button class="filter-chip"><span class="filter-emoji">⚽</span>Sports</button>
+  <button class="filter-chip"><span class="filter-emoji">🌤</span>Weather</button>
+  <button class="filter-chip"><span class="filter-emoji">🏛</span>Politics</button>
+  <button class="filter-chip"><span class="filter-emoji">🎬</span>Entertainment</button>
+  <button class="filter-chip"><span class="filter-emoji">📦</span>Other</button>
+</div>
+
+<!-- Toolbar -->
+<div class="toolbar">
+  <span class="market-count">활성 마켓 <strong>12</strong>개</span>
+  <div style="display:flex; gap:8px;">
+    <input class="search-input" placeholder="🔍 마켓 검색..." />
+    <select class="sort-select">
+      <option>⏰ 마감 임박순</option>
+      <option>💰 풀 규모순</option>
+      <option>🆕 최신순</option>
+      <option>🔥 인기순</option>
+    </select>
+  </div>
+</div>
+
+<!-- Market Grid -->
+<div class="market-grid">
+
+  <!-- Card 1 -->
+  <div class="market-card">
+    <div class="card-top">
+      <span class="category-tag cat-crypto">₿ Crypto</span>
+      <span class="deadline deadline-urgent">⏱ 6시간 15분</span>
+    </div>
+    <div class="card-question">BTC가 2026년 3월 내에 $100,000를 돌파할까?</div>
+    <div class="pool-bar-wrap">
+      <div class="pool-labels">
+        <span class="pool-yes">Yes 68%</span>
+        <span class="pool-no">No 32%</span>
+      </div>
+      <div class="pool-bar"><div class="pool-bar-fill" style="width:68%"></div></div>
+    </div>
+    <div class="card-stats">
+      <span>풀 <span class="stat-value">250,000 META</span></span>
+      <span>참여 <span class="stat-value">142명</span></span>
+    </div>
+    <div class="odds-row">
+      <div class="odds-box odds-yes">
+        <span class="odds-label">YES 배당률</span>
+        <span class="odds-value-yes">1.47x</span>
+      </div>
+      <div class="odds-box odds-no">
+        <span class="odds-label">NO 배당률</span>
+        <span class="odds-value-no">3.13x</span>
+      </div>
+    </div>
+    <div class="bet-buttons">
+      <button class="bet-btn bet-yes">Yes 베팅</button>
+      <button class="bet-btn bet-no">No 베팅</button>
+    </div>
+  </div>
+
+  <!-- Card 2 -->
+  <div class="market-card">
+    <div class="card-top">
+      <span class="category-tag cat-sports">⚽ Sports</span>
+      <span class="deadline">⏱ 2일 14시간</span>
+    </div>
+    <div class="card-question">토트넘이 EPL 다음 경기에서 아스날을 이길까?</div>
+    <div class="pool-bar-wrap">
+      <div class="pool-labels">
+        <span class="pool-yes">Yes 35%</span>
+        <span class="pool-no">No 65%</span>
+      </div>
+      <div class="pool-bar"><div class="pool-bar-fill" style="width:35%"></div></div>
+    </div>
+    <div class="card-stats">
+      <span>풀 <span class="stat-value">80,000 META</span></span>
+      <span>참여 <span class="stat-value">67명</span></span>
+    </div>
+    <div class="odds-row">
+      <div class="odds-box odds-yes">
+        <span class="odds-label">YES 배당률</span>
+        <span class="odds-value-yes">2.86x</span>
+      </div>
+      <div class="odds-box odds-no">
+        <span class="odds-label">NO 배당률</span>
+        <span class="odds-value-no">1.54x</span>
+      </div>
+    </div>
+    <div class="bet-buttons">
+      <button class="bet-btn bet-yes">Yes 베팅</button>
+      <button class="bet-btn bet-no">No 베팅</button>
+    </div>
+  </div>
+
+  <!-- Card 3 -->
+  <div class="market-card">
+    <div class="card-top">
+      <span class="category-tag cat-weather">🌤 Weather</span>
+      <span class="deadline">⏱ 5일 3시간</span>
+    </div>
+    <div class="card-question">서울에 이번 주말(3/22~23) 비가 올까?</div>
+    <div class="pool-bar-wrap">
+      <div class="pool-labels">
+        <span class="pool-yes">Yes 52%</span>
+        <span class="pool-no">No 48%</span>
+      </div>
+      <div class="pool-bar"><div class="pool-bar-fill" style="width:52%"></div></div>
+    </div>
+    <div class="card-stats">
+      <span>풀 <span class="stat-value">15,200 META</span></span>
+      <span>참여 <span class="stat-value">28명</span></span>
+    </div>
+    <div class="odds-row">
+      <div class="odds-box odds-yes">
+        <span class="odds-label">YES 배당률</span>
+        <span class="odds-value-yes">1.92x</span>
+      </div>
+      <div class="odds-box odds-no">
+        <span class="odds-label">NO 배당률</span>
+        <span class="odds-value-no">2.08x</span>
+      </div>
+    </div>
+    <div class="bet-buttons">
+      <button class="bet-btn bet-yes">Yes 베팅</button>
+      <button class="bet-btn bet-no">No 베팅</button>
+    </div>
+  </div>
+
+  <!-- Card 4 -->
+  <div class="market-card">
+    <div class="card-top">
+      <span class="category-tag cat-politics">🏛 Politics</span>
+      <span class="deadline">⏱ 12일 8시간</span>
+    </div>
+    <div class="card-question">미국 연준이 3월 FOMC에서 금리를 인하할까?</div>
+    <div class="pool-bar-wrap">
+      <div class="pool-labels">
+        <span class="pool-yes">Yes 41%</span>
+        <span class="pool-no">No 59%</span>
+      </div>
+      <div class="pool-bar"><div class="pool-bar-fill" style="width:41%"></div></div>
+    </div>
+    <div class="card-stats">
+      <span>풀 <span class="stat-value">320,000 META</span></span>
+      <span>참여 <span class="stat-value">215명</span></span>
+    </div>
+    <div class="odds-row">
+      <div class="odds-box odds-yes">
+        <span class="odds-label">YES 배당률</span>
+        <span class="odds-value-yes">2.44x</span>
+      </div>
+      <div class="odds-box odds-no">
+        <span class="odds-label">NO 배당률</span>
+        <span class="odds-value-no">1.69x</span>
+      </div>
+    </div>
+    <div class="bet-buttons">
+      <button class="bet-btn bet-yes">Yes 베팅</button>
+      <button class="bet-btn bet-no">No 베팅</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  &copy; 2026 MetaPool — Metadium 블록체인 기반 예측 마켓 | Contract: 0x1234...5678
+</footer>
+
+</body>
+</html>

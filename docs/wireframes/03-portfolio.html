@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MetaPool — 포트폴리오 (내 베팅 / 수익률)</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --bg: #0b0d1a; --bg-card: #131525; --bg-card-hover: #1a1d35;
+    --primary: #6366f1; --secondary: #8b5cf6; --accent: #06b6d4;
+    --yes: #10b981; --no: #ef4444; --warn: #f59e0b;
+    --text: #e2e8f0; --text-dim: #94a3b8; --border: #1e2140; --radius: 12px;
+  }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, sans-serif; min-height: 100vh; }
+
+  .header { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; border-bottom: 1px solid var(--border); background: rgba(11,13,26,0.95); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 100; }
+  .logo { font-size: 22px; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .logo span { font-weight: 400; opacity: 0.7; }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  .wallet-connected { background: var(--bg-card); border: 1px solid var(--border); color: var(--text); padding: 8px 16px; border-radius: 10px; font-size: 13px; display: flex; align-items: center; gap: 8px; }
+  .wallet-dot { width: 8px; height: 8px; background: var(--yes); border-radius: 50%; }
+  .wallet-balance { color: var(--accent); font-weight: 600; }
+
+  .nav-tabs { display: flex; gap: 4px; padding: 12px 24px; border-bottom: 1px solid var(--border); }
+  .nav-tab { padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 500; color: var(--text-dim); cursor: pointer; border: none; background: none; }
+  .nav-tab.active { background: var(--primary); color: #fff; }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 24px; }
+
+  /* Dashboard Stats */
+  .dashboard-stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 32px; }
+  .dash-stat { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; text-align: center; }
+  .dash-stat-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .dash-stat-value { font-size: 24px; font-weight: 700; }
+  .dash-stat-value.green { color: var(--yes); }
+  .dash-stat-value.red { color: var(--no); }
+  .dash-stat-value.accent { color: var(--accent); }
+  .dash-stat-sub { font-size: 12px; color: var(--text-dim); margin-top: 4px; }
+
+  /* Sub tabs */
+  .sub-tabs { display: flex; gap: 4px; margin-bottom: 20px; }
+  .sub-tab { padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; color: var(--text-dim); cursor: pointer; border: 1px solid var(--border); background: none; transition: all .2s; }
+  .sub-tab.active { background: rgba(99,102,241,0.15); border-color: var(--primary); color: var(--primary); }
+  .sub-tab .badge { background: var(--primary); color: #fff; font-size: 11px; padding: 1px 6px; border-radius: 10px; margin-left: 6px; }
+
+  /* Bet List */
+  .bet-list { display: flex; flex-direction: column; gap: 12px; }
+  .bet-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; display: flex; align-items: center; gap: 20px; transition: all .2s; }
+  .bet-item:hover { border-color: var(--primary); }
+  .bet-direction { width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; flex-shrink: 0; }
+  .bet-dir-yes { background: rgba(16,185,129,0.15); color: var(--yes); }
+  .bet-dir-no { background: rgba(239,68,68,0.15); color: var(--no); }
+  .bet-info { flex: 1; }
+  .bet-question { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+  .bet-meta { display: flex; gap: 16px; font-size: 12px; color: var(--text-dim); }
+  .bet-right { text-align: right; flex-shrink: 0; }
+  .bet-amount { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .bet-odds { font-size: 13px; color: var(--text-dim); }
+  .bet-status { display: inline-block; font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 6px; margin-top: 6px; }
+  .status-active { background: rgba(99,102,241,0.15); color: var(--primary); }
+  .status-won { background: rgba(16,185,129,0.15); color: var(--yes); }
+  .status-lost { background: rgba(239,68,68,0.15); color: var(--no); }
+  .status-void { background: rgba(148,163,184,0.15); color: var(--text-dim); }
+  .status-claimable { background: rgba(245,158,11,0.15); color: var(--warn); }
+  .claim-btn { padding: 8px 20px; background: var(--yes); color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 6px; }
+  .claim-btn:hover { opacity: 0.9; }
+  .claim-btn.void-btn { background: var(--text-dim); }
+
+  /* Settled section */
+  .settled-row { display: flex; justify-content: space-between; align-items: center; }
+  .pnl-positive { color: var(--yes); font-weight: 700; }
+  .pnl-negative { color: var(--no); font-weight: 700; }
+
+  .footer { text-align: center; padding: 24px; color: var(--text-dim); font-size: 12px; border-top: 1px solid var(--border); margin-top: 40px; }
+
+  @media (max-width: 768px) {
+    .dashboard-stats { grid-template-columns: repeat(2, 1fr); }
+    .bet-item { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .bet-right { text-align: left; }
+    .container { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">Meta<span>Pool</span></div>
+  <div class="header-right">
+    <div class="wallet-connected">
+      <span class="wallet-dot"></span>
+      <span>0x1a2B...9cDe</span>
+      <span class="wallet-balance">12,450 META</span>
+    </div>
+  </div>
+</header>
+
+<nav class="nav-tabs">
+  <button class="nav-tab">활성 마켓</button>
+  <button class="nav-tab active">내 베팅</button>
+  <button class="nav-tab">히스토리</button>
+  <button class="nav-tab">리더보드</button>
+</nav>
+
+<div class="container">
+
+  <!-- Dashboard Stats -->
+  <div class="dashboard-stats">
+    <div class="dash-stat">
+      <div class="dash-stat-label">총 베팅</div>
+      <div class="dash-stat-value">45,200</div>
+      <div class="dash-stat-sub">META</div>
+    </div>
+    <div class="dash-stat">
+      <div class="dash-stat-label">총 수익</div>
+      <div class="dash-stat-value green">62,840</div>
+      <div class="dash-stat-sub">META</div>
+    </div>
+    <div class="dash-stat">
+      <div class="dash-stat-label">순이익</div>
+      <div class="dash-stat-value green">+17,640</div>
+      <div class="dash-stat-sub">META (+39%)</div>
+    </div>
+    <div class="dash-stat">
+      <div class="dash-stat-label">승률</div>
+      <div class="dash-stat-value accent">68%</div>
+      <div class="dash-stat-sub">15승 7패</div>
+    </div>
+    <div class="dash-stat">
+      <div class="dash-stat-label">클레임 가능</div>
+      <div class="dash-stat-value" style="color:var(--warn);">8,320</div>
+      <div class="dash-stat-sub">META (2건)</div>
+    </div>
+  </div>
+
+  <!-- Sub tabs -->
+  <div class="sub-tabs">
+    <button class="sub-tab active">진행중<span class="badge">3</span></button>
+    <button class="sub-tab">클레임 가능<span class="badge" style="background:var(--warn)">2</span></button>
+    <button class="sub-tab">정산 완료</button>
+    <button class="sub-tab">전체</button>
+  </div>
+
+  <!-- Bet List -->
+  <div class="bet-list">
+
+    <!-- Active Bet -->
+    <div class="bet-item">
+      <div class="bet-direction bet-dir-yes">YES</div>
+      <div class="bet-info">
+        <div class="bet-question">BTC가 2026년 3월 내에 $100,000를 돌파할까?</div>
+        <div class="bet-meta">
+          <span>₿ Crypto</span>
+          <span>마감: 6시간 15분</span>
+          <span>현재 Yes 68%</span>
+        </div>
+      </div>
+      <div class="bet-right">
+        <div class="bet-amount">5,000 META</div>
+        <div class="bet-odds">배당률 1.47x</div>
+        <span class="bet-status status-active">진행중</span>
+      </div>
+    </div>
+
+    <!-- Active Bet 2 -->
+    <div class="bet-item">
+      <div class="bet-direction bet-dir-no">NO</div>
+      <div class="bet-info">
+        <div class="bet-question">미국 연준이 3월 FOMC에서 금리를 인하할까?</div>
+        <div class="bet-meta">
+          <span>🏛 Politics</span>
+          <span>마감: 12일 8시간</span>
+          <span>현재 No 59%</span>
+        </div>
+      </div>
+      <div class="bet-right">
+        <div class="bet-amount">2,000 META</div>
+        <div class="bet-odds">배당률 1.69x</div>
+        <span class="bet-status status-active">진행중</span>
+      </div>
+    </div>
+
+    <!-- Claimable -->
+    <div class="bet-item" style="border-color: rgba(245,158,11,0.4);">
+      <div class="bet-direction bet-dir-yes">YES</div>
+      <div class="bet-info">
+        <div class="bet-question">ETH 합병 후 1주일 내 $2,000 회복할까?</div>
+        <div class="bet-meta">
+          <span>₿ Crypto</span>
+          <span>결과: YES 확정</span>
+          <span>최종 Yes 72%</span>
+        </div>
+      </div>
+      <div class="bet-right">
+        <div class="bet-amount">3,000 META</div>
+        <div class="bet-odds">수익: +1,120 META</div>
+        <button class="claim-btn">보상 클레임</button>
+      </div>
+    </div>
+
+    <!-- Claimable (Void) -->
+    <div class="bet-item" style="border-color: rgba(148,163,184,0.4);">
+      <div class="bet-direction bet-dir-no">NO</div>
+      <div class="bet-info">
+        <div class="bet-question">취소된 경기: 맨시티 vs 리버풀</div>
+        <div class="bet-meta">
+          <span>⚽ Sports</span>
+          <span>결과: VOID (무효)</span>
+          <span>이벤트 취소됨</span>
+        </div>
+      </div>
+      <div class="bet-right">
+        <div class="bet-amount">1,500 META</div>
+        <div class="bet-odds">전액 환불</div>
+        <button class="claim-btn void-btn">환불 클레임</button>
+      </div>
+    </div>
+
+    <!-- Won (Settled) -->
+    <div class="bet-item">
+      <div class="bet-direction bet-dir-yes">YES</div>
+      <div class="bet-info">
+        <div class="bet-question">SOL이 $150를 돌파할까?</div>
+        <div class="bet-meta">
+          <span>₿ Crypto</span>
+          <span>결과: YES 확정</span>
+          <span>클레임 완료</span>
+        </div>
+      </div>
+      <div class="bet-right">
+        <div class="bet-amount">2,000 META</div>
+        <div class="pnl-positive">+1,520 META</div>
+        <span class="bet-status status-won">승리</span>
+      </div>
+    </div>
+
+    <!-- Lost -->
+    <div class="bet-item">
+      <div class="bet-direction bet-dir-no">NO</div>
+      <div class="bet-info">
+        <div class="bet-question">주말 서울 기온이 15도 이상일까?</div>
+        <div class="bet-meta">
+          <span>🌤 Weather</span>
+          <span>결과: YES 확정</span>
+        </div>
+      </div>
+      <div class="bet-right">
+        <div class="bet-amount">500 META</div>
+        <div class="pnl-negative">-500 META</div>
+        <span class="bet-status status-lost">패배</span>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<footer class="footer">
+  &copy; 2026 MetaPool — Metadium 블록체인 기반 예측 마켓
+</footer>
+
+</body>
+</html>

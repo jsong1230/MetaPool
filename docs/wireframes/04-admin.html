@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MetaPool — 관리자 패널</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --bg: #0b0d1a; --bg-card: #131525; --bg-card-hover: #1a1d35;
+    --primary: #6366f1; --secondary: #8b5cf6; --accent: #06b6d4;
+    --yes: #10b981; --no: #ef4444; --warn: #f59e0b;
+    --text: #e2e8f0; --text-dim: #94a3b8; --border: #1e2140; --radius: 12px;
+  }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, sans-serif; min-height: 100vh; }
+
+  .header { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; border-bottom: 1px solid var(--border); background: rgba(11,13,26,0.95); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 100; }
+  .logo { font-size: 22px; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .logo span { font-weight: 400; opacity: 0.7; }
+  .admin-badge { background: var(--warn); color: #000; font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 6px; margin-left: 8px; }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  .wallet-connected { background: var(--bg-card); border: 1px solid var(--border); color: var(--text); padding: 8px 16px; border-radius: 10px; font-size: 13px; display: flex; align-items: center; gap: 8px; }
+  .wallet-dot { width: 8px; height: 8px; background: var(--yes); border-radius: 50%; }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 24px; }
+  .page-title { font-size: 24px; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 8px; }
+
+  /* Admin Stats */
+  .admin-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 32px; }
+  .admin-stat { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; text-align: center; }
+  .admin-stat-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .admin-stat-value { font-size: 20px; font-weight: 700; }
+
+  /* Section */
+  .section { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 24px; }
+  .section-title { font-size: 18px; font-weight: 600; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+
+  /* Form */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group.full { grid-column: 1 / -1; }
+  .form-label { font-size: 13px; color: var(--text-dim); font-weight: 500; }
+  .form-input { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 12px 16px; border-radius: 8px; font-size: 14px; }
+  .form-input:focus { outline: none; border-color: var(--primary); }
+  .form-select { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 12px 16px; border-radius: 8px; font-size: 14px; }
+  .form-textarea { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 12px 16px; border-radius: 8px; font-size: 14px; resize: vertical; min-height: 60px; font-family: inherit; }
+  .form-hint { font-size: 11px; color: var(--text-dim); }
+
+  .btn-primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; border: none; padding: 12px 24px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 16px; }
+  .btn-danger { background: var(--no); color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .btn-warning { background: var(--warn); color: #000; border: none; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .btn-outline { background: none; border: 1px solid var(--border); color: var(--text-dim); padding: 10px 20px; border-radius: 8px; font-size: 13px; cursor: pointer; }
+
+  /* Market Admin List */
+  .market-admin-list { display: flex; flex-direction: column; gap: 12px; }
+  .market-admin-item { display: flex; align-items: center; justify-content: space-between; padding: 16px; background: var(--bg); border-radius: 10px; border: 1px solid var(--border); }
+  .market-admin-info { flex: 1; }
+  .market-admin-q { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .market-admin-meta { font-size: 12px; color: var(--text-dim); display: flex; gap: 12px; }
+  .market-admin-actions { display: flex; gap: 8px; }
+
+  .resolve-btns { display: flex; gap: 8px; }
+  .resolve-btn { padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; border: none; }
+  .resolve-yes { background: var(--yes); color: #fff; }
+  .resolve-no { background: var(--no); color: #fff; }
+  .resolve-void { background: var(--text-dim); color: #fff; }
+
+  /* Settings */
+  .settings-row { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid var(--border); }
+  .settings-row:last-child { border-bottom: none; }
+  .settings-label { font-size: 14px; font-weight: 500; }
+  .settings-desc { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+  .settings-value { display: flex; align-items: center; gap: 8px; }
+  .settings-input { width: 120px; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 8px; font-size: 14px; text-align: right; }
+
+  @media (max-width: 768px) {
+    .admin-stats { grid-template-columns: repeat(2, 1fr); }
+    .form-grid { grid-template-columns: 1fr; }
+    .container { padding: 16px; }
+    .market-admin-item { flex-direction: column; gap: 12px; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div style="display:flex; align-items:center;">
+    <div class="logo">Meta<span>Pool</span></div>
+    <span class="admin-badge">ADMIN</span>
+  </div>
+  <div class="header-right">
+    <div class="wallet-connected">
+      <span class="wallet-dot"></span>
+      <span>0xOwner...1234</span>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <h1 class="page-title">관리자 패널</h1>
+
+  <!-- Admin Stats -->
+  <div class="admin-stats">
+    <div class="admin-stat">
+      <div class="admin-stat-label">전체 마켓</div>
+      <div class="admin-stat-value">24</div>
+    </div>
+    <div class="admin-stat">
+      <div class="admin-stat-label">활성 마켓</div>
+      <div class="admin-stat-value" style="color:var(--yes)">12</div>
+    </div>
+    <div class="admin-stat">
+      <div class="admin-stat-label">누적 수수료</div>
+      <div class="admin-stat-value" style="color:var(--accent)">8,420 META</div>
+    </div>
+    <div class="admin-stat">
+      <div class="admin-stat-label">총 베팅액</div>
+      <div class="admin-stat-value">1.2M META</div>
+    </div>
+  </div>
+
+  <!-- Create Market -->
+  <div class="section">
+    <div class="section-title">마켓 생성</div>
+    <div class="form-grid">
+      <div class="form-group full">
+        <label class="form-label">질문 (English) *</label>
+        <input class="form-input" placeholder="Will BTC break $100K by end of March 2026?" />
+      </div>
+      <div class="form-group full">
+        <label class="form-label">질문 (한국어)</label>
+        <input class="form-input" placeholder="BTC가 2026년 3월 말까지 $100K를 돌파할까?" />
+      </div>
+      <div class="form-group full">
+        <label class="form-label">질문 (中文)</label>
+        <input class="form-input" placeholder="BTC 会在2026年3月底前突破10万美元吗？" />
+      </div>
+      <div class="form-group full">
+        <label class="form-label">질문 (日本語)</label>
+        <input class="form-input" placeholder="BTCは2026年3月末までに10万ドルを突破するか？" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">카테고리</label>
+        <select class="form-select">
+          <option>Crypto</option>
+          <option>Sports</option>
+          <option>Weather</option>
+          <option>Politics</option>
+          <option>Entertainment</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">베팅 마감 시간</label>
+        <input class="form-input" type="datetime-local" value="2026-03-31T00:00" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">결과 확정 예정 시간</label>
+        <input class="form-input" type="datetime-local" value="2026-04-01T00:00" />
+        <span class="form-hint">베팅 마감 이후여야 합니다</span>
+      </div>
+    </div>
+    <button class="btn-primary">마켓 생성 (서명 필요)</button>
+  </div>
+
+  <!-- Resolve Markets -->
+  <div class="section">
+    <div class="section-title">결과 확정 대기 마켓</div>
+    <div class="market-admin-list">
+      <div class="market-admin-item">
+        <div class="market-admin-info">
+          <div class="market-admin-q">#5 — SOL이 $150를 돌파할까?</div>
+          <div class="market-admin-meta">
+            <span>Crypto</span>
+            <span>풀: 45,000 META</span>
+            <span>마감됨: 2일 전</span>
+          </div>
+        </div>
+        <div class="resolve-btns">
+          <button class="resolve-btn resolve-yes">YES</button>
+          <button class="resolve-btn resolve-no">NO</button>
+          <button class="resolve-btn resolve-void">VOID</button>
+        </div>
+      </div>
+      <div class="market-admin-item">
+        <div class="market-admin-info">
+          <div class="market-admin-q">#8 — 맨시티 vs 리버풀 경기에서 맨시티가 승리할까?</div>
+          <div class="market-admin-meta">
+            <span>Sports</span>
+            <span>풀: 120,000 META</span>
+            <span>마감됨: 5시간 전</span>
+          </div>
+        </div>
+        <div class="resolve-btns">
+          <button class="resolve-btn resolve-yes">YES</button>
+          <button class="resolve-btn resolve-no">NO</button>
+          <button class="resolve-btn resolve-void">VOID</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Active Markets Management -->
+  <div class="section">
+    <div class="section-title">활성 마켓 관리</div>
+    <div class="market-admin-list">
+      <div class="market-admin-item">
+        <div class="market-admin-info">
+          <div class="market-admin-q">#7 — BTC가 2026년 3월 내에 $100,000를 돌파할까?</div>
+          <div class="market-admin-meta">
+            <span style="color:var(--yes)">Active</span>
+            <span>풀: 250,000 META</span>
+            <span>마감: 6시간 후</span>
+          </div>
+        </div>
+        <div class="market-admin-actions">
+          <button class="btn-warning">일시 중단</button>
+        </div>
+      </div>
+      <div class="market-admin-item">
+        <div class="market-admin-info">
+          <div class="market-admin-q">#10 — 서울에 이번 주말 비가 올까?</div>
+          <div class="market-admin-meta">
+            <span style="color:var(--warn)">Paused</span>
+            <span>풀: 15,200 META</span>
+            <span>중단됨: 1시간 전</span>
+          </div>
+        </div>
+        <div class="market-admin-actions">
+          <button class="btn-outline">재개</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings -->
+  <div class="section">
+    <div class="section-title">컨트랙트 설정</div>
+    <div class="settings-row">
+      <div>
+        <div class="settings-label">최소 베팅 금액 (minBet)</div>
+        <div class="settings-desc">현재: 100 META</div>
+      </div>
+      <div class="settings-value">
+        <input class="settings-input" value="100" /> META
+      </div>
+    </div>
+    <div class="settings-row">
+      <div>
+        <div class="settings-label">최대 베팅 금액 (maxBet)</div>
+        <div class="settings-desc">현재: 100,000 META</div>
+      </div>
+      <div class="settings-value">
+        <input class="settings-input" value="100000" /> META
+      </div>
+    </div>
+    <div class="settings-row">
+      <div>
+        <div class="settings-label">플랫폼 수수료율</div>
+        <div class="settings-desc">현재: 2% (최대 10%)</div>
+      </div>
+      <div class="settings-value">
+        <input class="settings-input" value="200" /> (basis points)
+      </div>
+    </div>
+    <div class="settings-row">
+      <div>
+        <div class="settings-label">누적 수수료 인출</div>
+        <div class="settings-desc">인출 가능: 8,420 META</div>
+      </div>
+      <div class="settings-value">
+        <button class="btn-primary" style="margin-top:0">수수료 인출</button>
+      </div>
+    </div>
+    <button class="btn-primary">설정 저장 (서명 필요)</button>
+  </div>
+
+</div>
+
+</body>
+</html>
