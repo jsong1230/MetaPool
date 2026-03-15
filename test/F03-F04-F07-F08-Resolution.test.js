@@ -266,6 +266,8 @@ describe("MetaPool - F-03/F-04/F-07/F-08 결과 확정 및 클레임", function 
       const { metaPool, owner, user1, marketId, user1Reward } = await networkHelpers.loadFixture(resolvedMarketFixture);
 
       await metaPool.connect(owner).resolveMarket(marketId, 1); // Yes
+      // 이의제기 기간(24시간) 이후로 시간 이동
+      await networkHelpers.time.increase(86401);
 
       const balanceBefore = await ethers.provider.getBalance(user1.address);
       const tx = await metaPool.connect(user1).claimWinnings(marketId);
@@ -296,6 +298,8 @@ describe("MetaPool - F-03/F-04/F-07/F-08 결과 확정 및 클레임", function 
       const { metaPool, owner, user2, marketId, user2Reward } = await networkHelpers.loadFixture(resolvedMarketFixture);
 
       await metaPool.connect(owner).resolveMarket(marketId, 2); // No
+      // 이의제기 기간(24시간) 이후로 시간 이동
+      await networkHelpers.time.increase(86401);
 
       const balanceBefore = await ethers.provider.getBalance(user2.address);
       const tx = await metaPool.connect(user2).claimWinnings(marketId);
@@ -311,6 +315,8 @@ describe("MetaPool - F-03/F-04/F-07/F-08 결과 확정 및 클레임", function 
       const { metaPool, owner, user1, marketId, user1Reward } = await networkHelpers.loadFixture(resolvedMarketFixture);
 
       await metaPool.connect(owner).resolveMarket(marketId, 1);
+      // 이의제기 기간(24시간) 이후로 시간 이동
+      await networkHelpers.time.increase(86401);
 
       await expect(metaPool.connect(user1).claimWinnings(marketId))
         .to.emit(metaPool, "WinningsClaimed")
@@ -331,6 +337,8 @@ describe("MetaPool - F-03/F-04/F-07/F-08 결과 확정 및 클레임", function 
       const { metaPool, owner, user2, marketId } = await networkHelpers.loadFixture(resolvedMarketFixture);
 
       await metaPool.connect(owner).resolveMarket(marketId, 1); // Yes 승리 → user2(No)는 패배
+      // 이의제기 기간(24시간) 이후로 시간 이동
+      await networkHelpers.time.increase(86401);
 
       await expect(
         metaPool.connect(user2).claimWinnings(marketId)
@@ -342,6 +350,8 @@ describe("MetaPool - F-03/F-04/F-07/F-08 결과 확정 및 클레임", function 
       const { metaPool, owner, user1, marketId } = await networkHelpers.loadFixture(resolvedMarketFixture);
 
       await metaPool.connect(owner).resolveMarket(marketId, 1);
+      // 이의제기 기간(24시간) 이후로 시간 이동
+      await networkHelpers.time.increase(86401);
       await metaPool.connect(user1).claimWinnings(marketId); // 첫 클레임
 
       await expect(
@@ -354,6 +364,8 @@ describe("MetaPool - F-03/F-04/F-07/F-08 결과 확정 및 클레임", function 
       const { metaPool, owner, user3, marketId } = await networkHelpers.loadFixture(resolvedMarketFixture);
 
       await metaPool.connect(owner).resolveMarket(marketId, 1);
+      // 이의제기 기간(24시간) 이후로 시간 이동
+      await networkHelpers.time.increase(86401);
 
       await expect(
         metaPool.connect(user3).claimWinnings(marketId)
@@ -365,6 +377,8 @@ describe("MetaPool - F-03/F-04/F-07/F-08 결과 확정 및 클레임", function 
       const { metaPool, owner, user1, marketId } = await networkHelpers.loadFixture(resolvedMarketFixture);
 
       await metaPool.connect(owner).resolveMarket(marketId, 1);
+      // 이의제기 기간(24시간) 이후로 시간 이동
+      await networkHelpers.time.increase(86401);
       await metaPool.connect(user1).claimWinnings(marketId);
 
       const bet = await metaPool.getUserBet(marketId, user1.address);
@@ -382,6 +396,8 @@ describe("MetaPool - F-03/F-04/F-07/F-08 결과 확정 및 클레임", function 
       const { metaPool, owner, user1, marketId } = await networkHelpers.loadFixture(resolvedMarketFixture);
 
       await metaPool.connect(owner).resolveMarket(marketId, 1);
+      // 이의제기 기간(24시간) 이후로 시간 이동
+      await networkHelpers.time.increase(86401);
       await metaPool.connect(user1).claimWinnings(marketId);
 
       const winnings = await metaPool.calculateWinnings(marketId, user1.address);
@@ -554,6 +570,8 @@ describe("MetaPool - F-03/F-04/F-07/F-08 결과 확정 및 클레임", function 
       expect(market.status).to.equal(2); // Resolved
       expect(market.outcome).to.equal(1); // Yes
 
+      // 이의제기 기간(24시간) 이후로 시간 이동
+      await networkHelpers.time.increase(86401);
       await metaPool.connect(user1).claimWinnings(1);
       const bet = await metaPool.getUserBet(1, user1.address);
       expect(bet.claimed).to.equal(true);
@@ -611,6 +629,9 @@ describe("MetaPool - F-03/F-04/F-07/F-08 결과 확정 및 클레임", function 
       await networkHelpers.time.increaseTo(bettingDeadline + 1);
       await metaPool.connect(owner).resolveMarket(1, 1); // Yes 승리
 
+      // 이의제기 기간(24시간) 이후로 시간 이동
+      await networkHelpers.time.increase(86401);
+
       // user1 클레임: 600 + 1470 * 600/1000 = 600 + 882 = 1482
       await metaPool.connect(user1).claimWinnings(1);
       // user3 클레임: 400 + 1470 * 400/1000 = 400 + 588 = 988
@@ -627,6 +648,8 @@ describe("MetaPool - F-03/F-04/F-07/F-08 결과 확정 및 클레임", function 
       const { metaPool, owner, user1, user2, marketId } = await networkHelpers.loadFixture(resolvedMarketFixture);
 
       await metaPool.connect(owner).resolveMarket(marketId, 1); // Yes
+      // 이의제기 기간(24시간) 이후로 시간 이동
+      await networkHelpers.time.increase(86401);
       await metaPool.connect(user1).claimWinnings(marketId);
 
       // user2(No 베팅)는 NotWinner

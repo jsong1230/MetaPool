@@ -17,6 +17,12 @@ export default {
     },
   },
   networks: {
+    hardhat: {
+      type: "edr-simulated",
+      accounts: {
+        count: 30, // F-09/F-10 임계값 테스트에 충분한 계정 수 (20명 베팅자 + owner + 예비)
+      },
+    },
     localhost: {
       type: "http",
       url: "http://127.0.0.1:8545",

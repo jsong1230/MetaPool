@@ -47,6 +47,12 @@ contract MetaPool is Ownable, ReentrancyGuard, Pausable {
         bool claimed;
     }
 
+    struct Dispute {
+        uint256 stake;
+        bool resolved;
+        bool accepted;
+    }
+
     // ============================================================
     // Custom Errors
     // ============================================================
@@ -70,6 +76,26 @@ contract MetaPool is Ownable, ReentrancyGuard, Pausable {
     error AlreadyClaimed(uint256 marketId, address user);
     error NoBetFound(uint256 marketId, address user);
     error TransferFailed();
+
+    // F-11 Custom Errors
+    error MarketNotPausable(uint256 marketId, MarketStatus currentStatus);
+    error MarketNotPaused(uint256 marketId, MarketStatus currentStatus);
+
+    // F-12 Custom Errors
+    error InvalidMinBet(uint256 minBet);
+    error InvalidMaxBet(uint256 maxBet, uint256 currentMinBet);
+    error InvalidFeeRate(uint256 feeRate);
+
+    // F-09/F-10 Custom Errors
+    error DisputePeriodActive(uint256 marketId, uint256 deadline);
+    error DisputePeriodEnded(uint256 marketId);
+    error InvalidDisputeStake(uint256 sent, uint256 required);
+    error NotBettor(uint256 marketId, address user);
+    error AlreadyDisputed(uint256 marketId, address user);
+    error MarketUnderReview(uint256 marketId);
+    error MarketNotUnderReview(uint256 marketId);
+    error DisputeNotFound(uint256 marketId, address user);
+    error DisputeAlreadyResolved(uint256 marketId, address user);
 
     // ============================================================
     // Events
@@ -97,12 +123,26 @@ contract MetaPool is Ownable, ReentrancyGuard, Pausable {
     event WinningsClaimed(uint256 indexed marketId, address indexed user, uint256 amount);
     event RefundClaimed(uint256 indexed marketId, address indexed user, uint256 amount);
 
+    // F-11 Events
+    event MarketPaused(uint256 indexed marketId);
+    event MarketResumed(uint256 indexed marketId, uint256 newBettingDeadline, uint256 newResolutionDeadline);
+
+    // F-12 Events
+    event SettingsUpdated(string setting, uint256 oldValue, uint256 newValue);
+    event FeesWithdrawn(address indexed recipient, uint256 amount);
+
+    // F-09/F-10 Events
+    event DisputeSubmitted(uint256 indexed marketId, address indexed disputant, uint256 stake, uint256 disputeCount);
+    event DisputeResolved(uint256 indexed marketId, address indexed disputant, bool accepted, uint256 stakeReturned);
+    event MarketReviewTriggered(uint256 indexed marketId, uint256 disputeCount, uint256 totalBettors);
+
     // ============================================================
     // State Variables
     // ============================================================
 
     mapping(uint256 => Market) public markets;
     mapping(uint256 => mapping(address => Bet)) public bets;
+    mapping(uint256 => mapping(address => Dispute)) public disputes;
 
     uint256 public marketCount;
     uint256 public minBet;
@@ -110,6 +150,11 @@ contract MetaPool is Ownable, ReentrancyGuard, Pausable {
     uint256 public platformFeeRate;
     uint256 public constant FEE_DENOMINATOR = 10000;
     uint256 public accumulatedFees;
+
+    // F-09/F-10 상수
+    uint256 public constant DISPUTE_PERIOD = 24 hours;
+    uint256 public constant DISPUTE_STAKE = 1000 ether;
+    uint256 public constant DISPUTE_THRESHOLD = 1000; // 10% (basis points)
 
     // ============================================================
     // Constructor
@@ -285,7 +330,7 @@ contract MetaPool is Ownable, ReentrancyGuard, Pausable {
         uint256 platformFee = 0;
 
         if (_outcome == MarketOutcome.Void) {
-            // Void 확정: 상태 Voided로 전환, 수수료 없음
+            // Void 확정: 상태 Voided로 전환, 수수료 없음, 이의제기 기간 없음
             market.status = MarketStatus.Voided;
         } else {
             // Yes/No 확정: 패배 풀에서 수수료 계산
@@ -293,6 +338,8 @@ contract MetaPool is Ownable, ReentrancyGuard, Pausable {
             platformFee = losingPool * platformFeeRate / FEE_DENOMINATOR;
             accumulatedFees += platformFee;
             market.status = MarketStatus.Resolved;
+            // 이의제기 기간 설정 (24시간)
+            market.disputeDeadline = block.timestamp + DISPUTE_PERIOD;
         }
 
         market.outcome = _outcome;
@@ -311,6 +358,14 @@ contract MetaPool is Ownable, ReentrancyGuard, Pausable {
         // Resolved 상태 검증
         if (market.status != MarketStatus.Resolved) {
             revert MarketNotResolved(_marketId, market.status);
+        }
+
+        // 재심 상태 검증: underReview이면 클레임 불가
+        if (market.underReview) revert MarketUnderReview(_marketId);
+
+        // 이의제기 기간 중 클레임 보류
+        if (block.timestamp <= market.disputeDeadline) {
+            revert DisputePeriodActive(_marketId, market.disputeDeadline);
         }
 
         Bet storage bet = bets[_marketId][msg.sender];
@@ -411,5 +466,256 @@ contract MetaPool is Ownable, ReentrancyGuard, Pausable {
 
         (bool success, ) = payable(owner()).call{value: amount}("");
         if (!success) revert TransferFailed();
+
+        emit FeesWithdrawn(owner(), amount);
+    }
+
+    // ============================================================
+    // F-11: 긴급 마켓 중단
+    // ============================================================
+
+    /// @notice Active 상태의 마켓을 즉시 Paused 상태로 전환한다
+    function pauseMarket(uint256 _marketId) external onlyOwner {
+        Market storage market = markets[_marketId];
+
+        // 마켓 존재 검증
+        if (market.id == 0) revert MarketNotFound(_marketId);
+
+        // Active 상태만 Pause 가능
+        if (market.status != MarketStatus.Active) {
+            revert MarketNotPausable(_marketId, market.status);
+        }
+
+        market.status = MarketStatus.Paused;
+
+        emit MarketPaused(_marketId);
+    }
+
+    /// @notice Paused 상태의 마켓을 새 마감시간과 함께 Active로 재개한다
+    function resumeMarket(
+        uint256 _marketId,
+        uint256 _newBettingDeadline,
+        uint256 _newResolutionDeadline
+    ) external onlyOwner {
+        Market storage market = markets[_marketId];
+
+        // 마켓 존재 검증
+        if (market.id == 0) revert MarketNotFound(_marketId);
+
+        // Paused 상태만 재개 가능
+        if (market.status != MarketStatus.Paused) {
+            revert MarketNotPaused(_marketId, market.status);
+        }
+
+        // 새 마감시간 검증
+        if (_newBettingDeadline <= block.timestamp) {
+            revert InvalidDeadline(_newBettingDeadline, _newResolutionDeadline);
+        }
+        if (_newResolutionDeadline <= _newBettingDeadline) {
+            revert InvalidDeadline(_newBettingDeadline, _newResolutionDeadline);
+        }
+
+        market.status = MarketStatus.Active;
+        market.bettingDeadline = _newBettingDeadline;
+        market.resolutionDeadline = _newResolutionDeadline;
+
+        emit MarketResumed(_marketId, _newBettingDeadline, _newResolutionDeadline);
+    }
+
+    // ============================================================
+    // F-12: 설정 관리
+    // ============================================================
+
+    /// @notice 최소 베팅 금액을 변경한다 (minBet > 0, minBet < maxBet)
+    function setMinBet(uint256 _minBet) external onlyOwner {
+        if (_minBet == 0) revert InvalidMinBet(_minBet);
+        if (_minBet >= maxBet) revert InvalidMinBet(_minBet);
+
+        uint256 oldValue = minBet;
+        minBet = _minBet;
+
+        emit SettingsUpdated("minBet", oldValue, _minBet);
+    }
+
+    /// @notice 최대 베팅 금액을 변경한다 (maxBet > minBet)
+    function setMaxBet(uint256 _maxBet) external onlyOwner {
+        if (_maxBet <= minBet) revert InvalidMaxBet(_maxBet, minBet);
+
+        uint256 oldValue = maxBet;
+        maxBet = _maxBet;
+
+        emit SettingsUpdated("maxBet", oldValue, _maxBet);
+    }
+
+    /// @notice 플랫폼 수수료율을 변경한다 (feeRate <= 1000, 즉 10%)
+    function setPlatformFeeRate(uint256 _feeRate) external onlyOwner {
+        if (_feeRate > 1000) revert InvalidFeeRate(_feeRate);
+
+        uint256 oldValue = platformFeeRate;
+        platformFeeRate = _feeRate;
+
+        emit SettingsUpdated("platformFeeRate", oldValue, _feeRate);
+    }
+
+    // ============================================================
+    // F-10: 이의제기 제출
+    // ============================================================
+
+    /// @notice 결과 확정 후 이의제기 기간 내에 1,000 META를 스테이킹하여 이의를 제출한다
+    function submitDispute(uint256 _marketId) external payable nonReentrant {
+        Market storage market = markets[_marketId];
+
+        // 마켓 존재 검증
+        if (market.id == 0) revert MarketNotFound(_marketId);
+
+        // Resolved 상태만 허용
+        if (market.status != MarketStatus.Resolved) {
+            revert MarketNotResolved(_marketId, market.status);
+        }
+
+        // 이의제기 기간 내에만 가능
+        if (block.timestamp > market.disputeDeadline) {
+            revert DisputePeriodEnded(_marketId);
+        }
+
+        // 정확히 DISPUTE_STAKE만 허용
+        if (msg.value != DISPUTE_STAKE) {
+            revert InvalidDisputeStake(msg.value, DISPUTE_STAKE);
+        }
+
+        // 해당 마켓에 베팅한 사용자만 가능
+        if (bets[_marketId][msg.sender].amount == 0) {
+            revert NotBettor(_marketId, msg.sender);
+        }
+
+        // 중복 이의 제출 불가
+        if (disputes[_marketId][msg.sender].stake > 0) {
+            revert AlreadyDisputed(_marketId, msg.sender);
+        }
+
+        // 이의 기록 저장
+        disputes[_marketId][msg.sender] = Dispute({
+            stake: msg.value,
+            resolved: false,
+            accepted: false
+        });
+
+        // 이의 건수 증가
+        market.disputeCount++;
+
+        emit DisputeSubmitted(_marketId, msg.sender, msg.value, market.disputeCount);
+
+        // 임계값 체크: disputeCount >= (yesCount + noCount) * DISPUTE_THRESHOLD / FEE_DENOMINATOR
+        uint256 totalBettors = market.yesCount + market.noCount;
+        uint256 threshold = totalBettors * DISPUTE_THRESHOLD / FEE_DENOMINATOR;
+
+        if (!market.underReview && market.disputeCount >= threshold && threshold > 0) {
+            market.underReview = true;
+            emit MarketReviewTriggered(_marketId, market.disputeCount, totalBettors);
+        }
+    }
+
+    // ============================================================
+    // F-10: 이의제기 처리 (관리자)
+    // ============================================================
+
+    /// @notice 관리자가 개별 이의제기를 인정 또는 기각한다
+    function resolveDispute(
+        uint256 _marketId,
+        address _disputant,
+        bool _accepted
+    ) external onlyOwner nonReentrant {
+        // 마켓 존재 검증
+        if (markets[_marketId].id == 0) revert MarketNotFound(_marketId);
+
+        Dispute storage dispute = disputes[_marketId][_disputant];
+
+        // 이의 기록 존재 검증
+        if (dispute.stake == 0) revert DisputeNotFound(_marketId, _disputant);
+
+        // 이미 처리된 이의 검증
+        if (dispute.resolved) revert DisputeAlreadyResolved(_marketId, _disputant);
+
+        // CEI 패턴: 상태 먼저 변경
+        dispute.resolved = true;
+        dispute.accepted = _accepted;
+
+        uint256 stakeReturned = 0;
+
+        if (_accepted) {
+            // 이의 인정: 스테이킹 금액 반환
+            stakeReturned = dispute.stake;
+            (bool success, ) = payable(_disputant).call{value: stakeReturned}("");
+            if (!success) revert TransferFailed();
+        } else {
+            // 이의 기각: 스테이킹 금액 몰수 → accumulatedFees에 추가
+            accumulatedFees += dispute.stake;
+        }
+
+        emit DisputeResolved(_marketId, _disputant, _accepted, stakeReturned);
+    }
+
+    // ============================================================
+    // F-09: 재심 결과 처리 (관리자)
+    // ============================================================
+
+    /// @notice 관리자가 재심 마켓의 결과를 재결정한다
+    function resolveReview(
+        uint256 _marketId,
+        MarketOutcome _newOutcome
+    ) external onlyOwner {
+        Market storage market = markets[_marketId];
+
+        // 마켓 존재 검증
+        if (market.id == 0) revert MarketNotFound(_marketId);
+
+        // underReview 상태만 처리 가능
+        if (!market.underReview) revert MarketNotUnderReview(_marketId);
+
+        // Yes, No, Void만 허용
+        if (_newOutcome == MarketOutcome.Undecided) revert InvalidOutcome();
+
+        // 재심 상태 해제
+        market.underReview = false;
+        // 이의제기 기간 종료 (즉시 클레임 가능하도록)
+        market.disputeDeadline = 0;
+
+        if (_newOutcome == MarketOutcome.Void) {
+            // Void로 변경: 기존 수수료 취소, Voided 상태로 전환
+            // 이전에 축적된 수수료에서 해당 마켓 수수료를 차감 (이미 계산된 수수료 되돌리기)
+            uint256 oldLosingPool = (market.outcome == MarketOutcome.Yes) ? market.noPool : market.yesPool;
+            uint256 oldFee = oldLosingPool * platformFeeRate / FEE_DENOMINATOR;
+            if (accumulatedFees >= oldFee) {
+                accumulatedFees -= oldFee;
+            }
+            market.status = MarketStatus.Voided;
+            market.outcome = _newOutcome;
+        } else if (_newOutcome != market.outcome) {
+            // 결과 변경 (Yes <-> No): 수수료 재계산
+            uint256 oldLosingPool = (market.outcome == MarketOutcome.Yes) ? market.noPool : market.yesPool;
+            uint256 oldFee = oldLosingPool * platformFeeRate / FEE_DENOMINATOR;
+
+            uint256 newLosingPool = (_newOutcome == MarketOutcome.Yes) ? market.noPool : market.yesPool;
+            uint256 newFee = newLosingPool * platformFeeRate / FEE_DENOMINATOR;
+
+            // 기존 수수료 제거 후 새 수수료 추가
+            if (accumulatedFees >= oldFee) {
+                accumulatedFees -= oldFee;
+            }
+            accumulatedFees += newFee;
+
+            market.outcome = _newOutcome;
+        }
+        // 결과가 동일한 경우: 원래 결과 유지, underReview만 해제
+
+        emit MarketResolved(_marketId, _newOutcome, accumulatedFees);
+    }
+
+    // ============================================================
+    // View: 이의제기 조회
+    // ============================================================
+
+    function getDispute(uint256 _marketId, address _user) external view returns (Dispute memory) {
+        return disputes[_marketId][_user];
     }
 }
