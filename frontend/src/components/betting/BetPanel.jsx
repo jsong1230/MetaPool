@@ -65,9 +65,10 @@ export function BetPanel({
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
-  // 배경 스크롤 방지 (모바일 bottom sheet 열릴 때)
+  // 배경 스크롤 방지 (모바일 bottom sheet 열릴 때만)
   useEffect(() => {
-    if (isOpen) {
+    const isMobile = window.innerWidth < 768; // md breakpoint
+    if (isOpen && isMobile) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';

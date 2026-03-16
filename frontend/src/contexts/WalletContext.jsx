@@ -4,7 +4,7 @@
  */
 import { createContext, useState, useEffect, useCallback, useRef } from 'react';
 import { ethers } from 'ethers';
-import { ACTIVE_NETWORK, ALLOWED_CHAIN_IDS, POLL_INTERVAL_BALANCE } from '../lib/constants.js';
+import { ACTIVE_NETWORK, ALLOWED_CHAIN_IDS, POLL_INTERVAL_BALANCE, RPC_URL } from '../lib/constants.js';
 
 export const WalletContext = createContext(null);
 
@@ -21,15 +21,16 @@ export function WalletProvider({ children }) {
   // 현재 체인이 허용된 네트워크인지 확인
   const isCorrectNetwork = chainId !== null && ALLOWED_CHAIN_IDS.includes(chainId);
 
-  // 잔액 조회
+  // 잔액 조회 — RPC 직접 호출 (MetaMask 캐시 우회)
   const fetchBalance = useCallback(async (address) => {
-    if (!address || !window.ethereum) return;
+    if (!address) return;
     try {
-      const provider = new ethers.BrowserProvider(window.ethereum);
+      const provider = new ethers.JsonRpcProvider(RPC_URL);
       const bal = await provider.getBalance(address);
+      console.log('[WalletContext] fetchBalance:', address, 'balance:', ethers.formatEther(bal), 'META');
       setBalance(bal);
-    } catch {
-      // 잔액 조회 실패는 무시 (네트워크 변경 중일 수 있음)
+    } catch (err) {
+      console.error('[WalletContext] fetchBalance error:', err);
     }
   }, []);
 
@@ -67,8 +68,9 @@ export function WalletProvider({ children }) {
         return;
       }
 
-      const network = await provider.getNetwork();
-      const currentChainId = Number(network.chainId);
+      const net = await provider.getNetwork();
+      const currentChainId = Number(net.chainId);
+      console.log('[WalletContext] connected:', accounts[0], 'chainId:', currentChainId);
 
       setAccount(accounts[0]);
       setChainId(currentChainId);

@@ -13,9 +13,13 @@ import { MarketDetailPage } from './pages/MarketDetailPage.jsx';
 import { MyBetsPage } from './pages/MyBetsPage.jsx';
 import { ProfilePage } from './pages/ProfilePage.jsx';
 import { LeaderboardPage } from './pages/LeaderboardPage.jsx';
+import { AdminPage } from './pages/AdminPage.jsx';
+import { AdminCreateMarketPage } from './pages/AdminCreateMarketPage.jsx';
+import { AdminSettingsPage } from './pages/AdminSettingsPage.jsx';
+import { HistoryPage } from './pages/HistoryPage.jsx';
 
-// 아직 미구현 페이지 placeholder
-function PlaceholderPage({ title }) {
+// 404 페이지
+function NotFoundPage() {
   return (
     <main className="max-w-7xl mx-auto px-4 lg:px-6 py-6">
       <div className="
@@ -23,8 +27,8 @@ function PlaceholderPage({ title }) {
         flex flex-col items-center justify-center text-center
         min-h-[300px]
       ">
-        <p className="text-text-secondary text-lg font-medium">{title}</p>
-        <p className="text-text-muted text-sm mt-2">추후 구현 예정</p>
+        <p className="text-text-secondary text-lg font-medium">페이지를 찾을 수 없습니다</p>
+        <p className="text-text-muted text-sm mt-2">존재하지 않는 URL입니다</p>
       </div>
     </main>
   );
@@ -45,30 +49,11 @@ export default function App() {
                 <Route path="/my-bets" element={<MyBetsPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/leaderboard" element={<LeaderboardPage />} />
-                <Route
-                  path="/history"
-                  element={<PlaceholderPage title="히스토리 (F-21)" />}
-                />
-                <Route
-                  path="/admin"
-                  element={<PlaceholderPage title="관리자 패널" />}
-                />
-                <Route
-                  path="/admin/create"
-                  element={<PlaceholderPage title="마켓 생성 (F-01)" />}
-                />
-                <Route
-                  path="/admin/resolve/:id"
-                  element={<PlaceholderPage title="결과 확정 (F-03)" />}
-                />
-                <Route
-                  path="/admin/settings"
-                  element={<PlaceholderPage title="설정 관리 (F-12)" />}
-                />
-                <Route
-                  path="*"
-                  element={<PlaceholderPage title="페이지를 찾을 수 없습니다" />}
-                />
+                <Route path="/history" element={<HistoryPage />} />
+                <Route path="/admin" element={<AdminPage />} />
+                <Route path="/admin/create" element={<AdminCreateMarketPage />} />
+                <Route path="/admin/settings" element={<AdminSettingsPage />} />
+                <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </div>
 

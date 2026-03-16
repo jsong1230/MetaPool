@@ -3,13 +3,15 @@
  * navigation.md §4.1 헤더 구조 기준
  */
 import { Link, useNavigate } from 'react-router-dom';
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, ShieldCheck } from 'lucide-react';
 import { ConnectWallet } from '../common/ConnectWallet.jsx';
 import { LanguageSelector } from '../common/LanguageSelector.jsx';
 import { useWallet } from '../../hooks/useWallet.js';
+import { useOwner } from '../../hooks/useOwner.js';
 
 export function Header() {
   const { isConnected, isCorrectNetwork, switchNetwork } = useWallet();
+  const { isOwner } = useOwner();
   const navigate = useNavigate();
 
   return (
@@ -66,6 +68,20 @@ export function Header() {
             <NavLink to="/">마켓</NavLink>
             <NavLink to="/history">히스토리</NavLink>
             <NavLink to="/leaderboard">리더보드</NavLink>
+            {/* owner일 때만 Admin 링크 노출 */}
+            {isOwner && (
+              <Link
+                to="/admin"
+                className="
+                  flex items-center gap-1 px-3 py-2 rounded-md text-sm font-medium
+                  text-brand-primary hover:bg-brand-primary-muted
+                  transition-colors duration-150
+                "
+              >
+                <ShieldCheck className="w-3.5 h-3.5" strokeWidth={2} />
+                Admin
+              </Link>
+            )}
           </nav>
 
           {/* 우측: 언어 선택 + 지갑 연결 */}

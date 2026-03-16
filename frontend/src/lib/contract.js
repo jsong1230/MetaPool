@@ -15,10 +15,21 @@ export function getProvider() {
 }
 
 /**
- * MetaMask Signer (지갑 연결 필요)
+ * 로컬 개발 모드 여부 (Hardhat 노드 직접 서명, MetaMask 불필요)
+ */
+const IS_LOCAL_DEV = RPC_URL.includes('127.0.0.1') || RPC_URL.includes('localhost');
+
+/**
+ * Signer 획득
+ * - 로컬 개발: JsonRpcProvider에서 Hardhat 계정 직접 사용 (MetaMask 우회)
+ * - 프로덕션: MetaMask BrowserProvider 사용
  * @returns {Promise<ethers.Signer>}
  */
 export async function getSigner() {
+  if (IS_LOCAL_DEV) {
+    const provider = new ethers.JsonRpcProvider(RPC_URL);
+    return provider.getSigner(0); // Hardhat Account #0
+  }
   if (!window.ethereum) {
     throw new Error('MetaMask가 설치되어 있지 않습니다');
   }

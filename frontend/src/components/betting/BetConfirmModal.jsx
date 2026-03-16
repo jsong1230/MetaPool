@@ -64,27 +64,24 @@ export function BetConfirmModal({
 
   return (
     <>
-      {/* 오버레이 */}
+      {/* 오버레이 + 모달 컨테이너 */}
       <div
-        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-end sm:items-center justify-center"
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-end sm:items-center justify-center overflow-y-auto p-4 sm:p-6"
         onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
-        aria-hidden="true"
-      />
-
-      {/* 모달 패널 */}
-      <div
-        className="
-          fixed z-[61]
-          bottom-0 sm:bottom-auto
-          left-0 right-0 sm:left-auto sm:right-auto
-          w-full sm:max-w-md sm:mx-auto
-          bg-bg-elevated border border-border-default rounded-t-xl sm:rounded-xl
-          p-6 shadow-elevation-3
-          animate-slide-up sm:animate-fade-scale
-        "
         role="dialog"
         aria-label="베팅 확인"
         aria-modal="true"
+      >
+      {/* 모달 패널 */}
+      <div
+        className="
+          w-full sm:max-w-md
+          bg-bg-elevated border border-border-default rounded-xl
+          p-6 shadow-elevation-3
+          animate-slide-up sm:animate-fade-scale
+          my-auto
+        "
+        onClick={(e) => e.stopPropagation()}
       >
         {/* 헤더 */}
         <div className="flex items-center justify-between mb-4">
@@ -214,6 +211,7 @@ export function BetConfirmModal({
             )}
           </button>
         </div>
+      </div>
       </div>
     </>
   );
