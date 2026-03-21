@@ -14,6 +14,7 @@ export default {
         runs: 200,
       },
       viaIR: true,
+      evmVersion: "paris",
     },
   },
   networks: {
