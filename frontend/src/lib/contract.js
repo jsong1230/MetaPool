@@ -3,7 +3,7 @@
  * 컴포넌트는 이 모듈을 통해서만 컨트랙트에 접근한다
  */
 import { ethers } from 'ethers';
-import ABI from './abi/MetaPool.json';
+import ABI from './abi/MetaPool.abi.js';
 import { CONTRACT_ADDRESS, RPC_URL, ACTIVE_NETWORK } from './constants.js';
 
 /**

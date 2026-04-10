@@ -28,7 +28,7 @@ export const NETWORKS = {
 };
 
 // 개발 환경에서 사용할 네트워크 결정
-const envChainId = import.meta.env.VITE_CHAIN_ID;
+const envChainId = import.meta.env?.VITE_CHAIN_ID;
 export const ACTIVE_NETWORK =
   envChainId === '11' ? NETWORKS.metadiumMainnet :
   envChainId === '12' ? NETWORKS.metadiumTestnet :
@@ -42,12 +42,12 @@ export const ALLOWED_CHAIN_IDS = [
 ];
 
 // 컨트랙트 주소
-export const CONTRACT_ADDRESS = import.meta.env.VITE_CONTRACT_ADDRESS || '';
+export const CONTRACT_ADDRESS = import.meta.env?.VITE_CONTRACT_ADDRESS || '';
 
 // RPC URL — 상대 경로(/rpc)면 현재 origin을 붙여 절대 URL로 변환 (Vite proxy 지원)
-const _rpcRaw = import.meta.env.VITE_RPC_URL || 'http://127.0.0.1:8545';
+const _rpcRaw = import.meta.env?.VITE_RPC_URL || 'http://127.0.0.1:8545';
 export const RPC_URL = _rpcRaw.startsWith('/')
-  ? `${window.location.origin}${_rpcRaw}`
+  ? `${typeof window !== 'undefined' ? window.location.origin : ''}${_rpcRaw}`
   : _rpcRaw;
 
 // 카테고리 enum (컨트랙트 MarketCategory와 일치)

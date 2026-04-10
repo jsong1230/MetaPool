@@ -8,4 +8,8 @@ export default defineConfig({
     setupFiles: ['./src/test-setup.js'],
     globals: true,
   },
+  // Vite 8 oxc에서 JSON import with assertion 지원
+  json: {
+    stringify: true,
+  },
 })
