@@ -115,7 +115,7 @@ describe('HomePage', () => {
         yesPool: 0n, noPool: 0n, yesCount: 0, noCount: 0 },
     ];
     renderHomePage({ markets, loading: false, error: null, refetch: vi.fn() });
-    fireEvent.click(screen.getByText('스포츠'));
+    fireEvent.click(screen.getByRole('tab', { name: '스포츠' }));
     expect(screen.getByText('Sports?')).toBeInTheDocument();
     expect(screen.queryByText('Crypto?')).not.toBeInTheDocument();
   });
