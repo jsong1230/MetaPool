@@ -6,6 +6,7 @@
  */
 import { useEffect, useRef } from 'react';
 import { X, TrendingUp, AlertTriangle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { formatMeta, formatOdds } from '../../lib/format.js';
 
 /**
@@ -38,6 +39,7 @@ export function BetConfirmModal({
   onConfirm,
   onClose,
 }) {
+  const { t } = useTranslation();
   const firstFocusableRef = useRef(null);
 
   // 포커스 트랩
@@ -85,7 +87,7 @@ export function BetConfirmModal({
       >
         {/* 헤더 */}
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-base font-bold text-text-primary">베팅 확인</h2>
+          <h2 className="text-base font-bold text-text-primary">{t('betting.confirmTitle')}</h2>
           <button
             ref={firstFocusableRef}
             onClick={onClose}
@@ -113,7 +115,7 @@ export function BetConfirmModal({
         <div className="grid grid-cols-2 gap-3 mb-4">
           {/* 방향 */}
           <div className="bg-bg-surface rounded-lg p-3">
-            <p className="text-xs text-text-muted mb-1">선택 방향</p>
+            <p className="text-xs text-text-muted mb-1">{t('betting.direction')}</p>
             <p className={`text-2xl font-black tracking-[0.08em] ${isYes ? 'text-yes' : 'text-no'}`}>
               {isYes ? 'YES' : 'NO'}
             </p>
@@ -121,7 +123,7 @@ export function BetConfirmModal({
 
           {/* 베팅 금액 */}
           <div className="bg-bg-surface rounded-lg p-3">
-            <p className="text-xs text-text-muted mb-1">베팅 금액</p>
+            <p className="text-xs text-text-muted mb-1">{t('betting.betAmount')}</p>
             <p className="text-xl font-bold tabular-nums text-text-primary">
               {amountMeta.toLocaleString()}
             </p>
@@ -132,7 +134,7 @@ export function BetConfirmModal({
           <div className="bg-bg-surface rounded-lg p-3">
             <p className="text-xs text-text-muted mb-1 flex items-center gap-1">
               <TrendingUp className="w-3 h-3" strokeWidth={1.5} />
-              현재 배당률
+              {t('betting.currentOdds')}
             </p>
             <p className="text-xl font-bold tabular-nums text-brand-accent">
               {odds ? formatOdds(odds) : '--'}
@@ -141,7 +143,7 @@ export function BetConfirmModal({
 
           {/* 예상 수익 */}
           <div className="bg-bg-surface rounded-lg p-3">
-            <p className="text-xs text-text-muted mb-1">예상 수령액</p>
+            <p className="text-xs text-text-muted mb-1">{t('betting.expectedPayout')}</p>
             {potentialWinnings && amountWei > 0n ? (
               <>
                 <p className="text-xl font-bold tabular-nums text-yes">
@@ -167,7 +169,7 @@ export function BetConfirmModal({
 
         {/* 수수료 안내 */}
         <p className="text-xs text-text-muted mb-5">
-          * 배당률은 다른 사용자의 베팅에 따라 변동될 수 있습니다. 플랫폼 수수료 2% 차감.
+          * {t('betting.oddsNote')}
         </p>
 
         {/* 버튼 영역 */}
@@ -184,7 +186,7 @@ export function BetConfirmModal({
               disabled:opacity-50 disabled:cursor-not-allowed
             "
           >
-            취소
+            {t('betting.cancel')}
           </button>
 
           <button
@@ -204,10 +206,10 @@ export function BetConfirmModal({
             {isPending ? (
               <span className="flex items-center justify-center gap-2">
                 <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                {txState === 'pending' ? '서명 대기...' : '처리 중...'}
+                {txState === 'pending' ? t('betting.signPending') : t('betting.processing')}
               </span>
             ) : (
-              '서명 & 베팅'
+              t('betting.sign')
             )}
           </button>
         </div>

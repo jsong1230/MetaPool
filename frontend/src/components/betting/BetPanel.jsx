@@ -6,6 +6,7 @@
  */
 import { useRef, useEffect } from 'react';
 import { X, AlertTriangle, TrendingUp } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { ethers } from 'ethers';
 import { QUICK_AMOUNTS } from '../../hooks/useBetting.js';
 import { formatMeta, formatOdds } from '../../lib/format.js';
@@ -55,6 +56,7 @@ export function BetPanel({
   market,
 }) {
   const panelRef = useRef(null);
+  const { t } = useTranslation();
 
   // ESC 키 닫기
   useEffect(() => {
@@ -109,7 +111,7 @@ export function BetPanel({
           overflow-y-auto
         "
         role="dialog"
-        aria-label={`${isYes ? 'YES' : 'NO'} 베팅 패널`}
+        aria-label={`${isYes ? 'YES' : 'NO'} ${t('betting.bet')}`}
         aria-modal="true"
       >
         {/* 헤더 */}
@@ -123,7 +125,7 @@ export function BetPanel({
             >
               {isYes ? 'YES' : 'NO'}
             </span>
-            <span className="text-text-secondary text-sm">베팅</span>
+            <span className="text-text-secondary text-sm">{t('betting.bet')}</span>
           </div>
           <button
             onClick={onClose}
@@ -147,7 +149,7 @@ export function BetPanel({
         {/* 금액 입력 필드 */}
         <div className="mb-4">
           <label className="text-xs text-text-secondary mb-1.5 block">
-            베팅 금액
+            {t('betting.betAmount')}
           </label>
           <div className="relative">
             <input
@@ -158,7 +160,7 @@ export function BetPanel({
               max={maxBet}
               className={`
                 w-full
-                bg-bg-input border rounded-md
+                bg-bg-input border rounded-xl
                 px-4 py-3 pr-16
                 text-text-primary text-xl font-semibold tabular-nums
                 focus:outline-none transition-all duration-150
@@ -178,10 +180,10 @@ export function BetPanel({
           {isOverBalance && (
             <div className="flex items-center gap-1.5 mt-1.5 text-danger text-xs">
               <AlertTriangle className="w-3.5 h-3.5" strokeWidth={1.5} />
-              <span>잔액 부족</span>
+              <span>{t('betting.insufficientBalance')}</span>
               {balance !== null && (
                 <span className="text-text-muted">
-                  (보유: {formatMeta(balance)} META)
+                  ({t('betting.balance')}: {formatMeta(balance)} META)
                 </span>
               )}
             </div>
@@ -217,7 +219,7 @@ export function BetPanel({
               onClick={() => onQuickAmount(amt)}
               className={`
                 px-3 py-1.5 text-sm font-medium
-                border rounded-sm
+                border rounded-lg
                 transition-colors duration-100
                 ${amountMeta === amt
                   ? 'border-border-brand text-brand-primary bg-brand-primary-muted'
@@ -236,7 +238,7 @@ export function BetPanel({
           <div className="flex justify-between items-center text-sm">
             <span className="text-text-muted flex items-center gap-1">
               <TrendingUp className="w-3.5 h-3.5" strokeWidth={1.5} />
-              현재 배당률
+              {t('betting.currentOdds')}
             </span>
             <span className="text-brand-accent font-semibold tabular-nums">
               {odds ? formatOdds(odds) : '--'}
@@ -248,13 +250,13 @@ export function BetPanel({
             <>
               <div className="border-t border-border-subtle" />
               <div className="flex justify-between items-center text-sm">
-                <span className="text-text-muted">예상 수령액</span>
+                <span className="text-text-muted">{t('betting.expectedPayout')}</span>
                 <span className="text-text-primary font-semibold tabular-nums">
                   {formatMeta(potentialWinnings.winnings)} META
                 </span>
               </div>
               <div className="flex justify-between items-center text-xs">
-                <span className="text-text-muted">예상 수익</span>
+                <span className="text-text-muted">{t('betting.profit')}</span>
                 <span className={`font-medium tabular-nums ${
                   potentialWinnings.profit > 0n ? 'text-yes' : 'text-text-muted'
                 }`}>
@@ -269,7 +271,7 @@ export function BetPanel({
 
         {/* 에러 메시지 */}
         {txError && (
-          <div className="flex items-start gap-2 mb-3 p-3 rounded-md bg-[rgba(239,68,68,0.1)] border border-[rgba(239,68,68,0.2)] text-danger text-sm">
+          <div className="flex items-start gap-2 mb-3 p-3 rounded-xl bg-[rgba(224,49,49,0.08)] border border-[rgba(224,49,49,0.2)] text-danger text-sm">
             <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" strokeWidth={1.5} />
             <span>{txError}</span>
           </div>
@@ -277,7 +279,7 @@ export function BetPanel({
 
         {/* 수수료 안내 */}
         <p className="text-xs text-text-muted mb-4">
-          * 플랫폼 수수료 2%가 패배 풀에서 차감됩니다
+          {t('betting.feeNote')}
         </p>
 
         {/* 확인 버튼 */}
@@ -285,7 +287,7 @@ export function BetPanel({
           onClick={onConfirm}
           disabled={!isAmountValid || isPending}
           className={`
-            w-full px-6 py-3 rounded-md
+            w-full px-6 py-3 rounded-xl
             text-base font-semibold tracking-[0.08em] uppercase
             transition-all duration-150
             ${!isAmountValid || isPending
@@ -299,10 +301,10 @@ export function BetPanel({
           {isPending ? (
             <span className="flex items-center justify-center gap-2">
               <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              처리 중...
+              {t('betting.processing')}
             </span>
           ) : (
-            `${isYes ? 'YES' : 'NO'} 베팅 확인`
+            `${isYes ? 'YES' : 'NO'} ${t('betting.confirm')}`
           )}
         </button>
       </div>

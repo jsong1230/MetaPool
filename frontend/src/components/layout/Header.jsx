@@ -4,6 +4,7 @@
  */
 import { Link, useNavigate } from 'react-router-dom';
 import { AlertTriangle, ShieldCheck } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { ConnectWallet } from '../common/ConnectWallet.jsx';
 import { LanguageSelector } from '../common/LanguageSelector.jsx';
 import { useWallet } from '../../hooks/useWallet.js';
@@ -13,12 +14,12 @@ export function Header() {
   const { isConnected, isCorrectNetwork, switchNetwork } = useWallet();
   const { isOwner } = useOwner();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <header className="
       sticky top-0 z-40
-      bg-bg-secondary border-b border-border-default
-      shadow-elevation-1
+      glass
     ">
       {/* 잘못된 네트워크 배너 */}
       {isConnected && !isCorrectNetwork && (
@@ -29,12 +30,12 @@ export function Header() {
           text-warning text-sm
         ">
           <AlertTriangle className="w-4 h-4 shrink-0" strokeWidth={1.5} />
-          <span>잘못된 네트워크에 연결되어 있습니다.</span>
+          <span>{t('wallet.wrongNetwork')}</span>
           <button
             onClick={switchNetwork}
             className="underline font-medium hover:no-underline"
           >
-            네트워크 전환
+            {t('wallet.switchNetwork')}
           </button>
         </div>
       )}
@@ -49,13 +50,13 @@ export function Header() {
           >
             <div className="
               w-7 h-7 rounded-md
-              bg-brand-primary
               flex items-center justify-center
-              text-white font-bold text-sm
-            ">
+              font-bold text-sm text-white
+              shadow-brand
+            " style={{background: 'linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%)'}}>
               M
             </div>
-            <span className="font-bold text-text-primary text-lg tracking-[-0.02em]">
+            <span className="font-bold text-lg tracking-[-0.02em] text-gradient-brand">
               MetaPool
             </span>
           </Link>
@@ -65,10 +66,9 @@ export function Header() {
             className="hidden md:flex items-center gap-1"
             aria-label="주 네비게이션"
           >
-            <NavLink to="/">마켓</NavLink>
-            <NavLink to="/history">히스토리</NavLink>
-            <NavLink to="/leaderboard">리더보드</NavLink>
-            {/* owner일 때만 Admin 링크 노출 */}
+            <NavLink to="/">{t('nav.markets')}</NavLink>
+            <NavLink to="/history">{t('nav.history')}</NavLink>
+            <NavLink to="/leaderboard">{t('nav.leaderboard')}</NavLink>
             {isOwner && (
               <Link
                 to="/admin"
@@ -79,7 +79,7 @@ export function Header() {
                 "
               >
                 <ShieldCheck className="w-3.5 h-3.5" strokeWidth={2} />
-                Admin
+                {t('nav.admin')}
               </Link>
             )}
           </nav>

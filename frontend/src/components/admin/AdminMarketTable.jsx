@@ -48,7 +48,7 @@ const OUTCOME_COLOR = {
 export function AdminMarketTable({ markets, onPause, onResume, onResolve, onRefetch }) {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [resolveTarget, setResolveTarget] = useState(null); // 결과 확정 모달 대상 마켓
   const [resolveTxStatus, setResolveTxStatus] = useState(TX_STATUS.IDLE);
@@ -63,7 +63,7 @@ export function AdminMarketTable({ markets, onPause, onResume, onResolve, onRefe
       setResolveTxStatus(TX_STATUS.CONFIRMING);
       await onResolve(marketId, outcome);
       setResolveTxStatus(TX_STATUS.SUCCESS);
-      toast.success(`마켓 #${marketId} 결과가 확정되었습니다`);
+      toast.success(t('admin.toast.resolved', { id: marketId }));
       setResolveTarget(null);
       onRefetch();
     } catch (err) {
@@ -78,7 +78,7 @@ export function AdminMarketTable({ markets, onPause, onResume, onResolve, onRefe
     setActionLoadingId(market.id);
     try {
       await onPause(market.id);
-      toast.success(`마켓 #${market.id} 일시 중단되었습니다`);
+      toast.success(t('admin.toast.paused', { id: market.id }));
       onRefetch();
     } catch (err) {
       const parsed = parseContractError(err);
@@ -96,7 +96,7 @@ export function AdminMarketTable({ markets, onPause, onResume, onResolve, onRefe
     setActionLoadingId(market.id);
     try {
       await onResume(market.id, newBetting, newResolution);
-      toast.success(`마켓 #${market.id} 재개되었습니다`);
+      toast.success(t('admin.toast.resumed', { id: market.id }));
       onRefetch();
     } catch (err) {
       const parsed = parseContractError(err);
@@ -112,7 +112,7 @@ export function AdminMarketTable({ markets, onPause, onResume, onResolve, onRefe
         bg-bg-surface border border-border-default rounded-lg
         p-8 text-center
       ">
-        <p className="text-text-muted text-sm">마켓이 없습니다</p>
+        <p className="text-text-muted text-sm">{t('admin.table.empty')}</p>
       </div>
     );
   }
@@ -125,12 +125,12 @@ export function AdminMarketTable({ markets, onPause, onResume, onResolve, onRefe
           <thead>
             <tr className="bg-bg-surface border-b border-border-default">
               <th className="text-left px-4 py-3 text-text-muted font-medium">ID</th>
-              <th className="text-left px-4 py-3 text-text-muted font-medium">질문</th>
-              <th className="text-left px-4 py-3 text-text-muted font-medium">카테고리</th>
-              <th className="text-left px-4 py-3 text-text-muted font-medium">상태</th>
-              <th className="text-left px-4 py-3 text-text-muted font-medium">결과</th>
-              <th className="text-right px-4 py-3 text-text-muted font-medium">풀 규모</th>
-              <th className="text-center px-4 py-3 text-text-muted font-medium">액션</th>
+              <th className="text-left px-4 py-3 text-text-muted font-medium">{t('admin.table.question')}</th>
+              <th className="text-left px-4 py-3 text-text-muted font-medium">{t('admin.table.category')}</th>
+              <th className="text-left px-4 py-3 text-text-muted font-medium">{t('admin.table.status')}</th>
+              <th className="text-left px-4 py-3 text-text-muted font-medium">{t('admin.table.outcome')}</th>
+              <th className="text-right px-4 py-3 text-text-muted font-medium">{t('admin.table.pool')}</th>
+              <th className="text-center px-4 py-3 text-text-muted font-medium">{t('admin.table.actions')}</th>
             </tr>
           </thead>
           <tbody>
@@ -159,7 +159,7 @@ export function AdminMarketTable({ markets, onPause, onResume, onResolve, onRefe
                   <td className="px-4 py-3 max-w-[280px]">
                     <p className="text-text-primary truncate">{question}</p>
                     <p className="text-text-muted text-xs mt-0.5">
-                      {formatDate(market.bettingDeadline)} 마감
+                      {formatDate(market.bettingDeadline)} {t('admin.table.deadline')}
                     </p>
                   </td>
                   <td className="px-4 py-3">
@@ -196,7 +196,7 @@ export function AdminMarketTable({ markets, onPause, onResume, onResolve, onRefe
                         <button
                           onClick={() => handlePause(market)}
                           disabled={isLoading}
-                          title="마켓 일시 중단"
+                          title={t('admin.actions.pauseTitle')}
                           className="
                             p-1.5 rounded-md
                             bg-[rgba(245,158,11,0.1)] text-warning
@@ -217,7 +217,7 @@ export function AdminMarketTable({ markets, onPause, onResume, onResolve, onRefe
                         <button
                           onClick={() => handleResume(market)}
                           disabled={isLoading}
-                          title="마켓 재개"
+                          title={t('admin.actions.resumeTitle')}
                           className="
                             p-1.5 rounded-md
                             bg-yes-muted text-yes
@@ -237,7 +237,7 @@ export function AdminMarketTable({ markets, onPause, onResume, onResolve, onRefe
                       {isResolvable && (
                         <button
                           onClick={() => setResolveTarget(market)}
-                          title="결과 확정"
+                          title={t('admin.actions.resolveTitle')}
                           className="
                             p-1.5 rounded-md
                             bg-brand-primary-muted text-brand-primary
@@ -320,7 +320,7 @@ export function AdminMarketTable({ markets, onPause, onResume, onResolve, onRefe
                       "
                     >
                       <Pause className="w-3 h-3" strokeWidth={2} />
-                      중단
+                      {t('admin.actions.pause')}
                     </button>
                   )}
                   {isPaused && (
@@ -336,7 +336,7 @@ export function AdminMarketTable({ markets, onPause, onResume, onResolve, onRefe
                       "
                     >
                       <Play className="w-3 h-3" strokeWidth={2} />
-                      재개
+                      {t('admin.actions.resume')}
                     </button>
                   )}
                   {isResolvable && (
@@ -350,7 +350,7 @@ export function AdminMarketTable({ markets, onPause, onResume, onResolve, onRefe
                       "
                     >
                       <Check className="w-3 h-3" strokeWidth={2} />
-                      확정
+                      {t('admin.actions.resolve')}
                     </button>
                   )}
                 </div>

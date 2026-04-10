@@ -4,12 +4,14 @@
  */
 import { useState, useEffect } from 'react';
 import { Clock } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { formatCountdown } from '../../lib/format.js';
 
 /**
  * @param {{ deadline: number, showIcon?: boolean, className?: string }} props
  */
 export function Countdown({ deadline, showIcon = true, className = '' }) {
+  const { t } = useTranslation();
   const [countdown, setCountdown] = useState(() => formatCountdown(deadline));
 
   useEffect(() => {
@@ -48,7 +50,7 @@ export function Countdown({ deadline, showIcon = true, className = '' }) {
       <span
         className={`text-sm font-semibold tabular-nums font-mono tracking-[0.04em] ${colorClass}`}
       >
-        {countdown.text}
+        {countdown.urgency === 'ended' ? t('common.ended') : countdown.text}
       </span>
     </div>
   );

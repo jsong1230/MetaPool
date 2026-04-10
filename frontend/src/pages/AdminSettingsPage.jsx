@@ -5,6 +5,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Loader2, ShieldAlert, Save, DollarSign, AlertTriangle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { ethers } from 'ethers';
 import { getWriteContract, parseContractError } from '../lib/contract.js';
 import { useAdmin } from '../hooks/useAdmin.js';
@@ -27,6 +28,7 @@ function fromWeiToMeta(weiValue) {
 }
 
 export function AdminSettingsPage() {
+  const { t } = useTranslation();
   const { toast } = useToast();
   const {
     isOwner,
@@ -59,7 +61,7 @@ export function AdminSettingsPage() {
   const handleSaveMinBet = async () => {
     const wei = toWei(minBetInput);
     if (!wei || wei <= 0n) {
-      toast.error('유효한 값을 입력해주세요');
+      toast.error(t('admin.settings.errors.invalidValue'));
       return;
     }
     setSavingMin(true);
@@ -67,7 +69,7 @@ export function AdminSettingsPage() {
       const contract = await getWriteContract();
       const tx = await contract.setMinBet(wei);
       await tx.wait();
-      toast.success('최소 베팅 금액이 저장되었습니다');
+      toast.success(t('admin.toast.minBetSaved'));
       refetch();
     } catch (err) {
       const parsed = parseContractError(err);
@@ -81,7 +83,7 @@ export function AdminSettingsPage() {
   const handleSaveMaxBet = async () => {
     const wei = toWei(maxBetInput);
     if (!wei || wei <= 0n) {
-      toast.error('유효한 값을 입력해주세요');
+      toast.error(t('admin.settings.errors.invalidValue'));
       return;
     }
     setSavingMax(true);
@@ -89,7 +91,7 @@ export function AdminSettingsPage() {
       const contract = await getWriteContract();
       const tx = await contract.setMaxBet(wei);
       await tx.wait();
-      toast.success('최대 베팅 금액이 저장되었습니다');
+      toast.success(t('admin.toast.maxBetSaved'));
       refetch();
     } catch (err) {
       const parsed = parseContractError(err);
@@ -103,7 +105,7 @@ export function AdminSettingsPage() {
   const handleSaveFeeRate = async () => {
     const rate = parseInt(feeRateInput, 10);
     if (isNaN(rate) || rate < 0 || rate > 1000) {
-      toast.error('수수료율은 0~1000 basis points (0~10%) 범위여야 합니다');
+      toast.error(t('admin.settings.errors.feeRateRange'));
       return;
     }
     setSavingFee(true);
@@ -111,7 +113,7 @@ export function AdminSettingsPage() {
       const contract = await getWriteContract();
       const tx = await contract.setPlatformFeeRate(rate);
       await tx.wait();
-      toast.success('수수료율이 저장되었습니다');
+      toast.success(t('admin.toast.feeRateSaved'));
       refetch();
     } catch (err) {
       const parsed = parseContractError(err);
@@ -124,14 +126,14 @@ export function AdminSettingsPage() {
   // 수수료 인출
   const handleWithdrawFees = async () => {
     if (accumulatedFees === 0n) {
-      toast.info('인출할 수수료가 없습니다');
+      toast.info(t('admin.noFeesToWithdraw'));
       return;
     }
-    if (!window.confirm(`${formatMeta(accumulatedFees)} META를 인출하시겠습니까?`)) return;
+    if (!window.confirm(t('admin.withdrawConfirm', { amount: formatMeta(accumulatedFees) }))) return;
     setWithdrawing(true);
     try {
       await withdrawFees();
-      toast.success('수수료 인출 완료');
+      toast.success(t('admin.toast.feesWithdrawn'));
     } catch (err) {
       const parsed = parseContractError(err);
       toast.error(parsed.message);
@@ -160,9 +162,9 @@ export function AdminSettingsPage() {
           p-10 flex flex-col items-center text-center min-h-[300px]
         ">
           <ShieldAlert className="w-12 h-12 text-danger mb-4" strokeWidth={1} />
-          <h2 className="text-xl font-bold text-text-primary mb-2">접근 권한 없음</h2>
+          <h2 className="text-xl font-bold text-text-primary mb-2">{t('admin.accessDenied')}</h2>
           <Link to="/" className="mt-4 text-sm text-brand-primary hover:underline">
-            메인으로 →
+            {t('admin.backToMain')} →
           </Link>
         </div>
       </main>
@@ -190,30 +192,30 @@ export function AdminSettingsPage() {
         </Link>
         <div>
           <h1 className="text-xl font-bold text-text-primary tracking-[-0.02em]">
-            설정 관리
+            {t('admin.settings.title')}
           </h1>
-          <p className="text-text-muted text-xs mt-0.5">컨트랙트 파라미터 설정</p>
+          <p className="text-text-muted text-xs mt-0.5">{t('admin.settings.subtitle')}</p>
         </div>
       </div>
 
       {/* 현재 설정값 요약 */}
       <div className="grid grid-cols-3 gap-3">
         <div className="bg-bg-surface border border-border-default rounded-lg p-4">
-          <p className="text-xs text-text-muted mb-1">최소 베팅</p>
+          <p className="text-xs text-text-muted mb-1">{t('admin.settings.minBet')}</p>
           <p className="text-base font-bold text-text-primary tabular-nums">
             {formatMeta(settings?.minBet)}
           </p>
           <p className="text-xs text-text-muted">META</p>
         </div>
         <div className="bg-bg-surface border border-border-default rounded-lg p-4">
-          <p className="text-xs text-text-muted mb-1">최대 베팅</p>
+          <p className="text-xs text-text-muted mb-1">{t('admin.settings.maxBet')}</p>
           <p className="text-base font-bold text-text-primary tabular-nums">
             {formatMeta(settings?.maxBet)}
           </p>
           <p className="text-xs text-text-muted">META</p>
         </div>
         <div className="bg-bg-surface border border-border-default rounded-lg p-4">
-          <p className="text-xs text-text-muted mb-1">수수료율</p>
+          <p className="text-xs text-text-muted mb-1">{t('admin.settings.feeRate')}</p>
           <p className="text-base font-bold text-brand-accent tabular-nums">
             {feePercent}%
           </p>
@@ -223,12 +225,12 @@ export function AdminSettingsPage() {
 
       {/* 설정 폼 */}
       <section className="bg-bg-surface border border-border-default rounded-lg p-5 space-y-5">
-        <h2 className="text-sm font-semibold text-text-primary">파라미터 변경</h2>
+        <h2 className="text-sm font-semibold text-text-primary">{t('admin.settings.paramsSection')}</h2>
 
         {/* 최소 베팅 금액 */}
         <SettingRow
-          label="최소 베팅 금액"
-          description="베팅 가능한 최소 META 수량"
+          label={t('admin.settings.minBetLabel')}
+          description={t('admin.settings.minBetDesc')}
           unit="META"
         >
           <div className="flex gap-2">
@@ -261,15 +263,15 @@ export function AdminSettingsPage() {
                 ? <Loader2 className="w-4 h-4 animate-spin" strokeWidth={2} />
                 : <Save className="w-4 h-4" strokeWidth={2} />
               }
-              저장
+              {t('admin.settings.save')}
             </button>
           </div>
         </SettingRow>
 
         {/* 최대 베팅 금액 */}
         <SettingRow
-          label="최대 베팅 금액"
-          description="베팅 가능한 최대 META 수량 (최소 베팅보다 커야 함)"
+          label={t('admin.settings.maxBetLabel')}
+          description={t('admin.settings.maxBetDesc')}
           unit="META"
         >
           <div className="flex gap-2">
@@ -302,15 +304,15 @@ export function AdminSettingsPage() {
                 ? <Loader2 className="w-4 h-4 animate-spin" strokeWidth={2} />
                 : <Save className="w-4 h-4" strokeWidth={2} />
               }
-              저장
+              {t('admin.settings.save')}
             </button>
           </div>
         </SettingRow>
 
         {/* 수수료율 */}
         <SettingRow
-          label="플랫폼 수수료율"
-          description="패배 풀에서 차감하는 수수료 (0~1000 basis points = 0~10%)"
+          label={t('admin.settings.feeRateLabel')}
+          description={t('admin.settings.feeRateDesc')}
           unit="bp"
         >
           <div className="flex gap-2">
@@ -352,7 +354,7 @@ export function AdminSettingsPage() {
                 ? <Loader2 className="w-4 h-4 animate-spin" strokeWidth={2} />
                 : <Save className="w-4 h-4" strokeWidth={2} />
               }
-              저장
+              {t('admin.settings.save')}
             </button>
           </div>
         </SettingRow>
@@ -360,7 +362,7 @@ export function AdminSettingsPage() {
 
       {/* 수수료 인출 섹션 */}
       <section className="bg-bg-surface border border-border-default rounded-lg p-5">
-        <h2 className="text-sm font-semibold text-text-primary mb-4">수수료 인출</h2>
+        <h2 className="text-sm font-semibold text-text-primary mb-4">{t('admin.settings.withdrawSection')}</h2>
 
         <div className="flex items-center justify-between p-4 bg-bg-elevated rounded-lg mb-4">
           <div className="flex items-center gap-3">
@@ -368,7 +370,7 @@ export function AdminSettingsPage() {
               <DollarSign className="w-5 h-5 text-brand-accent" strokeWidth={1.5} />
             </div>
             <div>
-              <p className="text-xs text-text-muted">누적 수수료</p>
+              <p className="text-xs text-text-muted">{t('admin.accumulatedFees')}</p>
               <p className="text-xl font-bold text-brand-accent tabular-nums">
                 {formatMeta(accumulatedFees)}
                 <span className="text-sm font-normal text-text-muted ml-1">META</span>
@@ -384,7 +386,7 @@ export function AdminSettingsPage() {
           ">
             <AlertTriangle className="w-4 h-4 text-warning shrink-0 mt-0.5" strokeWidth={1.5} />
             <p className="text-xs text-warning">
-              수수료 인출 후에는 되돌릴 수 없습니다. 신중하게 진행해 주세요.
+              {t('admin.settings.withdrawWarning')}
             </p>
           </div>
         )}
@@ -403,7 +405,7 @@ export function AdminSettingsPage() {
           "
         >
           {withdrawing && <Loader2 className="w-4 h-4 animate-spin" strokeWidth={2} />}
-          {accumulatedFees === 0n ? '인출 가능한 수수료 없음' : '수수료 인출'}
+          {accumulatedFees === 0n ? t('admin.settings.noFees') : t('admin.withdrawFees')}
         </button>
       </section>
     </main>

@@ -3,6 +3,7 @@
  * 로딩, 에러, 빈 상태 처리 포함
  */
 import { LayoutGrid } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { MarketCard } from './MarketCard.jsx';
 
 /**
@@ -35,15 +36,16 @@ function SkeletonCard() {
  * 빈 상태 메시지
  */
 function EmptyState() {
+  const { t } = useTranslation();
   return (
     <div className="col-span-full flex flex-col items-center justify-center py-20 gap-4">
       <LayoutGrid className="w-12 h-12 text-text-muted" strokeWidth={1} />
       <div className="text-center">
         <p className="text-text-secondary text-lg font-medium mb-1">
-          활성 마켓이 없습니다
+          {t('markets.noActive')}
         </p>
         <p className="text-text-muted text-sm">
-          새로운 마켓이 생성되면 여기에 표시됩니다
+          {t('markets.noActiveDesc')}
         </p>
       </div>
     </div>
@@ -54,11 +56,12 @@ function EmptyState() {
  * 에러 상태
  */
 function ErrorState({ error, onRetry }) {
+  const { t } = useTranslation();
   return (
     <div className="col-span-full flex flex-col items-center justify-center py-20 gap-4">
       <div className="text-center">
         <p className="text-danger text-lg font-medium mb-1">
-          마켓을 불러오는 데 실패했습니다
+          {t('markets.loadFailed')}
         </p>
         <p className="text-text-muted text-sm mb-4">{error}</p>
         {onRetry && (
@@ -70,7 +73,7 @@ function ErrorState({ error, onRetry }) {
               transition-colors duration-150
             "
           >
-            다시 시도
+            {t('common.retry')}
           </button>
         )}
       </div>
@@ -82,8 +85,9 @@ function ErrorState({ error, onRetry }) {
  * @param {{ markets: object[], loading: boolean, error: string|null, onRetry?: Function }} props
  */
 export function MarketList({ markets, loading, error, onRetry }) {
+  const { t } = useTranslation();
   return (
-    <section aria-label="마켓 목록">
+    <section aria-label={t('markets.title')}>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {loading && (
           <>

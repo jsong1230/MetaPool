@@ -1,21 +1,22 @@
 /**
  * MobileNav — 모바일 하단 탭바
- * navigation.md §4.2 기준 (모바일 768px 미만)
  */
 import { NavLink } from 'react-router-dom';
 import { LayoutGrid, Wallet, History, Trophy, User } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useWallet } from '../../hooks/useWallet.js';
-
-const NAV_ITEMS = [
-  { to: '/', label: '마켓', icon: LayoutGrid, requiresWallet: false },
-  { to: '/my-bets', label: '내 베팅', icon: Wallet, requiresWallet: true },
-  { to: '/history', label: '히스토리', icon: History, requiresWallet: false },
-  { to: '/leaderboard', label: '리더보드', icon: Trophy, requiresWallet: false },
-  { to: '/profile', label: '프로필', icon: User, requiresWallet: true },
-];
 
 export function MobileNav() {
   const { isConnected, connectWallet } = useWallet();
+  const { t } = useTranslation();
+
+  const NAV_ITEMS = [
+    { to: '/',           labelKey: 'nav.markets',     icon: LayoutGrid, requiresWallet: false },
+    { to: '/my-bets',    labelKey: 'nav.myBets',      icon: Wallet,     requiresWallet: true  },
+    { to: '/history',    labelKey: 'nav.history',     icon: History,    requiresWallet: false },
+    { to: '/leaderboard',labelKey: 'nav.leaderboard', icon: Trophy,     requiresWallet: false },
+    { to: '/profile',    labelKey: 'nav.profile',     icon: User,       requiresWallet: true  },
+  ];
 
   const handleProtectedClick = (e, item) => {
     if (item.requiresWallet && !isConnected) {
@@ -28,14 +29,15 @@ export function MobileNav() {
     <nav
       className="
         fixed bottom-0 left-0 right-0 z-40
-        bg-bg-secondary border-t border-border-default
+        bg-bg-primary border-t border-border-default
         flex md:hidden
         safe-area-inset-bottom
       "
-      aria-label="모바일 탭 네비게이션"
+      aria-label="mobile navigation"
     >
       {NAV_ITEMS.map(item => {
         const Icon = item.icon;
+        const label = t(item.labelKey);
         return (
           <NavLink
             key={item.to}
@@ -45,15 +47,12 @@ export function MobileNav() {
               flex-1 flex flex-col items-center justify-center
               py-2 gap-0.5 min-h-[56px]
               transition-colors duration-150
-              ${isActive
-                ? 'text-brand-primary'
-                : 'text-text-muted hover:text-text-secondary'
-              }
+              ${isActive ? 'text-brand-primary' : 'text-text-muted hover:text-text-secondary'}
             `}
-            aria-label={item.label}
+            aria-label={label}
           >
             <Icon className="w-5 h-5" strokeWidth={1.5} />
-            <span className="text-xs font-medium">{item.label}</span>
+            <span className="text-xs font-medium">{label}</span>
           </NavLink>
         );
       })}

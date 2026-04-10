@@ -7,6 +7,7 @@ import {
   Plus, Settings, ShieldAlert, Loader2,
   DollarSign, LayoutDashboard, TrendingUp
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useAdmin } from '../hooks/useAdmin.js';
 import { useToast } from '../components/common/Toast.jsx';
 import { AdminMarketTable } from '../components/admin/AdminMarketTable.jsx';
@@ -15,6 +16,7 @@ import { parseContractError } from '../lib/contract.js';
 
 export function AdminPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { toast } = useToast();
   const {
     isOwner,
@@ -32,13 +34,13 @@ export function AdminPage() {
   // 수수료 인출 처리
   const handleWithdrawFees = async () => {
     if (accumulatedFees === 0n) {
-      toast.info('인출할 수수료가 없습니다');
+      toast.info(t('admin.noFeesToWithdraw'));
       return;
     }
-    if (!window.confirm(`${formatMeta(accumulatedFees)} META를 인출하시겠습니까?`)) return;
+    if (!window.confirm(t('admin.withdrawConfirm', { amount: formatMeta(accumulatedFees) }))) return;
     try {
       await withdrawFees();
-      toast.success('수수료 인출 완료');
+      toast.success(t('admin.toast.feesWithdrawn'));
     } catch (err) {
       const parsed = parseContractError(err);
       toast.error(parsed.message);
@@ -66,9 +68,9 @@ export function AdminPage() {
           min-h-[300px]
         ">
           <ShieldAlert className="w-12 h-12 text-danger mb-4" strokeWidth={1} />
-          <h2 className="text-xl font-bold text-text-primary mb-2">접근 권한 없음</h2>
+          <h2 className="text-xl font-bold text-text-primary mb-2">{t('admin.accessDenied')}</h2>
           <p className="text-text-secondary text-sm mb-6">
-            관리자 전용 페이지입니다. owner 지갑으로 연결해 주세요.
+            {t('admin.accessDeniedDesc')}
           </p>
           <Link
             to="/"
@@ -79,7 +81,7 @@ export function AdminPage() {
               transition-colors duration-150
             "
           >
-            메인으로
+            {t('admin.backToMain')}
           </Link>
         </div>
       </main>
@@ -99,7 +101,7 @@ export function AdminPage() {
             onClick={refetch}
             className="mt-4 px-4 py-2 rounded-md bg-bg-elevated text-text-secondary text-sm hover:text-text-primary"
           >
-            다시 시도
+            {t('admin.retry')}
           </button>
         </div>
       </main>
@@ -118,9 +120,9 @@ export function AdminPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-text-primary tracking-[-0.02em]">
-            관리자 패널
+            {t('admin.title')}
           </h1>
-          <p className="text-text-muted text-sm mt-1">MetaPool 마켓 관리</p>
+          <p className="text-text-muted text-sm mt-1">{t('admin.subtitle')}</p>
         </div>
 
         {/* 서브 네비게이션 */}
@@ -136,7 +138,7 @@ export function AdminPage() {
             "
           >
             <Plus className="w-4 h-4" strokeWidth={2} />
-            마켓 생성
+            {t('admin.createMarket')}
           </Link>
           <Link
             to="/admin/settings"
@@ -150,7 +152,7 @@ export function AdminPage() {
             "
           >
             <Settings className="w-4 h-4" strokeWidth={1.5} />
-            설정
+            {t('admin.settingsNav')}
           </Link>
         </div>
       </div>
@@ -158,20 +160,20 @@ export function AdminPage() {
       {/* 통계 카드 */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <StatsCard
-          label="전체 마켓"
+          label={t('admin.allMarkets')}
           value={markets.length}
-          unit="개"
+          unit={t('admin.countUnit')}
           icon={<LayoutDashboard className="w-4 h-4" strokeWidth={1.5} />}
         />
         <StatsCard
-          label="활성 마켓"
+          label={t('admin.activeMarkets')}
           value={activeCount}
-          unit="개"
+          unit={t('admin.countUnit')}
           color="text-yes"
           icon={<TrendingUp className="w-4 h-4" strokeWidth={1.5} />}
         />
         <StatsCard
-          label="총 풀 규모"
+          label={t('admin.totalPool')}
           value={formatMeta(totalPool)}
           unit="META"
           icon={<DollarSign className="w-4 h-4" strokeWidth={1.5} />}
@@ -181,7 +183,7 @@ export function AdminPage() {
           flex flex-col gap-2
         ">
           <div className="flex items-center justify-between">
-            <p className="text-text-muted text-xs font-medium">누적 수수료</p>
+            <p className="text-text-muted text-xs font-medium">{t('admin.accumulatedFees')}</p>
             <DollarSign className="w-4 h-4 text-brand-accent" strokeWidth={1.5} />
           </div>
           <p className="text-xl font-bold text-brand-accent tabular-nums">
@@ -200,7 +202,7 @@ export function AdminPage() {
               disabled:opacity-40 disabled:cursor-not-allowed
             "
           >
-            수수료 인출
+            {t('admin.withdrawFees')}
           </button>
         </div>
       </div>
@@ -209,13 +211,13 @@ export function AdminPage() {
       <section>
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-base font-semibold text-text-primary">
-            전체 마켓 ({markets.length})
+            {t('admin.allMarketsCount', { count: markets.length })}
           </h2>
           <button
             onClick={refetch}
             className="text-xs text-text-muted hover:text-text-secondary transition-colors"
           >
-            새로고침
+            {t('admin.refresh')}
           </button>
         </div>
 

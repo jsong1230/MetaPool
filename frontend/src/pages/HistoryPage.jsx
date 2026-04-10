@@ -139,7 +139,7 @@ function OutcomeBadge({ outcome }) {
 
 export function HistoryPage() {
   const navigate = useNavigate();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { markets, loading, error, refetch } = useHistoryMarkets();
   const [selectedCategory, setSelectedCategory] = useState(-1); // -1 = 전체
   const [statusFilter, setStatusFilter] = useState('all'); // all | resolved | voided
@@ -165,10 +165,10 @@ export function HistoryPage() {
         <History className="w-5 h-5 text-brand-primary" strokeWidth={1.5} />
         <div>
           <h1 className="text-xl font-bold text-text-primary tracking-[-0.02em]">
-            히스토리
+            {t('history.title')}
           </h1>
           <p className="text-text-muted text-xs mt-0.5">
-            종료된 마켓의 결과를 확인하세요
+            {t('history.subtitle')}
           </p>
         </div>
       </div>
@@ -185,9 +185,9 @@ export function HistoryPage() {
         {/* 상태 필터 */}
         <div className="flex items-center gap-1.5 shrink-0">
           {[
-            { value: 'all', label: '전체' },
-            { value: 'resolved', label: 'Resolved' },
-            { value: 'voided', label: 'Voided' },
+            { value: 'all', label: t('history.filters.all') },
+            { value: 'resolved', label: t('history.filters.resolved') },
+            { value: 'voided', label: t('history.filters.voided') },
           ].map(opt => (
             <button
               key={opt.value}
@@ -225,7 +225,7 @@ export function HistoryPage() {
             onClick={refetch}
             className="px-4 py-2 rounded-md bg-bg-elevated text-text-secondary text-sm hover:text-text-primary"
           >
-            다시 시도
+            {t('common.retry')}
           </button>
         </div>
       )}
@@ -237,11 +237,11 @@ export function HistoryPage() {
           p-10 text-center
         ">
           <History className="w-10 h-10 text-text-muted mx-auto mb-3" strokeWidth={1} />
-          <p className="text-text-secondary text-sm font-medium">종료된 마켓이 없습니다</p>
+          <p className="text-text-secondary text-sm font-medium">{t('history.empty')}</p>
           <p className="text-text-muted text-xs mt-1">
             {selectedCategory !== -1 || statusFilter !== 'all'
-              ? '필터 조건에 맞는 마켓이 없습니다'
-              : '마켓이 종료되면 여기에 표시됩니다'
+              ? t('history.filteredEmpty')
+              : t('history.emptyDesc')
             }
           </p>
         </div>
@@ -251,7 +251,7 @@ export function HistoryPage() {
       {!loading && !error && filtered.length > 0 && (
         <>
           <p className="text-xs text-text-muted">
-            {filtered.length}개의 종료된 마켓
+            {t('history.count', { count: filtered.length })}
           </p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {filtered.map(market => (
@@ -273,6 +273,7 @@ export function HistoryPage() {
  * 히스토리 마켓 카드
  */
 function HistoryCard({ market, language, onClick }) {
+  const { t } = useTranslation();
   const question = getLocalizedQuestion(market, language);
   const { yesPercent, noPercent } = calcPoolRatio(market.yesPool, market.noPool);
   const totalPool = (market.yesPool || 0n) + (market.noPool || 0n);
@@ -311,7 +312,7 @@ function HistoryCard({ market, language, onClick }) {
           bg-[rgba(100,116,139,0.08)] border border-[rgba(100,116,139,0.2)]
           rounded-md px-3 py-2
         ">
-          <p className="text-xs text-void text-center">무효 처리 — 원금 환불</p>
+          <p className="text-xs text-void text-center">{t('history.voided')}</p>
         </div>
       )}
 

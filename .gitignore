@@ -59,3 +59,4 @@ typechain-types/
 
 # 프론트엔드 빌드
 frontend/dist/
+.gstack/

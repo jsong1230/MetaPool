@@ -4,7 +4,7 @@
  */
 import { ethers } from 'ethers';
 import ABI from './abi/MetaPool.json';
-import { CONTRACT_ADDRESS, RPC_URL } from './constants.js';
+import { CONTRACT_ADDRESS, RPC_URL, ACTIVE_NETWORK } from './constants.js';
 
 /**
  * 읽기 전용 Provider (MetaMask 불필요)
@@ -15,9 +15,10 @@ export function getProvider() {
 }
 
 /**
- * 로컬 개발 모드 여부 (Hardhat 노드 직접 서명, MetaMask 불필요)
+ * 로컬 개발 모드 여부 — Chain ID 31337(Hardhat)이면 MetaMask 없이 직접 서명
  */
-const IS_LOCAL_DEV = RPC_URL.includes('127.0.0.1') || RPC_URL.includes('localhost');
+const LOCAL_CHAIN_ID = parseInt(ACTIVE_NETWORK.chainId, 16);
+const IS_LOCAL_DEV = LOCAL_CHAIN_ID === 31337;
 
 /**
  * Signer 획득

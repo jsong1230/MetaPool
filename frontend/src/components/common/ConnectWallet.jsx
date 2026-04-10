@@ -3,6 +3,7 @@
  * MetaMask 미설치 / 미연결 / 연결됨 상태 처리
  */
 import { Wallet, AlertTriangle, ExternalLink } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useWallet } from '../../hooks/useWallet.js';
 import { shortenAddress, formatMeta } from '../../lib/format.js';
 
@@ -10,6 +11,7 @@ import { shortenAddress, formatMeta } from '../../lib/format.js';
  * @param {{ size?: 'sm' | 'md' | 'lg', className?: string }} props
  */
 export function ConnectWallet({ size = 'md', className = '' }) {
+  const { t } = useTranslation();
   const {
     account,
     balance,
@@ -39,12 +41,12 @@ export function ConnectWallet({ size = 'md', className = '' }) {
           inline-flex items-center gap-2
           bg-transparent border border-border-default
           text-text-secondary hover:text-text-primary hover:border-border-strong
-          rounded-md transition-colors duration-150
+          rounded-xl transition-colors duration-150
           ${sizeClasses} ${className}
         `}
       >
         <ExternalLink className="w-4 h-4" strokeWidth={1.5} />
-        MetaMask 설치
+        {t('wallet.install')}
       </a>
     );
   }
@@ -58,12 +60,12 @@ export function ConnectWallet({ size = 'md', className = '' }) {
           inline-flex items-center gap-2
           bg-[rgba(245,158,11,0.1)] border border-[rgba(245,158,11,0.3)]
           text-warning hover:bg-[rgba(245,158,11,0.15)]
-          rounded-md transition-colors duration-150
+          rounded-xl transition-colors duration-150
           ${sizeClasses} ${className}
         `}
       >
         <AlertTriangle className="w-4 h-4" strokeWidth={1.5} />
-        네트워크 전환
+        {t('wallet.switchNetwork')}
       </button>
     );
   }
@@ -75,7 +77,7 @@ export function ConnectWallet({ size = 'md', className = '' }) {
         className={`
           inline-flex items-center gap-2
           bg-bg-surface border border-border-default
-          text-text-primary rounded-md
+          text-text-primary rounded-xl
           ${sizeClasses} ${className}
         `}
       >
@@ -100,12 +102,12 @@ export function ConnectWallet({ size = 'md', className = '' }) {
         className={`
           inline-flex items-center gap-2
           bg-brand-primary opacity-70 cursor-not-allowed
-          text-white rounded-md
+          text-white rounded-xl
           ${sizeClasses} ${className}
         `}
       >
         <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-        연결 중...
+        {t('wallet.connecting')}
       </button>
     );
   }
@@ -117,13 +119,13 @@ export function ConnectWallet({ size = 'md', className = '' }) {
       className={`
         inline-flex items-center gap-2
         bg-brand-primary hover:bg-brand-primary-hover
-        text-white rounded-md transition-colors duration-150
+        text-white rounded-xl transition-colors duration-150
         font-medium
         ${sizeClasses} ${className}
       `}
     >
       <Wallet className="w-4 h-4" strokeWidth={1.5} />
-      지갑 연결
+      {t('wallet.connect')}
     </button>
   );
 }

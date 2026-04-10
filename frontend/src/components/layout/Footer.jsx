@@ -1,7 +1,10 @@
 /**
  * Footer — 심플 푸터
  */
+import { useTranslation } from 'react-i18next';
+
 export function Footer() {
+  const { t } = useTranslation();
   return (
     <footer className="
       border-t border-border-default
@@ -25,7 +28,7 @@ export function Footer() {
           </div>
 
           <p className="text-text-muted text-xs text-center">
-            Metadium 블록체인 기반 예측 마켓 플랫폼 &mdash; 투자 주의 요망
+            {t('footer.tagline')}
           </p>
         </div>
       </div>

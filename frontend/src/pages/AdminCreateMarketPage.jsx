@@ -8,6 +8,7 @@ import {
   ArrowLeft, Loader2, CheckCircle, ShieldAlert,
   ChevronDown, Eye
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { CATEGORIES } from '../lib/constants.js';
 import { CategoryTag } from '../components/common/CategoryTag.jsx';
 import { useCreateMarket, TX_STATUS } from '../hooks/useCreateMarket.js';
@@ -30,6 +31,7 @@ function defaultDatetime(offsetMinutes = 60) {
 
 export function AdminCreateMarketPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { toast } = useToast();
   const { isOwner, loading: adminLoading } = useAdmin();
   const { createMarket, txStatus, txHash, createdMarketId, txError, reset } = useCreateMarket();
@@ -55,8 +57,8 @@ export function AdminCreateMarketPage() {
     if (isSuccess) {
       toast.success(
         createdMarketId
-          ? `마켓 #${createdMarketId} 생성 완료`
-          : '마켓 생성 완료'
+          ? t('admin.toast.created', { id: createdMarketId })
+          : t('admin.toast.createdNoId')
       );
       const timer = setTimeout(() => navigate('/admin'), 1500);
       return () => clearTimeout(timer);
@@ -66,19 +68,19 @@ export function AdminCreateMarketPage() {
   // 폼 유효성 검사
   const validate = () => {
     const errs = {};
-    if (!form.question.trim()) errs.question = '영어 질문은 필수입니다';
-    if (!form.bettingDeadline) errs.bettingDeadline = '베팅 마감 시간을 입력해주세요';
-    if (!form.resolutionDeadline) errs.resolutionDeadline = '결과 확정 시간을 입력해주세요';
+    if (!form.question.trim()) errs.question = t('admin.create.errors.questionRequired');
+    if (!form.bettingDeadline) errs.bettingDeadline = t('admin.create.errors.bettingDeadlineRequired');
+    if (!form.resolutionDeadline) errs.resolutionDeadline = t('admin.create.errors.resolutionDeadlineRequired');
 
     const betting = toUnixTimestamp(form.bettingDeadline);
     const resolution = toUnixTimestamp(form.resolutionDeadline);
     const now = Math.floor(Date.now() / 1000);
 
     if (betting && betting <= now) {
-      errs.bettingDeadline = '베팅 마감 시간은 현재 시각 이후여야 합니다';
+      errs.bettingDeadline = t('admin.create.errors.bettingDeadlinePast');
     }
     if (betting && resolution && resolution <= betting) {
-      errs.resolutionDeadline = '결과 확정 시간은 베팅 마감 이후여야 합니다';
+      errs.resolutionDeadline = t('admin.create.errors.resolutionBeforeBetting');
     }
 
     setErrors(errs);
@@ -129,9 +131,9 @@ export function AdminCreateMarketPage() {
           min-h-[300px]
         ">
           <ShieldAlert className="w-12 h-12 text-danger mb-4" strokeWidth={1} />
-          <h2 className="text-xl font-bold text-text-primary mb-2">접근 권한 없음</h2>
+          <h2 className="text-xl font-bold text-text-primary mb-2">{t('admin.accessDenied')}</h2>
           <Link to="/" className="mt-4 text-sm text-brand-primary hover:underline">
-            메인으로 →
+            {t('admin.backToMain')} →
           </Link>
         </div>
       </main>
@@ -155,9 +157,9 @@ export function AdminCreateMarketPage() {
         </Link>
         <div>
           <h1 className="text-xl font-bold text-text-primary tracking-[-0.02em]">
-            마켓 생성
+            {t('admin.createMarket')}
           </h1>
-          <p className="text-text-muted text-xs mt-0.5">새로운 예측 마켓을 생성합니다</p>
+          <p className="text-text-muted text-xs mt-0.5">{t('admin.create.subtitle')}</p>
         </div>
       </div>
 
@@ -166,10 +168,10 @@ export function AdminCreateMarketPage() {
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* 질문 섹션 */}
           <section className="bg-bg-surface border border-border-default rounded-lg p-5 space-y-4">
-            <h2 className="text-sm font-semibold text-text-primary">질문 (다국어)</h2>
+            <h2 className="text-sm font-semibold text-text-primary">{t('admin.create.questionSection')}</h2>
 
             {/* 영어 (필수) */}
-            <FormField label="영어 (필수)" error={errors.question}>
+            <FormField label={t('admin.create.questionEn')} error={errors.question}>
               <textarea
                 value={form.question}
                 onChange={(e) => handleChange('question', e.target.value)}
@@ -188,7 +190,7 @@ export function AdminCreateMarketPage() {
             </FormField>
 
             {/* 한국어 */}
-            <FormField label="한국어 (선택)">
+            <FormField label={t('admin.create.questionKo')}>
               <textarea
                 value={form.questionKo}
                 onChange={(e) => handleChange('questionKo', e.target.value)}
@@ -206,7 +208,7 @@ export function AdminCreateMarketPage() {
             </FormField>
 
             {/* 중국어 */}
-            <FormField label="중국어 (선택)">
+            <FormField label={t('admin.create.questionZh')}>
               <textarea
                 value={form.questionZh}
                 onChange={(e) => handleChange('questionZh', e.target.value)}
@@ -224,7 +226,7 @@ export function AdminCreateMarketPage() {
             </FormField>
 
             {/* 일본어 */}
-            <FormField label="일본어 (선택)">
+            <FormField label={t('admin.create.questionJa')}>
               <textarea
                 value={form.questionJa}
                 onChange={(e) => handleChange('questionJa', e.target.value)}
@@ -244,10 +246,10 @@ export function AdminCreateMarketPage() {
 
           {/* 카테고리 + 마감 시간 */}
           <section className="bg-bg-surface border border-border-default rounded-lg p-5 space-y-4">
-            <h2 className="text-sm font-semibold text-text-primary">마켓 설정</h2>
+            <h2 className="text-sm font-semibold text-text-primary">{t('admin.create.marketSettings')}</h2>
 
             {/* 카테고리 */}
-            <FormField label="카테고리">
+            <FormField label={t('admin.create.category')}>
               <div className="relative">
                 <select
                   value={form.category}
@@ -275,7 +277,7 @@ export function AdminCreateMarketPage() {
             </FormField>
 
             {/* 베팅 마감 시간 */}
-            <FormField label="베팅 마감 시간" error={errors.bettingDeadline}>
+            <FormField label={t('admin.create.bettingDeadline')} error={errors.bettingDeadline}>
               <input
                 type="datetime-local"
                 value={form.bettingDeadline}
@@ -291,7 +293,7 @@ export function AdminCreateMarketPage() {
             </FormField>
 
             {/* 결과 확정 예정 시간 */}
-            <FormField label="결과 확정 예정 시간" error={errors.resolutionDeadline}>
+            <FormField label={t('admin.create.resolutionDeadline')} error={errors.resolutionDeadline}>
               <input
                 type="datetime-local"
                 value={form.resolutionDeadline}
@@ -326,7 +328,7 @@ export function AdminCreateMarketPage() {
             ">
               <CheckCircle className="w-4 h-4 text-yes shrink-0" strokeWidth={2} />
               <p className="text-sm text-yes">
-                마켓 #{createdMarketId} 생성 완료! 관리자 패널로 이동합니다...
+                {t('admin.create.successMessage', { id: createdMarketId })}
               </p>
             </div>
           )}
@@ -343,7 +345,7 @@ export function AdminCreateMarketPage() {
                 transition-colors duration-150
               "
             >
-              취소
+              {t('betting.cancel')}
             </Link>
             <button
               type="submit"
@@ -359,10 +361,10 @@ export function AdminCreateMarketPage() {
             >
               {isLoading && <Loader2 className="w-4 h-4 animate-spin" strokeWidth={2} />}
               {isLoading
-                ? (txStatus === TX_STATUS.CONFIRMING ? '블록 확인 중...' : '서명 대기...')
+                ? (txStatus === TX_STATUS.CONFIRMING ? t('admin.create.confirming') : t('betting.signPending'))
                 : isSuccess
-                  ? '✓ 생성 완료'
-                  : '마켓 생성'
+                  ? t('admin.create.successButton')
+                  : t('admin.createMarket')
               }
             </button>
           </div>
@@ -373,7 +375,7 @@ export function AdminCreateMarketPage() {
           <div className="sticky top-20">
             <div className="flex items-center justify-between mb-3">
               <p className="text-xs font-medium text-text-muted uppercase tracking-wide">
-                미리보기
+                {t('admin.create.preview')}
               </p>
               <button
                 type="button"
@@ -381,7 +383,7 @@ export function AdminCreateMarketPage() {
                 className="text-xs text-text-muted hover:text-text-secondary flex items-center gap-1"
               >
                 <Eye className="w-3.5 h-3.5" strokeWidth={1.5} />
-                {showPreview ? '숨기기' : '보기'}
+                {showPreview ? t('admin.create.hide') : t('admin.create.show')}
               </button>
             </div>
 
@@ -400,14 +402,14 @@ export function AdminCreateMarketPage() {
               {/* 질문 */}
               <p className="text-sm font-semibold text-text-primary leading-relaxed">
                 {form.question || (
-                  <span className="text-text-muted font-normal">영어 질문을 입력하면 미리보기가 표시됩니다</span>
+                  <span className="text-text-muted font-normal">{t('admin.create.previewPlaceholder')}</span>
                 )}
               </p>
 
               {/* 마감 시간 */}
               {form.bettingDeadline && (
                 <p className="text-xs text-text-muted">
-                  베팅 마감: {new Date(form.bettingDeadline).toLocaleString('ko-KR')}
+                  {t('admin.create.bettingDeadlineLabel')}{new Date(form.bettingDeadline).toLocaleString()}
                 </p>
               )}
 

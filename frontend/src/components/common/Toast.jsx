@@ -18,10 +18,10 @@ const ICONS = {
 };
 
 const STYLES = {
-  success: 'border-[rgba(16,185,129,0.3)] text-success',
-  error:   'border-[rgba(239,68,68,0.3)] text-danger',
-  warning: 'border-[rgba(245,158,11,0.3)] text-warning',
-  info:    'border-[rgba(99,102,241,0.3)] text-brand-primary',
+  success: 'border-[rgba(20,158,97,0.35)] text-success',
+  error:   'border-[rgba(224,49,49,0.35)] text-danger',
+  warning: 'border-[rgba(245,158,11,0.35)] text-warning',
+  info:    'border-[rgba(113,50,245,0.35)] text-brand-primary',
 };
 
 const AUTO_CLOSE_MS = {

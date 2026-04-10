@@ -5,6 +5,7 @@
  */
 import { useState, useEffect } from 'react';
 import { Gift, RefreshCw, CheckCircle, AlertTriangle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { formatMeta } from '../../lib/format.js';
 import { getReadContract } from '../../lib/contract.js';
 import { PoolBar } from '../common/PoolBar.jsx';
@@ -29,6 +30,7 @@ export function ClaimPanel({
   onClaimWinnings,
   onClaimRefund,
 }) {
+  const { t } = useTranslation();
   const [userBet, setUserBet] = useState(null);
   const [winnings, setWinnings] = useState(null);
 
@@ -89,13 +91,13 @@ export function ClaimPanel({
       {isResolved && (
         <div className="flex items-center justify-between">
           <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wide">
-            확정 결과
+            {t('claim.finalResult')}
           </h3>
           <div className={`
             px-3 py-1 rounded-sm text-sm font-bold uppercase tracking-[0.08em]
             ${outcomeIsYes ? 'bg-yes-muted text-yes' : outcomeIsNo ? 'bg-no-muted text-no' : 'bg-border-default text-text-muted'}
           `}>
-            {outcomeIsYes ? 'YES 승리' : outcomeIsNo ? 'NO 승리' : '결과 없음'}
+            {outcomeIsYes ? t('claim.yesWin') : outcomeIsNo ? t('claim.noWin') : t('claim.noResult')}
           </div>
         </div>
       )}
@@ -103,10 +105,10 @@ export function ClaimPanel({
       {isVoided && (
         <div className="flex items-center justify-between">
           <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wide">
-            마켓 상태
+            {t('claim.marketStatus')}
           </h3>
           <div className="px-3 py-1 rounded-sm text-sm font-bold bg-[rgba(100,116,139,0.1)] text-void uppercase tracking-[0.08em]">
-            무효 처리됨
+            {t('claim.voided')}
           </div>
         </div>
       )}
@@ -125,11 +127,11 @@ export function ClaimPanel({
               : 'bg-bg-elevated border-border-subtle opacity-60'
             }
           `}>
-            <p className="text-xs text-text-muted mb-1">YES 풀</p>
+            <p className="text-xs text-text-muted mb-1">{t('claim.yesPool')}</p>
             <p className={`text-base font-bold tabular-nums ${outcomeIsYes ? 'text-yes' : 'text-text-secondary'}`}>
               {formatMeta(market.yesPool)} META
             </p>
-            <p className="text-xs text-text-muted">{market.yesCount}명 참여</p>
+            <p className="text-xs text-text-muted">{t('claim.participantsCount', { count: market.yesCount })}</p>
           </div>
 
           {/* No 풀 */}
@@ -140,11 +142,11 @@ export function ClaimPanel({
               : 'bg-bg-elevated border-border-subtle opacity-60'
             }
           `}>
-            <p className="text-xs text-text-muted mb-1">NO 풀</p>
+            <p className="text-xs text-text-muted mb-1">{t('claim.noPool')}</p>
             <p className={`text-base font-bold tabular-nums ${outcomeIsNo ? 'text-no' : 'text-text-secondary'}`}>
               {formatMeta(market.noPool)} META
             </p>
-            <p className="text-xs text-text-muted">{market.noCount}명 참여</p>
+            <p className="text-xs text-text-muted">{t('claim.participantsCount', { count: market.noCount })}</p>
           </div>
         </div>
       )}
@@ -152,22 +154,22 @@ export function ClaimPanel({
       {/* 사용자 베팅 정보 */}
       {account && userBet && userBet.amount > 0n && (
         <div className="bg-bg-elevated rounded-lg p-3 space-y-2">
-          <p className="text-xs font-semibold text-text-secondary uppercase tracking-wide">내 베팅</p>
+          <p className="text-xs font-semibold text-text-secondary uppercase tracking-wide">{t('claim.myBet')}</p>
           <div className="flex justify-between text-sm">
-            <span className="text-text-muted">베팅 방향</span>
+            <span className="text-text-muted">{t('claim.betDirection')}</span>
             <span className={`font-bold tracking-[0.04em] ${userBet.isYes ? 'text-yes' : 'text-no'}`}>
               {userBet.isYes ? 'YES' : 'NO'}
             </span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-text-muted">베팅 금액</span>
+            <span className="text-text-muted">{t('betting.betAmount')}</span>
             <span className="tabular-nums font-medium text-text-primary">
               {formatMeta(userBet.amount)} META
             </span>
           </div>
           {isResolved && winnings !== null && winnings > 0n && isWinner && (
             <div className="flex justify-between text-sm">
-              <span className="text-text-muted">예상 수령액</span>
+              <span className="text-text-muted">{t('betting.expectedPayout')}</span>
               <span className="tabular-nums font-bold text-yes">
                 {formatMeta(winnings)} META
               </span>
@@ -188,7 +190,7 @@ export function ClaimPanel({
       {isSuccess && (
         <div className="flex items-center gap-2 p-3 rounded-md bg-[rgba(16,185,129,0.1)] border border-[rgba(16,185,129,0.2)] text-success text-sm">
           <CheckCircle className="w-4 h-4 shrink-0" strokeWidth={1.5} />
-          <span>{txState === 'success' ? '클레임 완료!' : '처리 완료!'}</span>
+          <span>{txState === 'success' ? t('myBets.claimed') : t('claim.done')}</span>
           {txHash && (
             <a
               href={`#tx-${txHash}`}
@@ -196,7 +198,7 @@ export function ClaimPanel({
               target="_blank"
               rel="noopener noreferrer"
             >
-              Tx 확인
+              {t('claim.txCheck')}
             </a>
           )}
         </div>
@@ -205,7 +207,7 @@ export function ClaimPanel({
       {/* 클레임 버튼 영역 */}
       {!account && (
         <p className="text-sm text-text-muted text-center py-2">
-          클레임하려면 지갑을 연결해 주세요
+          {t('claim.connectWallet')}
         </p>
       )}
 
@@ -227,12 +229,12 @@ export function ClaimPanel({
           {isPending ? (
             <>
               <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              {txState === 'pending' ? '서명 대기...' : '처리 중...'}
+              {txState === 'pending' ? t('betting.signPending') : t('betting.processing')}
             </>
           ) : (
             <>
               <Gift className="w-4 h-4" strokeWidth={1.5} />
-              보상 클레임
+              {t('myBets.claim')}
             </>
           )}
         </button>
@@ -256,12 +258,12 @@ export function ClaimPanel({
           {isPending ? (
             <>
               <span className="w-4 h-4 border-2 border-brand-primary/30 border-t-brand-primary rounded-full animate-spin" />
-              처리 중...
+              {t('betting.processing')}
             </>
           ) : (
             <>
               <RefreshCw className="w-4 h-4" strokeWidth={1.5} />
-              원금 환불
+              {t('myBets.refund')}
             </>
           )}
         </button>
@@ -271,7 +273,7 @@ export function ClaimPanel({
       {account && userBet?.claimed && (
         <div className="flex items-center justify-center gap-2 py-2 text-success text-sm">
           <CheckCircle className="w-4 h-4" strokeWidth={1.5} />
-          <span>이미 클레임 완료</span>
+          <span>{t('claim.alreadyClaimed')}</span>
         </div>
       )}
     </div>

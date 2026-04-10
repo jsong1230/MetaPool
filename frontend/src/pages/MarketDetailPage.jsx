@@ -46,7 +46,7 @@ export function MarketDetailPage() {
     market,
     balance,
     onSuccess: () => {
-      toast.success('베팅이 완료되었습니다!');
+      toast.success(t('betting.success'));
       setShowConfirmModal(false);
       betting.closePanel();
       refetch();
@@ -58,7 +58,7 @@ export function MarketDetailPage() {
     marketId: id,
     account,
     onSuccess: () => {
-      toast.success('클레임이 완료되었습니다!');
+      toast.success(t('myBets.claimed'));
       refetch();
     },
   });
@@ -110,15 +110,15 @@ export function MarketDetailPage() {
           className="inline-flex items-center gap-2 mb-6 text-text-secondary hover:text-text-primary transition-colors duration-150 text-sm"
         >
           <ArrowLeft className="w-4 h-4" strokeWidth={1.5} />
-          마켓 목록으로
+          {t('market.backToList')}
         </Link>
         <div className="bg-bg-surface border border-border-default rounded-lg p-8 text-center">
-          <p className="text-danger mb-2">{error || '마켓을 찾을 수 없습니다'}</p>
+          <p className="text-danger mb-2">{error || t('market.notFound')}</p>
           <button
             onClick={refetch}
             className="text-sm text-brand-primary hover:underline"
           >
-            다시 시도
+            {t('common.retry')}
           </button>
         </div>
       </main>
@@ -145,7 +145,7 @@ export function MarketDetailPage() {
         className="inline-flex items-center gap-2 mb-6 text-text-secondary hover:text-text-primary transition-colors duration-150 text-sm"
       >
         <ArrowLeft className="w-4 h-4" strokeWidth={1.5} />
-        마켓 목록으로
+        {t('market.backToList')}
       </Link>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -176,22 +176,22 @@ export function MarketDetailPage() {
             {/* 통계 3컬럼 */}
             <div className="grid grid-cols-3 gap-3 text-center">
               <div className="bg-bg-elevated rounded-lg p-3">
-                <p className="text-xs text-text-muted mb-1">총 풀</p>
+                <p className="text-xs text-text-muted mb-1">{t('market.totalPool')}</p>
                 <p className="text-lg font-bold tabular-nums text-text-primary">
                   {formatMeta(totalPool)}
                 </p>
                 <p className="text-xs text-text-muted">META</p>
               </div>
               <div className="bg-bg-elevated rounded-lg p-3">
-                <p className="text-xs text-text-muted mb-1">참여자</p>
+                <p className="text-xs text-text-muted mb-1">{t('market.participants')}</p>
                 <div className="flex items-center justify-center gap-1 my-0.5">
                   <Users className="w-4 h-4 text-text-muted" strokeWidth={1.5} />
                   <p className="text-lg font-bold tabular-nums text-text-primary">{totalParticipants}</p>
                 </div>
-                <p className="text-xs text-text-muted">명</p>
+                <p className="text-xs text-text-muted">{t('market.unit')}</p>
               </div>
               <div className="bg-bg-elevated rounded-lg p-3">
-                <p className="text-xs text-text-muted mb-1">배당률</p>
+                <p className="text-xs text-text-muted mb-1">{t('market.oddsLabel')}</p>
                 <div
                   className={`flex items-center justify-center gap-1 my-0.5 ${flashing ? 'animate-value-flash rounded' : ''}`}
                   aria-live="polite"
@@ -209,13 +209,13 @@ export function MarketDetailPage() {
           {/* 배당률 상세 카드 */}
           <div className="bg-bg-surface border border-border-default rounded-lg p-5">
             <h2 className="text-sm font-semibold text-text-secondary mb-3 uppercase tracking-wide">
-              YES / NO 배당률
+              {t('market.yesNoOdds')}
             </h2>
 
             {isFirstBetter ? (
               <div className="py-4 text-center">
-                <p className="text-brand-primary font-medium">첫 번째 베터가 되세요!</p>
-                <p className="text-text-muted text-sm mt-1">현재 풀이 없습니다. 베팅하면 배당률이 형성됩니다.</p>
+                <p className="text-brand-primary font-medium">{t('market.beFirst')}</p>
+                <p className="text-text-muted text-sm mt-1">{t('market.beFirstDesc')}</p>
               </div>
             ) : (
               <div className="grid grid-cols-2 gap-3">
@@ -229,7 +229,7 @@ export function MarketDetailPage() {
                     {yesOdds ? formatOdds(yesOdds) : '--'}
                   </p>
                   <p className="text-xs text-text-muted mt-1">
-                    {formatMeta(market.yesPool)} META · {market.yesCount}명
+                    {formatMeta(market.yesPool)} META · {market.yesCount}{t('market.unit')}
                   </p>
                 </div>
                 <div className={`rounded-lg p-4 border ${
@@ -242,7 +242,7 @@ export function MarketDetailPage() {
                     {noOdds ? formatOdds(noOdds) : '--'}
                   </p>
                   <p className="text-xs text-text-muted mt-1">
-                    {formatMeta(market.noPool)} META · {market.noCount}명
+                    {formatMeta(market.noPool)} META · {market.noCount}{t('market.unit')}
                   </p>
                 </div>
               </div>
@@ -255,25 +255,25 @@ export function MarketDetailPage() {
           {/* 마켓 메타 정보 */}
           <div className="bg-bg-surface border border-border-default rounded-lg p-5">
             <h2 className="text-sm font-semibold text-text-secondary mb-3 uppercase tracking-wide">
-              마켓 정보
+              {t('market.info')}
             </h2>
             <dl className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <dt className="text-text-muted">베팅 마감</dt>
+                <dt className="text-text-muted">{t('market.closed')}</dt>
                 <dd className="text-text-primary tabular-nums">{formatDate(market.bettingDeadline)}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-text-muted">결과 확정 예정</dt>
+                <dt className="text-text-muted">{t('market.resolveBy')}</dt>
                 <dd className="text-text-primary tabular-nums">{formatDate(market.resolutionDeadline)}</dd>
               </div>
               {isResolved && market.resolvedAt > 0 && (
                 <div className="flex justify-between">
-                  <dt className="text-text-muted">확정일</dt>
+                  <dt className="text-text-muted">{t('market.resolvedOn')}</dt>
                   <dd className="text-text-primary tabular-nums">{formatDate(market.resolvedAt)}</dd>
                 </div>
               )}
               <div className="flex justify-between">
-                <dt className="text-text-muted">마켓 ID</dt>
+                <dt className="text-text-muted">{t('market.marketId')}</dt>
                 <dd className="text-text-muted font-mono">#{market.id}</dd>
               </div>
             </dl>
@@ -300,7 +300,7 @@ export function MarketDetailPage() {
           {isBettable && (
             <div className="bg-bg-surface border border-border-default rounded-lg p-5 hidden lg:block">
               <h2 className="text-sm font-semibold text-text-secondary mb-4 uppercase tracking-wide">
-                베팅
+                {t('betting.bet')}
               </h2>
               <div className="grid grid-cols-2 gap-3">
                 <button
@@ -308,7 +308,7 @@ export function MarketDetailPage() {
                   className="
                     bg-yes hover:bg-yes-hover
                     text-white font-semibold
-                    px-5 py-3 rounded-md
+                    px-5 py-3 rounded-xl
                     text-base tracking-[0.08em] uppercase
                     transition-all duration-150
                     active:shadow-yes
@@ -322,7 +322,7 @@ export function MarketDetailPage() {
                   className="
                     bg-no hover:bg-no-hover
                     text-white font-semibold
-                    px-5 py-3 rounded-md
+                    px-5 py-3 rounded-xl
                     text-base tracking-[0.08em] uppercase
                     transition-all duration-150
                     active:shadow-no
@@ -334,7 +334,7 @@ export function MarketDetailPage() {
               </div>
               {!isConnected && (
                 <p className="text-xs text-text-muted mt-3 text-center">
-                  베팅하려면 지갑을 연결해 주세요
+                  {t('market.connectToBet')}
                 </p>
               )}
             </div>
@@ -345,7 +345,7 @@ export function MarketDetailPage() {
             <div className="bg-bg-surface border border-border-default rounded-lg p-5 flex flex-col items-center gap-2">
               <Lock className="w-6 h-6 text-text-muted" strokeWidth={1.5} />
               <p className="text-text-muted text-sm font-medium">
-                {isClosed ? '베팅 마감' : '마켓 일시 중단'}
+                {isClosed ? t('market.closed') : t('market.paused')}
               </p>
             </div>
           )}
@@ -361,7 +361,7 @@ export function MarketDetailPage() {
               className="
                 bg-yes hover:bg-yes-hover
                 text-white font-semibold
-                px-5 py-3 rounded-md
+                px-5 py-3 rounded-xl
                 text-base tracking-[0.08em] uppercase
                 transition-all duration-150
                 active:shadow-yes
@@ -375,7 +375,7 @@ export function MarketDetailPage() {
               className="
                 bg-no hover:bg-no-hover
                 text-white font-semibold
-                px-5 py-3 rounded-md
+                px-5 py-3 rounded-xl
                 text-base tracking-[0.08em] uppercase
                 transition-all duration-150
                 active:shadow-no

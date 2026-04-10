@@ -17,7 +17,7 @@ import { getReadContract } from '../../lib/contract.js';
  */
 export function MarketCard({ market }) {
   const navigate = useNavigate();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [yesOdds, setYesOdds] = useState(null);
   const [noOdds, setNoOdds] = useState(null);
   const [oddsFlashing, setOddsFlashing] = useState(false);
@@ -79,9 +79,9 @@ export function MarketCard({ market }) {
   return (
     <article
       className="
-        bg-bg-surface border border-border-default rounded-lg
-        p-4 shadow-elevation-1
-        hover:border-border-strong hover:shadow-elevation-2
+        bg-bg-surface border border-border-default rounded-2xl
+        p-5 shadow-elevation-1
+        hover:border-border-brand hover:shadow-card-hover
         transition-all duration-200 cursor-pointer
         flex flex-col gap-3
       "
@@ -114,7 +114,7 @@ export function MarketCard({ market }) {
       <div className="grid grid-cols-3 gap-2 text-center">
         {/* 총 풀 */}
         <div className="flex flex-col gap-0.5">
-          <span className="text-xs text-text-muted">총 풀</span>
+          <span className="text-xs text-text-muted">{t('market.totalPool')}</span>
           <span className="text-sm font-semibold text-text-primary tabular-nums">
             {formatMeta(totalPool)}
           </span>
@@ -123,19 +123,19 @@ export function MarketCard({ market }) {
 
         {/* 참여자 수 */}
         <div className="flex flex-col gap-0.5 items-center">
-          <span className="text-xs text-text-muted">참여자</span>
+          <span className="text-xs text-text-muted">{t('market.participants')}</span>
           <div className="flex items-center gap-1">
             <Users className="w-3.5 h-3.5 text-text-muted" strokeWidth={1.5} />
             <span className="text-sm font-semibold text-text-primary tabular-nums">
               {totalParticipants}
             </span>
           </div>
-          <span className="text-xs text-text-muted">명</span>
+          <span className="text-xs text-text-muted">{t('market.unit')}</span>
         </div>
 
         {/* 배당률 */}
         <div className="flex flex-col gap-0.5">
-          <span className="text-xs text-text-muted">배당률</span>
+          <span className="text-xs text-text-muted">{t('market.oddsLabel')}</span>
           <div
             className={`flex items-center justify-center gap-1 ${oddsFlashing ? 'animate-value-flash rounded' : ''}`}
             aria-live="polite"
@@ -160,12 +160,11 @@ export function MarketCard({ market }) {
       >
         <button
           className="
-            bg-yes hover:bg-yes-hover
+            btn-yes
             text-white font-semibold
-            px-3 py-2 rounded-md
+            px-3 py-2 rounded-xl
             text-sm tracking-[0.08em] uppercase
             transition-all duration-150
-            active:shadow-yes
             min-h-[36px]
           "
           onClick={(e) => {
@@ -178,12 +177,11 @@ export function MarketCard({ market }) {
         </button>
         <button
           className="
-            bg-no hover:bg-no-hover
+            btn-no
             text-white font-semibold
-            px-3 py-2 rounded-md
+            px-3 py-2 rounded-xl
             text-sm tracking-[0.08em] uppercase
             transition-all duration-150
-            active:shadow-no
             min-h-[36px]
           "
           onClick={(e) => {

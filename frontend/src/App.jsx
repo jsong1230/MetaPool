@@ -3,6 +3,7 @@
  * navigation.md URL 구조 기준
  */
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { WalletProvider } from './contexts/WalletContext.jsx';
 import { ToastProvider } from './components/common/Toast.jsx';
 import { Header } from './components/layout/Header.jsx';
@@ -20,6 +21,7 @@ import { HistoryPage } from './pages/HistoryPage.jsx';
 
 // 404 페이지
 function NotFoundPage() {
+  const { t } = useTranslation();
   return (
     <main className="max-w-7xl mx-auto px-4 lg:px-6 py-6">
       <div className="
@@ -27,8 +29,8 @@ function NotFoundPage() {
         flex flex-col items-center justify-center text-center
         min-h-[300px]
       ">
-        <p className="text-text-secondary text-lg font-medium">페이지를 찾을 수 없습니다</p>
-        <p className="text-text-muted text-sm mt-2">존재하지 않는 URL입니다</p>
+        <p className="text-text-secondary text-lg font-medium">{t('common.notFound')}</p>
+        <p className="text-text-muted text-sm mt-2">{t('common.notFoundDesc')}</p>
       </div>
     </main>
   );

@@ -25,7 +25,7 @@ const OUTCOME = {
  * }} props
  */
 export function ResolveModal({ market, onClose, onResolve, txStatus, txError }) {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [selectedOutcome, setSelectedOutcome] = useState(null);
   const [showVoidConfirm, setShowVoidConfirm] = useState(false);
 
@@ -55,7 +55,7 @@ export function ResolveModal({ market, onClose, onResolve, txStatus, txError }) 
         {/* 헤더 */}
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-lg font-bold text-text-primary tracking-[-0.02em]">
-            결과 확정
+            {t('admin.resolve.title')}
           </h2>
           <button
             onClick={onClose}
@@ -76,7 +76,7 @@ export function ResolveModal({ market, onClose, onResolve, txStatus, txError }) 
           bg-bg-surface border border-border-subtle rounded-md
           p-3 mb-5
         ">
-          <p className="text-xs text-text-muted mb-1">마켓 #{market.id}</p>
+          <p className="text-xs text-text-muted mb-1">{t('admin.resolve.marketLabel', { id: market.id })}</p>
           <p className="text-sm text-text-primary leading-relaxed line-clamp-2">
             {question}
           </p>
@@ -91,7 +91,7 @@ export function ResolveModal({ market, onClose, onResolve, txStatus, txError }) 
           ">
             <AlertTriangle className="w-4 h-4 text-warning shrink-0 mt-0.5" strokeWidth={1.5} />
             <p className="text-sm text-warning">
-              Void 처리 시 모든 베터에게 원금이 환불됩니다. 이 작업은 되돌릴 수 없습니다.
+              {t('admin.resolve.voidWarning')}
             </p>
           </div>
         )}
@@ -177,7 +177,7 @@ export function ResolveModal({ market, onClose, onResolve, txStatus, txError }) 
               disabled:opacity-50 disabled:cursor-not-allowed
             "
           >
-            취소
+            {t('betting.cancel')}
           </button>
 
           <button
@@ -197,10 +197,10 @@ export function ResolveModal({ market, onClose, onResolve, txStatus, txError }) 
           >
             {isLoading && <Loader2 className="w-4 h-4 animate-spin" strokeWidth={2} />}
             {isLoading
-              ? (txStatus === TX_STATUS.CONFIRMING ? '확인 중...' : '서명 대기...')
+              ? (txStatus === TX_STATUS.CONFIRMING ? t('admin.resolve.confirming') : t('betting.signPending'))
               : selectedOutcome === OUTCOME.VOID && showVoidConfirm
-                ? '⚠ Void 확정'
-                : '결과 확정'
+                ? t('admin.resolve.voidConfirm')
+                : t('admin.resolve.confirm')
             }
           </button>
         </div>

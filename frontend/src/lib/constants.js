@@ -44,17 +44,20 @@ export const ALLOWED_CHAIN_IDS = [
 // 컨트랙트 주소
 export const CONTRACT_ADDRESS = import.meta.env.VITE_CONTRACT_ADDRESS || '';
 
-// RPC URL
-export const RPC_URL = import.meta.env.VITE_RPC_URL || 'http://127.0.0.1:8545';
+// RPC URL — 상대 경로(/rpc)면 현재 origin을 붙여 절대 URL로 변환 (Vite proxy 지원)
+const _rpcRaw = import.meta.env.VITE_RPC_URL || 'http://127.0.0.1:8545';
+export const RPC_URL = _rpcRaw.startsWith('/')
+  ? `${window.location.origin}${_rpcRaw}`
+  : _rpcRaw;
 
 // 카테고리 enum (컨트랙트 MarketCategory와 일치)
 export const CATEGORIES = [
-  { id: 0, name: 'Crypto', label: '가상자산', color: 'brand-primary' },
-  { id: 1, name: 'Sports', label: '스포츠', color: 'sky' },
-  { id: 2, name: 'Weather', label: '날씨', color: 'warning' },
-  { id: 3, name: 'Politics', label: '정치', color: 'brand-secondary' },
-  { id: 4, name: 'Entertainment', label: '엔터', color: 'pink' },
-  { id: 5, name: 'Other', label: '기타', color: 'muted' },
+  { id: 0, name: 'Crypto',         labelKey: 'categories.crypto',         color: 'brand-primary' },
+  { id: 1, name: 'Sports',         labelKey: 'categories.sports',         color: 'sky' },
+  { id: 2, name: 'Weather',        labelKey: 'categories.weather',        color: 'warning' },
+  { id: 3, name: 'Politics',       labelKey: 'categories.politics',       color: 'brand-secondary' },
+  { id: 4, name: 'Entertainment',  labelKey: 'categories.entertainment',  color: 'pink' },
+  { id: 5, name: 'Other',          labelKey: 'categories.other',          color: 'muted' },
 ];
 
 export const CATEGORY_NAMES = CATEGORIES.map(c => c.name);

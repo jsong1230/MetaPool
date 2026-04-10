@@ -141,7 +141,7 @@ export function HomePage() {
             onChange={e => setSearchQuery(e.target.value)}
             placeholder={t('markets.searchPlaceholder')}
             className="
-              w-full pl-9 pr-8 py-2 rounded-md
+              w-full pl-9 pr-8 py-2 rounded-xl
               bg-bg-input border border-border-default
               text-text-primary text-sm
               placeholder:text-text-muted

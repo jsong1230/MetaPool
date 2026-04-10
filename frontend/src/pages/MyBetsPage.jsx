@@ -5,6 +5,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { TrendingUp, Gift, RefreshCw, CheckCircle, AlertTriangle, Wallet } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useUserBets } from '../hooks/useUserBets.js';
 import { useClaim } from '../hooks/useClaim.js';
 import { useWallet } from '../hooks/useWallet.js';
@@ -13,18 +14,18 @@ import { CategoryTag } from '../components/common/CategoryTag.jsx';
 import { Countdown } from '../components/common/Countdown.jsx';
 import { formatMeta, formatOdds } from '../lib/format.js';
 
-// 상태 탭 목록
-const STATUS_TABS = [
-  { id: 'all', label: '전체' },
-  { id: 'active', label: '진행중' },
-  { id: 'resolved', label: '완료' },
-  { id: 'claimable', label: '클레임 가능' },
-];
-
 export function MyBetsPage() {
   const { account, isConnected, connectWallet } = useWallet();
   const { toast } = useToast();
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('all');
+
+  const STATUS_TABS = [
+    { id: 'all',       label: t('myBets.tabs.all') },
+    { id: 'active',    label: t('myBets.tabs.active') },
+    { id: 'resolved',  label: t('myBets.tabs.resolved') },
+    { id: 'claimable', label: t('myBets.tabs.claimable') },
+  ];
 
   const { bets, loading, error, refetch } = useUserBets(account);
 
@@ -34,7 +35,7 @@ export function MyBetsPage() {
     marketId: claimingMarketId,
     account,
     onSuccess: () => {
-      toast.success('클레임이 완료되었습니다!');
+      toast.success(t('myBets.claimed'));
       refetch();
       setClaimingMarketId(null);
     },
@@ -63,15 +64,15 @@ export function MyBetsPage() {
   if (!isConnected) {
     return (
       <main className="max-w-7xl mx-auto px-4 lg:px-6 py-6 pb-20">
-        <h1 className="text-2xl font-bold text-text-primary tracking-[-0.02em] mb-6">내 베팅</h1>
+        <h1 className="text-2xl font-bold text-text-primary tracking-[-0.02em] mb-6">{t('myBets.title')}</h1>
         <div className="bg-bg-surface border border-border-default rounded-lg p-12 flex flex-col items-center gap-4">
           <Wallet className="w-10 h-10 text-text-muted" strokeWidth={1.5} />
-          <p className="text-text-secondary font-medium">지갑을 연결해 주세요</p>
+          <p className="text-text-secondary font-medium">{t('myBets.connectWallet')}</p>
           <button
             onClick={connectWallet}
             className="bg-brand-primary hover:bg-brand-primary-hover text-white px-6 py-2.5 rounded-md font-medium text-sm transition-colors duration-150"
           >
-            지갑 연결
+            {t('wallet.connect')}
           </button>
         </div>
       </main>
@@ -80,8 +81,8 @@ export function MyBetsPage() {
 
   return (
     <main className="max-w-7xl mx-auto px-4 lg:px-6 py-6 pb-20">
-      <h1 className="text-2xl font-bold text-text-primary tracking-[-0.02em] mb-2">내 베팅</h1>
-      <p className="text-text-secondary text-sm mb-5">참여한 마켓 목록과 정산 내역</p>
+      <h1 className="text-2xl font-bold text-text-primary tracking-[-0.02em] mb-2">{t('myBets.title')}</h1>
+      <p className="text-text-secondary text-sm mb-5">{t('myBets.subtitle')}</p>
 
       {/* 상태 탭 */}
       <div className="flex items-center gap-1 mb-5 border-b border-border-default overflow-x-auto">
@@ -131,7 +132,7 @@ export function MyBetsPage() {
       {!loading && error && (
         <div className="bg-bg-surface border border-border-default rounded-lg p-8 text-center">
           <p className="text-danger mb-2">{error}</p>
-          <button onClick={refetch} className="text-sm text-brand-primary hover:underline">다시 시도</button>
+          <button onClick={refetch} className="text-sm text-brand-primary hover:underline">{t('common.retry')}</button>
         </div>
       )}
 
@@ -140,7 +141,7 @@ export function MyBetsPage() {
         <div className="bg-bg-surface border border-border-default rounded-lg p-12 text-center">
           <TrendingUp className="w-10 h-10 text-text-muted mx-auto mb-3" strokeWidth={1} />
           <p className="text-text-secondary font-medium mb-1">
-            {activeTab === 'claimable' ? '클레임 가능한 베팅이 없습니다' : '베팅 내역이 없습니다'}
+            {activeTab === 'claimable' ? t('myBets.emptyClaimable') : t('myBets.empty')}
           </p>
           {activeTab === 'all' && (
             <Link to="/" className="text-sm text-brand-primary hover:underline">
@@ -173,6 +174,7 @@ export function MyBetsPage() {
  * 베팅 항목 카드
  */
 function BetItem({ bet, isClaimingThis, claimTxState, claimTxError, onClaim }) {
+  const { t } = useTranslation();
   const isPending = isClaimingThis && (claimTxState === 'pending' || claimTxState === 'confirming');
   const isClaimSuccess = isClaimingThis && claimTxState === 'success';
 
@@ -198,26 +200,26 @@ function BetItem({ bet, isClaimingThis, claimTxState, claimTxError, onClaim }) {
       {/* 베팅 정보 그리드 */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3 text-xs">
         <div>
-          <p className="text-text-muted mb-0.5">방향</p>
+          <p className="text-text-muted mb-0.5">{t('myBets.direction')}</p>
           <p className={`font-bold tracking-[0.04em] ${bet.isYes ? 'text-yes' : 'text-no'}`}>
             {bet.isYes ? 'YES' : 'NO'}
           </p>
         </div>
         <div>
-          <p className="text-text-muted mb-0.5">베팅 금액</p>
+          <p className="text-text-muted mb-0.5">{t('myBets.amount')}</p>
           <p className="font-semibold tabular-nums text-text-primary">
             {formatMeta(bet.betAmount)} META
           </p>
         </div>
         {bet.status === 0 && (
           <div className="col-span-2 sm:col-span-1">
-            <p className="text-text-muted mb-0.5">마감까지</p>
+            <p className="text-text-muted mb-0.5">{t('myBets.timeLeft')}</p>
             <Countdown deadline={bet.bettingDeadline} showIcon={false} />
           </div>
         )}
         {(bet.status === 2 || bet.status === 3) && bet.result === 'win' && bet.winnings > 0n && (
           <div>
-            <p className="text-text-muted mb-0.5">예상 수령액</p>
+            <p className="text-text-muted mb-0.5">{t('myBets.expectedPayout')}</p>
             <p className="font-bold tabular-nums text-yes">
               {formatMeta(bet.winnings)} META
             </p>
@@ -225,7 +227,7 @@ function BetItem({ bet, isClaimingThis, claimTxState, claimTxError, onClaim }) {
         )}
         {bet.result === 'loss' && (
           <div>
-            <p className="text-text-muted mb-0.5">손실</p>
+            <p className="text-text-muted mb-0.5">{t('myBets.loss')}</p>
             <p className="font-semibold tabular-nums text-no">
               -{formatMeta(bet.betAmount)} META
             </p>
@@ -245,7 +247,7 @@ function BetItem({ bet, isClaimingThis, claimTxState, claimTxError, onClaim }) {
       {isClaimSuccess && (
         <div className="flex items-center gap-1.5 mb-2 text-success text-xs">
           <CheckCircle className="w-3.5 h-3.5" strokeWidth={1.5} />
-          <span>클레임 완료!</span>
+          <span>{t('myBets.claimed')}</span>
         </div>
       )}
 
@@ -268,17 +270,17 @@ function BetItem({ bet, isClaimingThis, claimTxState, claimTxError, onClaim }) {
           {isPending ? (
             <>
               <span className="w-3.5 h-3.5 border-2 border-current/30 border-t-current rounded-full animate-spin" />
-              처리 중...
+              {t('myBets.claiming')}
             </>
           ) : bet.claimType === 'winnings' ? (
             <>
               <Gift className="w-3.5 h-3.5" strokeWidth={1.5} />
-              보상 클레임
+              {t('myBets.claim')}
             </>
           ) : (
             <>
               <RefreshCw className="w-3.5 h-3.5" strokeWidth={1.5} />
-              원금 환불
+              {t('myBets.refund')}
             </>
           )}
         </button>
