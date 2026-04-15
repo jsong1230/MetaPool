@@ -1,4 +1,17 @@
 {
+  "landing": {
+    "heroTitle": "未来を予測し\n報酬を獲得",
+    "heroSubtitle": "Metadium基盤の分散型予測マーケット。METAトークンで実際の結果に賭けて、的中すれば報酬を獲得できます。",
+    "exploreMarkets": "マーケットを探す",
+    "statMarkets": "アクティブマーケット",
+    "statPool": "総プール",
+    "statParticipants": "参加者",
+    "featuredTitle": "人気マーケット",
+    "viewAll": "すべて見る",
+    "ctaTitle": "予測を始める準備はできましたか？",
+    "ctaSubtitle": "ウォレットを接続して、あなたが信じる結果に賭けましょう。",
+    "startPredicting": "予測を始める"
+  },
   "nav": {
     "markets": "マーケット",
     "history": "履歴",

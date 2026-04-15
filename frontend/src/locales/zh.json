@@ -1,4 +1,17 @@
 {
+  "landing": {
+    "heroTitle": "预测未来\n赢取奖励",
+    "heroSubtitle": "基于 Metadium 的去中心化预测市场。用 META 代币对现实世界的结果进行投注，预测正确即可获得奖励。",
+    "exploreMarkets": "探索市场",
+    "statMarkets": "活跃市场",
+    "statPool": "总奖池",
+    "statParticipants": "参与者",
+    "featuredTitle": "热门市场",
+    "viewAll": "查看全部",
+    "ctaTitle": "准备好开始预测了吗？",
+    "ctaSubtitle": "连接钱包，开始对你看好的结果进行投注。",
+    "startPredicting": "开始预测"
+  },
   "nav": {
     "markets": "市场",
     "history": "历史",

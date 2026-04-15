@@ -9,6 +9,7 @@ import { ToastProvider } from './components/common/Toast.jsx';
 import { Header } from './components/layout/Header.jsx';
 import { Footer } from './components/layout/Footer.jsx';
 import { MobileNav } from './components/layout/MobileNav.jsx';
+import { LandingPage } from './pages/LandingPage.jsx';
 import { HomePage } from './pages/HomePage.jsx';
 import { MarketDetailPage } from './pages/MarketDetailPage.jsx';
 import { MyBetsPage } from './pages/MyBetsPage.jsx';
@@ -46,7 +47,8 @@ export default function App() {
 
             <div className="flex-1">
               <Routes>
-                <Route path="/" element={<HomePage />} />
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/markets" element={<HomePage />} />
                 <Route path="/market/:id" element={<MarketDetailPage />} />
                 <Route path="/my-bets" element={<MyBetsPage />} />
                 <Route path="/profile" element={<ProfilePage />} />

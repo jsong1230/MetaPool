@@ -1,4 +1,17 @@
 {
+  "landing": {
+    "heroTitle": "미래를 예측하고\n보상을 받으세요.",
+    "heroSubtitle": "Metadium 기반 탈중앙화 예측 마켓. META 토큰으로 실제 결과에 베팅하고, 맞으면 보상을 받으세요.",
+    "exploreMarkets": "마켓 둘러보기",
+    "statMarkets": "활성 마켓",
+    "statPool": "총 풀",
+    "statParticipants": "참여자",
+    "featuredTitle": "인기 마켓",
+    "viewAll": "전체 보기",
+    "ctaTitle": "예측을 시작할 준비되셨나요?",
+    "ctaSubtitle": "지갑을 연결하고 당신이 믿는 결과에 베팅하세요.",
+    "startPredicting": "예측 시작하기"
+  },
   "nav": {
     "markets": "마켓",
     "history": "히스토리",

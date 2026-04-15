@@ -11,7 +11,7 @@ export function MobileNav() {
   const { t } = useTranslation();
 
   const NAV_ITEMS = [
-    { to: '/',           labelKey: 'nav.markets',     icon: LayoutGrid, requiresWallet: false },
+    { to: '/markets',    labelKey: 'nav.markets',     icon: LayoutGrid, requiresWallet: false },
     { to: '/my-bets',    labelKey: 'nav.myBets',      icon: Wallet,     requiresWallet: true  },
     { to: '/history',    labelKey: 'nav.history',     icon: History,    requiresWallet: false },
     { to: '/leaderboard',labelKey: 'nav.leaderboard', icon: Trophy,     requiresWallet: false },

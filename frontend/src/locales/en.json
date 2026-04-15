@@ -1,4 +1,17 @@
 {
+  "landing": {
+    "heroTitle": "Predict the Future.\nEarn Rewards.",
+    "heroSubtitle": "A decentralized prediction market on Metadium. Bet META on real-world outcomes and earn rewards when you're right.",
+    "exploreMarkets": "Explore Markets",
+    "statMarkets": "Active Markets",
+    "statPool": "Total Pool",
+    "statParticipants": "Participants",
+    "featuredTitle": "Trending Markets",
+    "viewAll": "View All",
+    "ctaTitle": "Ready to make your prediction?",
+    "ctaSubtitle": "Connect your wallet and start betting on outcomes you believe in.",
+    "startPredicting": "Start Predicting"
+  },
   "nav": {
     "markets": "Markets",
     "history": "History",

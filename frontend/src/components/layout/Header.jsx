@@ -68,7 +68,7 @@ export function Header() {
             className="hidden md:flex items-center gap-1"
             aria-label="주 네비게이션"
           >
-            <NavLink to="/">{t('nav.markets')}</NavLink>
+            <NavLink to="/markets">{t('nav.markets')}</NavLink>
             <NavLink to="/history">{t('nav.history')}</NavLink>
             <NavLink to="/leaderboard">{t('nav.leaderboard')}</NavLink>
             {isOwner && (
