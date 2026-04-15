@@ -1,87 +1,87 @@
 @import "tailwindcss";
 
-/* ── MetaPool Dark Design System ── */
-/* Primary: Violet #7c3aed | Dark trading terminal aesthetic */
+/* ── MetaPool Design System — Inspired by Superhuman ── */
+/* Mysteria Purple #1b1938 | Lavender Glow #cbb7fb | Warm Cream #e9e5dd */
 
 @theme {
-  /* Background */
-  --color-bg-primary: #080a12;
-  --color-bg-secondary: #0c0e1a;
-  --color-bg-surface: #111425;
-  --color-bg-elevated: #181c30;
-  --color-bg-input: #0f1220;
+  /* Background — Deep purple twilight */
+  --color-bg-primary: #1b1938;
+  --color-bg-secondary: #161331;
+  --color-bg-surface: #231f45;
+  --color-bg-elevated: #2c2750;
+  --color-bg-input: #1e1a3d;
 
-  /* Text */
-  --color-text-primary: #dde1f0;
-  --color-text-secondary: #666987;
-  --color-text-muted: #3e4158;
-  --color-text-inverse: #080a12;
+  /* Text — Translucent white hierarchy */
+  --color-text-primary: #f0eef6;
+  --color-text-secondary: #8e8a9e;
+  --color-text-muted: #5a5670;
+  --color-text-inverse: #1b1938;
 
-  /* Brand — Violet */
-  --color-brand-primary: #7c3aed;
-  --color-brand-primary-hover: #8b5cf6;
-  --color-brand-secondary: #a78bfa;
-  --color-brand-secondary-hover: #7c3aed;
-  --color-brand-accent: #10b981;
+  /* Brand — Lavender + Warm Cream */
+  --color-brand-primary: #cbb7fb;
+  --color-brand-primary-hover: #d8c8fc;
+  --color-brand-secondary: #714cb6;
+  --color-brand-secondary-hover: #8b6cc9;
+  --color-brand-accent: #e9e5dd;
 
   /* Semantic */
-  --color-yes: #10b981;
-  --color-yes-hover: #059669;
-  --color-yes-dim: rgba(16,185,129,0.14);
-  --color-no: #ef4444;
-  --color-no-hover: #dc2626;
-  --color-no-dim: rgba(239,68,68,0.14);
-  --color-success: #10b981;
-  --color-warning: #f59e0b;
-  --color-danger: #ef4444;
-  --color-void: #4b5068;
+  --color-yes: #34d399;
+  --color-yes-hover: #10b981;
+  --color-yes-dim: rgba(52,211,153,0.12);
+  --color-no: #f87171;
+  --color-no-hover: #ef4444;
+  --color-no-dim: rgba(248,113,113,0.12);
+  --color-success: #34d399;
+  --color-warning: #fbbf24;
+  --color-danger: #f87171;
+  --color-void: #5a5670;
 
-  /* Border */
-  --color-border-default: #1c1f35;
-  --color-border-subtle: #13162a;
-  --color-border-strong: #2a2e4e;
-  --color-border-brand: #7c3aed;
+  /* Border — Subtle white-alpha on purple */
+  --color-border-default: #2d2952;
+  --color-border-subtle: #242048;
+  --color-border-strong: #3d3865;
+  --color-border-brand: #cbb7fb;
 
   /* Font */
-  --font-sans: 'IBM Plex Sans', 'Noto Sans KR', Helvetica, Arial, sans-serif;
+  --font-sans: 'IBM Plex Sans', 'Noto Sans KR', system-ui, -apple-system, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
 }
 
 @layer base {
   :root {
-    --color-bg-primary: #080a12;
-    --color-bg-secondary: #0c0e1a;
-    --color-bg-surface: #111425;
-    --color-bg-elevated: #181c30;
-    --color-bg-input: #0f1220;
-    --color-text-primary: #dde1f0;
-    --color-text-secondary: #666987;
-    --color-text-muted: #3e4158;
-    --color-text-inverse: #080a12;
-    --color-brand-primary: #7c3aed;
-    --color-brand-primary-hover: #8b5cf6;
-    --color-brand-primary-muted: color-mix(in srgb, #7c3aed 14%, transparent);
-    --color-brand-secondary: #a78bfa;
-    --color-brand-secondary-hover: #7c3aed;
-    --color-brand-accent: #10b981;
-    --color-brand-accent-muted: color-mix(in srgb, #10b981 14%, transparent);
-    --color-yes: #10b981;
-    --color-yes-hover: #059669;
-    --color-yes-muted: color-mix(in srgb, #10b981 14%, transparent);
-    --color-yes-dim: rgba(16,185,129,0.14);
-    --color-no: #ef4444;
-    --color-no-hover: #dc2626;
-    --color-no-muted: color-mix(in srgb, #ef4444 14%, transparent);
-    --color-no-dim: rgba(239,68,68,0.14);
-    --color-success: #10b981;
-    --color-warning: #f59e0b;
-    --color-danger: #ef4444;
-    --color-void: #4b5068;
-    --color-border-default: #1c1f35;
-    --color-border-subtle: #13162a;
-    --color-border-strong: #2a2e4e;
-    --color-border-brand: #7c3aed;
-    --font-sans: 'IBM Plex Sans', 'Noto Sans KR', Helvetica, Arial, sans-serif;
+    --color-bg-primary: #1b1938;
+    --color-bg-secondary: #161331;
+    --color-bg-surface: #231f45;
+    --color-bg-elevated: #2c2750;
+    --color-bg-input: #1e1a3d;
+    --color-text-primary: #f0eef6;
+    --color-text-secondary: #8e8a9e;
+    --color-text-muted: #5a5670;
+    --color-text-inverse: #1b1938;
+    --color-brand-primary: #cbb7fb;
+    --color-brand-primary-hover: #d8c8fc;
+    --color-brand-primary-muted: color-mix(in srgb, #cbb7fb 12%, transparent);
+    --color-brand-secondary: #714cb6;
+    --color-brand-secondary-hover: #8b6cc9;
+    --color-brand-accent: #e9e5dd;
+    --color-brand-accent-muted: color-mix(in srgb, #e9e5dd 12%, transparent);
+    --color-yes: #34d399;
+    --color-yes-hover: #10b981;
+    --color-yes-muted: color-mix(in srgb, #34d399 12%, transparent);
+    --color-yes-dim: rgba(52,211,153,0.12);
+    --color-no: #f87171;
+    --color-no-hover: #ef4444;
+    --color-no-muted: color-mix(in srgb, #f87171 12%, transparent);
+    --color-no-dim: rgba(248,113,113,0.12);
+    --color-success: #34d399;
+    --color-warning: #fbbf24;
+    --color-danger: #f87171;
+    --color-void: #5a5670;
+    --color-border-default: #2d2952;
+    --color-border-subtle: #242048;
+    --color-border-strong: #3d3865;
+    --color-border-brand: #cbb7fb;
+    --font-sans: 'IBM Plex Sans', 'Noto Sans KR', system-ui, -apple-system, sans-serif;
     --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
   }
 
@@ -101,9 +101,6 @@
     margin: 0;
     min-height: 100vh;
     background-color: var(--color-bg-primary);
-    /* Subtle radial glow from top */
-    background-image: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(124,58,237,0.08) 0%, transparent 60%);
-    background-attachment: fixed;
   }
 
   #root {
@@ -115,13 +112,13 @@
     outline-offset: 2px;
   }
 
-  /* Dark scrollbar */
+  /* Minimal scrollbar */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: var(--color-bg-secondary);
+    background: transparent;
   }
   ::-webkit-scrollbar-thumb {
     background: var(--color-border-strong);
@@ -133,73 +130,79 @@
 }
 
 @layer utilities {
-  /* Elevation — dark glow shadows */
+  /* Elevation — border-first depth (Superhuman philosophy) */
   .shadow-elevation-1 {
-    box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+    box-shadow: none;
   }
   .shadow-elevation-2 {
-    box-shadow: 0 4px 24px rgba(0,0,0,0.5), 0 1px 4px rgba(0,0,0,0.4);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3);
   }
   .shadow-elevation-3 {
-    box-shadow: 0 8px 40px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.4);
   }
   .shadow-brand {
-    box-shadow: 0 0 0 1px var(--color-border-brand), 0 4px 20px rgba(124,58,237,0.25);
+    box-shadow: 0 0 0 1px var(--color-border-brand);
   }
   .shadow-yes {
-    box-shadow: 0 0 0 1px var(--color-yes), 0 4px 16px rgba(16,185,129,0.2);
+    box-shadow: 0 0 0 1px var(--color-yes);
   }
   .shadow-no {
-    box-shadow: 0 0 0 1px var(--color-no), 0 4px 16px rgba(239,68,68,0.2);
+    box-shadow: 0 0 0 1px var(--color-no);
   }
   .shadow-card-hover {
-    box-shadow: 0 0 0 1px var(--color-border-brand), 0 8px 32px rgba(124,58,237,0.18), 0 2px 8px rgba(0,0,0,0.5);
+    box-shadow: 0 0 0 1px var(--color-border-brand), 0 4px 20px rgba(203,183,251,0.08);
   }
 
-  /* Glass morphism */
+  /* Glass — minimal, Superhuman-restrained */
   .glass {
-    backdrop-filter: blur(16px) saturate(180%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
-    background: rgba(8,10,18,0.82);
+    background: rgba(27,25,56,0.92);
     border-bottom: 1px solid var(--color-border-default);
   }
 
-  /* Gradient text */
+  /* Gradient text — Lavender Glow */
   .text-gradient-brand {
-    background: linear-gradient(135deg, #c4b5fd 0%, #7c3aed 100%);
+    background: linear-gradient(135deg, #e0d4fd 0%, #cbb7fb 50%, #714cb6 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
   .text-gradient-yes {
-    background: linear-gradient(135deg, #6ee7b7 0%, #10b981 100%);
+    background: linear-gradient(135deg, #6ee7b7 0%, #34d399 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
   .text-gradient-no {
-    background: linear-gradient(135deg, #fca5a5 0%, #ef4444 100%);
+    background: linear-gradient(135deg, #fca5a5 0%, #f87171 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
-  /* Gradient buttons */
+  /* Buttons — Superhuman-style muted tones, no heavy gradients */
   .btn-yes {
-    background: linear-gradient(160deg, #10b981 0%, #059669 100%);
-    box-shadow: 0 2px 12px rgba(16,185,129,0.25);
+    background-color: var(--color-yes);
+    transition: background-color 150ms, opacity 150ms;
   }
   .btn-yes:hover {
-    background: linear-gradient(160deg, #34d399 0%, #10b981 100%);
-    box-shadow: 0 4px 20px rgba(16,185,129,0.4);
+    background-color: var(--color-yes-hover);
   }
   .btn-no {
-    background: linear-gradient(160deg, #ef4444 0%, #dc2626 100%);
-    box-shadow: 0 2px 12px rgba(239,68,68,0.25);
+    background-color: var(--color-no);
+    transition: background-color 150ms, opacity 150ms;
   }
   .btn-no:hover {
-    background: linear-gradient(160deg, #f87171 0%, #ef4444 100%);
-    box-shadow: 0 4px 20px rgba(239,68,68,0.4);
+    background-color: var(--color-no-hover);
+  }
+
+  /* Warm Cream CTA — Superhuman signature */
+  .btn-cream {
+    background-color: #e9e5dd;
+    color: #292827;
+    transition: opacity 150ms;
+  }
+  .btn-cream:hover {
+    opacity: 0.88;
   }
 
   /* Animations */
@@ -219,7 +222,7 @@
     animation: pulse-dot 2s ease-in-out infinite;
   }
 
-  /* 색상 유틸 (CSS 변수 기반) */
+  /* Color utilities (CSS variable based) */
   .bg-bg-primary { background-color: var(--color-bg-primary); }
   .bg-bg-secondary { background-color: var(--color-bg-secondary); }
   .bg-bg-surface { background-color: var(--color-bg-surface); }
@@ -268,16 +271,16 @@
   .hover\:border-border-brand:hover { border-color: var(--color-border-brand); }
   .hover\:text-text-primary:hover { color: var(--color-text-primary); }
   .hover\:text-brand-primary:hover { color: var(--color-brand-primary); }
-  .hover\:shadow-card-hover:hover { box-shadow: 0 0 0 1px var(--color-border-brand), 0 8px 32px rgba(124,58,237,0.18), 0 2px 8px rgba(0,0,0,0.5); }
-  .hover\:shadow-yes:hover { box-shadow: 0 0 0 1px var(--color-yes), 0 4px 16px rgba(16,185,129,0.2); }
-  .hover\:shadow-no:hover { box-shadow: 0 0 0 1px var(--color-no), 0 4px 16px rgba(239,68,68,0.2); }
+  .hover\:shadow-card-hover:hover { box-shadow: 0 0 0 1px var(--color-border-brand), 0 4px 20px rgba(203,183,251,0.08); }
+  .hover\:shadow-yes:hover { box-shadow: 0 0 0 1px var(--color-yes); }
+  .hover\:shadow-no:hover { box-shadow: 0 0 0 1px var(--color-no); }
 
-  .active\:shadow-yes:active { box-shadow: 0 0 0 1px var(--color-yes), rgba(16, 185, 129, 0.2) 0px 4px 12px; }
-  .active\:shadow-no:active { box-shadow: 0 0 0 1px var(--color-no), rgba(239, 68, 68, 0.2) 0px 4px 12px; }
+  .active\:shadow-yes:active { box-shadow: 0 0 0 1px var(--color-yes); }
+  .active\:shadow-no:active { box-shadow: 0 0 0 1px var(--color-no); }
   .active\:bg-brand-primary-muted:active { background-color: var(--color-brand-primary-muted); }
 
   .focus\:border-border-brand:focus { border-color: var(--color-border-brand); }
-  .focus\:shadow-brand:focus { box-shadow: 0 0 0 1px var(--color-border-brand), rgba(124, 58, 237, 0.2) 0px 4px 16px; }
+  .focus\:shadow-brand:focus { box-shadow: 0 0 0 1px var(--color-border-brand); }
 
   .font-numeric {
     font-variant-numeric: tabular-nums;
@@ -302,7 +305,7 @@
 
 @keyframes value-flash {
   0% { background-color: transparent; }
-  30% { background-color: color-mix(in srgb, var(--color-brand-accent) 16%, transparent); }
+  30% { background-color: color-mix(in srgb, var(--color-brand-primary) 12%, transparent); }
   100% { background-color: transparent; }
 }
 

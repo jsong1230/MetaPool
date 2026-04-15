@@ -1,125 +1,89 @@
-# MetaPool Design System
+# MetaPool Design System — Inspired by Superhuman
 
-## 1. Visual Theme & Atmosphere
+## 1. Visual Theme
 
-Dark trading terminal aesthetic. Deep blue-black backgrounds with violet as the primary brand color, emerald green for YES, red for NO. Designed to feel like a professional crypto platform — not a light-mode web app.
+Premium dark UI inspired by Superhuman. Deep purple (Mysteria) backgrounds, Lavender Glow as the singular accent, minimal shadows, border-based depth. Confidence through restraint.
 
 **Key Characteristics:**
-- Deep dark backgrounds (`#080a12`) with subtle violet radial glow
-- Violet (`#7c3aed`) as primary brand
-- Emerald green (`#10b981`) for YES / Red (`#ef4444`) for NO
-- Glass morphism header (`backdrop-filter: blur(16px)`)
-- Gradient buttons with colored glow shadows
-- IBM Plex Sans (Latin) + Noto Sans KR (Korean) font stack
+- Mysteria Purple (`#1b1938`) base background
+- Lavender Glow (`#cbb7fb`) as the sole brand accent
+- Warm Cream (`#e9e5dd`) for primary CTA buttons
+- Minimal shadows, border-first depth
+- Only 8px (`rounded-lg`) and 16px (`rounded-2xl`) radius
+- Softer semantic colors: YES `#34d399`, NO `#f87171`
 
 ## 2. Color Palette
 
-### Background
+### Background (Deep Purple Twilight)
 | Token | Value | Use |
 |-------|-------|-----|
-| `bg-primary` | `#080a12` | App background |
-| `bg-secondary` | `#0c0e1a` | Subtle sections |
-| `bg-surface` | `#111425` | Cards, panels |
-| `bg-elevated` | `#181c30` | Popovers, modals |
-| `bg-input` | `#0f1220` | Input fields |
+| `bg-primary` | `#1b1938` | App background |
+| `bg-secondary` | `#161331` | Subtle sections |
+| `bg-surface` | `#231f45` | Cards, panels |
+| `bg-elevated` | `#2c2750` | Modals, popovers |
+| `bg-input` | `#1e1a3d` | Input fields |
 
-### Text
+### Text (White Hierarchy)
 | Token | Value | Use |
 |-------|-------|-----|
-| `text-primary` | `#dde1f0` | Main text |
-| `text-secondary` | `#666987` | Supporting text |
-| `text-muted` | `#3e4158` | Placeholder, labels |
+| `text-primary` | `#f0eef6` | Main text |
+| `text-secondary` | `#8e8a9e` | Supporting text |
+| `text-muted` | `#5a5670` | Placeholder, labels |
 
 ### Brand
 | Token | Value | Use |
 |-------|-------|-----|
-| `brand-primary` | `#7c3aed` | CTA buttons, accents |
-| `brand-primary-hover` | `#8b5cf6` | Hover state |
-| `brand-secondary` | `#a78bfa` | Gradient endpoint |
-| `brand-accent` | `#10b981` | Positive indicators |
+| `brand-primary` | `#cbb7fb` | Lavender Glow accent |
+| `brand-secondary` | `#714cb6` | Amethyst links |
+| `brand-accent` | `#e9e5dd` | Warm Cream CTA |
 
 ### Semantic
-| Token | Value | Use |
-|-------|-------|-----|
-| `yes` | `#10b981` | YES bet, bullish |
-| `no` | `#ef4444` | NO bet, bearish |
-| `warning` | `#f59e0b` | Caution states |
-| `danger` | `#ef4444` | Errors, destructive |
+| Token | Value |
+|-------|-------|
+| `yes` | `#34d399` (soft emerald) |
+| `no` | `#f87171` (soft red) |
+| `warning` | `#fbbf24` |
+| `danger` | `#f87171` |
 
 ### Border
 | Token | Value | Use |
 |-------|-------|-----|
-| `border-default` | `#1c1f35` | Default dividers |
-| `border-subtle` | `#13162a` | Hairline dividers |
-| `border-strong` | `#2a2e4e` | Emphasized borders |
-| `border-brand` | `#7c3aed` | Focus, hover brand border |
+| `border-default` | `#2d2952` | Default dividers |
+| `border-subtle` | `#242048` | Hairline |
+| `border-strong` | `#3d3865` | Emphasized |
+| `border-brand` | `#cbb7fb` | Focus, hover |
 
-## 3. Typography
+## 3. Depth & Elevation
 
-- **Font**: IBM Plex Sans (primary), Noto Sans KR (Korean fallback)
-- **Mono**: IBM Plex Mono (numbers, addresses)
-- **Tabular nums** on all financial values (`tabular-nums` / `font-numeric`)
+Superhuman philosophy: border containment over shadows.
 
-## 4. Utility Classes
+| Level | Treatment |
+|-------|-----------|
+| Level 0 | No shadow, border only (`border-default`) |
+| Level 1 | `border-brand` on hover (card highlight) |
+| Level 2 | `0 4px 24px rgba(0,0,0,0.3)` (modals) |
+| Level 3 | `0 8px 40px rgba(0,0,0,0.4)` (elevated) |
 
-### Glass Morphism
-```css
-.glass {
-  backdrop-filter: blur(16px) saturate(180%);
-  background: rgba(8,10,18,0.82);
-  border-bottom: 1px solid var(--color-border-default);
-}
-```
-Used on: Header (sticky)
-
-### Gradient Text
-```css
-.text-gradient-brand  /* violet gradient: #c4b5fd → #7c3aed */
-.text-gradient-yes    /* green gradient:  #6ee7b7 → #10b981 */
-.text-gradient-no     /* red gradient:    #fca5a5 → #ef4444 */
-```
-
-### Gradient Buttons
-```css
-.btn-yes  /* linear-gradient(160deg, #10b981, #059669) + glow shadow */
-.btn-no   /* linear-gradient(160deg, #ef4444, #dc2626) + glow shadow */
-```
-
-### Shadows
-```css
-.shadow-elevation-1    /* 0 1px 4px rgba(0,0,0,0.4) */
-.shadow-elevation-2    /* 0 4px 24px rgba(0,0,0,0.5) */
-.shadow-elevation-3    /* 0 8px 40px rgba(0,0,0,0.6) */
-.shadow-brand          /* violet outline + glow */
-.shadow-yes            /* green outline + glow */
-.shadow-no             /* red outline + glow */
-.shadow-card-hover     /* violet border + 32px violet glow — card hover state */
-```
-
-## 5. Component Patterns
+## 4. Component Patterns
 
 ### Cards
-- Background: `bg-bg-surface` (`#111425`)
-- Default border: `border-border-default`
-- Hover: `border-border-brand` + `shadow-card-hover`
-- Radius: `rounded-2xl`
+- `bg-bg-surface`, `border-border-default`, `rounded-2xl`
+- Hover: `border-border-brand` (lavender outline, no glow)
 
 ### Header
-- `glass` class — sticky with backdrop blur
-- Logo: gradient icon (`#a78bfa` → `#7c3aed`) + `text-gradient-brand` wordmark
+- `glass` (solid dark purple, no backdrop-blur)
+- Logo: `bg-brand-primary` icon + `text-brand-primary` wordmark
 
-### YES/NO Buttons (MarketCard)
-- Use `.btn-yes` / `.btn-no` utility classes
-- White text, gradient background, colored glow on hover
-- Radius: `rounded-xl`
+### Buttons
+- YES/NO: flat color (`btn-yes` / `btn-no`), `rounded-lg`, no gradients
+- Primary CTA: `btn-cream` (Warm Cream `#e9e5dd`, dark text)
+- Brand: `bg-brand-primary` (Lavender), dark text
 
-### Input Fields
-- Background: `bg-bg-input`
-- Border: `border-border-default`
-- Focus: `border-border-brand`
+### Border Radius
+- `rounded-lg` (8px): buttons, inputs, small elements
+- `rounded-2xl` (16px): cards, containers
+- No other radii
 
-## 6. Layout
-
-- Max width: `max-w-7xl` (full) / `max-w-2xl` (forms, detail pages)
-- Breakpoints: `sm:640` `md:768` `lg:1024` `xl:1280`
-- Grid: `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3` for market list
+## 5. Reference
+- [Superhuman Design System](https://github.com/VoltAgent/awesome-design-md/tree/main/design-md/superhuman)
+- [Design Catalog](https://cp-khs.github.io/awesome-design-md-catalog/catalog.html)

@@ -80,8 +80,8 @@ export function MarketCard({ market }) {
     <article
       className="
         bg-bg-surface border border-border-default rounded-2xl
-        p-5 shadow-elevation-1
-        hover:border-border-brand hover:shadow-card-hover
+        p-5
+        hover:border-border-brand
         transition-all duration-200 cursor-pointer
         flex flex-col gap-3
       "
@@ -162,7 +162,7 @@ export function MarketCard({ market }) {
           className="
             btn-yes
             text-white font-semibold
-            px-3 py-2 rounded-xl
+            px-3 py-2 rounded-lg
             text-sm tracking-[0.08em] uppercase
             transition-all duration-150
             min-h-[36px]
@@ -179,7 +179,7 @@ export function MarketCard({ market }) {
           className="
             btn-no
             text-white font-semibold
-            px-3 py-2 rounded-xl
+            px-3 py-2 rounded-lg
             text-sm tracking-[0.08em] uppercase
             transition-all duration-150
             min-h-[36px]
