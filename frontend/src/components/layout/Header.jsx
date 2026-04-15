@@ -48,14 +48,16 @@ export function Header() {
             className="flex items-center gap-2 shrink-0"
             aria-label="MetaPool 홈으로"
           >
-            <div className="
-              w-7 h-7 rounded-md
-              flex items-center justify-center
-              font-semibold text-sm
-              bg-brand-primary text-white
-            ">
-              M
-            </div>
+            <svg width="28" height="28" viewBox="0 0 32 32" fill="none" className="shrink-0">
+              <defs>
+                <linearGradient id="logo-bg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stopColor="#5e6ad2"/>
+                  <stop offset="1" stopColor="#7170ff"/>
+                </linearGradient>
+              </defs>
+              <rect width="32" height="32" rx="7" fill="url(#logo-bg)"/>
+              <path d="M7 23V9l5 8.5L16 9l4 8.5L25 9v14" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" fill="none" opacity="0.95"/>
+            </svg>
             <span className="font-semibold text-lg tracking-[-0.03em] text-text-primary">
               MetaPool
             </span>
