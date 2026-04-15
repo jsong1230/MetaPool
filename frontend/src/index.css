@@ -1,88 +1,88 @@
 @import "tailwindcss";
 
-/* ── MetaPool Design System — Inspired by Superhuman ── */
-/* Mysteria Purple #1b1938 | Lavender Glow #cbb7fb | Warm Cream #e9e5dd */
+/* ── MetaPool Design System — Inspired by Linear ── */
+/* Marketing Black #08090a | Brand Indigo #5e6ad2 | Near-black precision */
 
 @theme {
-  /* Background — Deep purple twilight */
-  --color-bg-primary: #1b1938;
-  --color-bg-secondary: #161331;
-  --color-bg-surface: #231f45;
-  --color-bg-elevated: #2c2750;
-  --color-bg-input: #1e1a3d;
+  /* Background — Luminance stacking (darker = deeper) */
+  --color-bg-primary: #08090a;
+  --color-bg-secondary: #0f1011;
+  --color-bg-surface: #191a1b;
+  --color-bg-elevated: #28282c;
+  --color-bg-input: #0f1011;
 
-  /* Text — Translucent white hierarchy */
-  --color-text-primary: #f0eef6;
-  --color-text-secondary: #8e8a9e;
-  --color-text-muted: #5a5670;
-  --color-text-inverse: #1b1938;
+  /* Text — Cool gray hierarchy */
+  --color-text-primary: #f7f8f8;
+  --color-text-secondary: #8a8f98;
+  --color-text-muted: #62666d;
+  --color-text-inverse: #08090a;
 
-  /* Brand — Lavender + Warm Cream */
-  --color-brand-primary: #cbb7fb;
-  --color-brand-primary-hover: #d8c8fc;
-  --color-brand-secondary: #714cb6;
-  --color-brand-secondary-hover: #8b6cc9;
-  --color-brand-accent: #e9e5dd;
+  /* Brand — Indigo-Violet (the only chromatic color) */
+  --color-brand-primary: #5e6ad2;
+  --color-brand-primary-hover: #828fff;
+  --color-brand-secondary: #7170ff;
+  --color-brand-secondary-hover: #828fff;
+  --color-brand-accent: #10b981;
 
   /* Semantic */
-  --color-yes: #34d399;
-  --color-yes-hover: #10b981;
-  --color-yes-dim: rgba(52,211,153,0.12);
-  --color-no: #f87171;
-  --color-no-hover: #ef4444;
-  --color-no-dim: rgba(248,113,113,0.12);
-  --color-success: #34d399;
-  --color-warning: #fbbf24;
-  --color-danger: #f87171;
-  --color-void: #5a5670;
+  --color-yes: #10b981;
+  --color-yes-hover: #059669;
+  --color-yes-dim: rgba(16,185,129,0.12);
+  --color-no: #ef4444;
+  --color-no-hover: #dc2626;
+  --color-no-dim: rgba(239,68,68,0.12);
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  --color-void: #62666d;
 
-  /* Border — Subtle white-alpha on purple */
-  --color-border-default: #2d2952;
-  --color-border-subtle: #242048;
-  --color-border-strong: #3d3865;
-  --color-border-brand: #cbb7fb;
+  /* Border — Semi-transparent white on near-black */
+  --color-border-default: #23252a;
+  --color-border-subtle: #18191a;
+  --color-border-strong: #34343a;
+  --color-border-brand: #5e6ad2;
 
-  /* Font */
-  --font-sans: 'IBM Plex Sans', 'Noto Sans KR', system-ui, -apple-system, sans-serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  /* Font — Inter Variable is Linear's signature */
+  --font-sans: 'Inter', 'Noto Sans KR', system-ui, -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', monospace;
 }
 
 @layer base {
   :root {
-    --color-bg-primary: #1b1938;
-    --color-bg-secondary: #161331;
-    --color-bg-surface: #231f45;
-    --color-bg-elevated: #2c2750;
-    --color-bg-input: #1e1a3d;
-    --color-text-primary: #f0eef6;
-    --color-text-secondary: #8e8a9e;
-    --color-text-muted: #5a5670;
-    --color-text-inverse: #1b1938;
-    --color-brand-primary: #cbb7fb;
-    --color-brand-primary-hover: #d8c8fc;
-    --color-brand-primary-muted: color-mix(in srgb, #cbb7fb 12%, transparent);
-    --color-brand-secondary: #714cb6;
-    --color-brand-secondary-hover: #8b6cc9;
-    --color-brand-accent: #e9e5dd;
-    --color-brand-accent-muted: color-mix(in srgb, #e9e5dd 12%, transparent);
-    --color-yes: #34d399;
-    --color-yes-hover: #10b981;
-    --color-yes-muted: color-mix(in srgb, #34d399 12%, transparent);
-    --color-yes-dim: rgba(52,211,153,0.12);
-    --color-no: #f87171;
-    --color-no-hover: #ef4444;
-    --color-no-muted: color-mix(in srgb, #f87171 12%, transparent);
-    --color-no-dim: rgba(248,113,113,0.12);
-    --color-success: #34d399;
-    --color-warning: #fbbf24;
-    --color-danger: #f87171;
-    --color-void: #5a5670;
-    --color-border-default: #2d2952;
-    --color-border-subtle: #242048;
-    --color-border-strong: #3d3865;
-    --color-border-brand: #cbb7fb;
-    --font-sans: 'IBM Plex Sans', 'Noto Sans KR', system-ui, -apple-system, sans-serif;
-    --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+    --color-bg-primary: #08090a;
+    --color-bg-secondary: #0f1011;
+    --color-bg-surface: #191a1b;
+    --color-bg-elevated: #28282c;
+    --color-bg-input: #0f1011;
+    --color-text-primary: #f7f8f8;
+    --color-text-secondary: #8a8f98;
+    --color-text-muted: #62666d;
+    --color-text-inverse: #08090a;
+    --color-brand-primary: #5e6ad2;
+    --color-brand-primary-hover: #828fff;
+    --color-brand-primary-muted: rgba(94,106,210,0.12);
+    --color-brand-secondary: #7170ff;
+    --color-brand-secondary-hover: #828fff;
+    --color-brand-accent: #10b981;
+    --color-brand-accent-muted: rgba(16,185,129,0.12);
+    --color-yes: #10b981;
+    --color-yes-hover: #059669;
+    --color-yes-muted: rgba(16,185,129,0.12);
+    --color-yes-dim: rgba(16,185,129,0.12);
+    --color-no: #ef4444;
+    --color-no-hover: #dc2626;
+    --color-no-muted: rgba(239,68,68,0.12);
+    --color-no-dim: rgba(239,68,68,0.12);
+    --color-success: #10b981;
+    --color-warning: #f59e0b;
+    --color-danger: #ef4444;
+    --color-void: #62666d;
+    --color-border-default: #23252a;
+    --color-border-subtle: #18191a;
+    --color-border-strong: #34343a;
+    --color-border-brand: #5e6ad2;
+    --font-sans: 'Inter', 'Noto Sans KR', system-ui, -apple-system, sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', monospace;
   }
 
   * {
@@ -91,6 +91,7 @@
 
   html {
     font-family: var(--font-sans);
+    font-feature-settings: "cv01", "ss03";
     background-color: var(--color-bg-primary);
     color: var(--color-text-primary);
     -webkit-font-smoothing: antialiased;
@@ -112,7 +113,7 @@
     outline-offset: 2px;
   }
 
-  /* Minimal scrollbar */
+  /* Minimal scrollbar — near invisible */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -130,15 +131,15 @@
 }
 
 @layer utilities {
-  /* Elevation — border-first depth (Superhuman philosophy) */
+  /* Elevation — Linear luminance stacking + border-as-shadow */
   .shadow-elevation-1 {
-    box-shadow: none;
+    box-shadow: rgba(0,0,0,0.2) 0px 0px 0px 1px;
   }
   .shadow-elevation-2 {
-    box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+    box-shadow: rgba(0,0,0,0.4) 0px 2px 4px;
   }
   .shadow-elevation-3 {
-    box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+    box-shadow: rgba(0,0,0,0) 0px 8px 2px, rgba(0,0,0,0.01) 0px 5px 2px, rgba(0,0,0,0.04) 0px 3px 2px, rgba(0,0,0,0.07) 0px 1px 1px, rgba(0,0,0,0.08) 0px 0px 1px;
   }
   .shadow-brand {
     box-shadow: 0 0 0 1px var(--color-border-brand);
@@ -150,59 +151,53 @@
     box-shadow: 0 0 0 1px var(--color-no);
   }
   .shadow-card-hover {
-    box-shadow: 0 0 0 1px var(--color-border-brand), 0 4px 20px rgba(203,183,251,0.08);
+    box-shadow: 0 0 0 1px var(--color-border-brand);
   }
 
-  /* Glass — minimal, Superhuman-restrained */
+  /* Header — solid dark, no blur (Linear-style) */
   .glass {
-    background: rgba(27,25,56,0.92);
+    background: var(--color-bg-secondary);
     border-bottom: 1px solid var(--color-border-default);
   }
 
-  /* Gradient text — Lavender Glow */
+  /* Gradient text — Brand Indigo */
   .text-gradient-brand {
-    background: linear-gradient(135deg, #e0d4fd 0%, #cbb7fb 50%, #714cb6 100%);
+    background: linear-gradient(135deg, #828fff 0%, #5e6ad2 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
   .text-gradient-yes {
-    background: linear-gradient(135deg, #6ee7b7 0%, #34d399 100%);
+    background: linear-gradient(135deg, #6ee7b7 0%, #10b981 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
   .text-gradient-no {
-    background: linear-gradient(135deg, #fca5a5 0%, #f87171 100%);
+    background: linear-gradient(135deg, #fca5a5 0%, #ef4444 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
-  /* Buttons — Superhuman-style muted tones, no heavy gradients */
+  /* Buttons — near-transparent Linear-style */
   .btn-yes {
-    background-color: var(--color-yes);
-    transition: background-color 150ms, opacity 150ms;
+    background-color: rgba(16,185,129,0.15);
+    color: #10b981;
+    border: 1px solid rgba(16,185,129,0.2);
+    transition: background-color 150ms;
   }
   .btn-yes:hover {
-    background-color: var(--color-yes-hover);
+    background-color: rgba(16,185,129,0.25);
   }
   .btn-no {
-    background-color: var(--color-no);
-    transition: background-color 150ms, opacity 150ms;
+    background-color: rgba(239,68,68,0.15);
+    color: #ef4444;
+    border: 1px solid rgba(239,68,68,0.2);
+    transition: background-color 150ms;
   }
   .btn-no:hover {
-    background-color: var(--color-no-hover);
-  }
-
-  /* Warm Cream CTA — Superhuman signature */
-  .btn-cream {
-    background-color: #e9e5dd;
-    color: #292827;
-    transition: opacity 150ms;
-  }
-  .btn-cream:hover {
-    opacity: 0.88;
+    background-color: rgba(239,68,68,0.25);
   }
 
   /* Animations */
@@ -271,7 +266,7 @@
   .hover\:border-border-brand:hover { border-color: var(--color-border-brand); }
   .hover\:text-text-primary:hover { color: var(--color-text-primary); }
   .hover\:text-brand-primary:hover { color: var(--color-brand-primary); }
-  .hover\:shadow-card-hover:hover { box-shadow: 0 0 0 1px var(--color-border-brand), 0 4px 20px rgba(203,183,251,0.08); }
+  .hover\:shadow-card-hover:hover { box-shadow: 0 0 0 1px var(--color-border-brand); }
   .hover\:shadow-yes:hover { box-shadow: 0 0 0 1px var(--color-yes); }
   .hover\:shadow-no:hover { box-shadow: 0 0 0 1px var(--color-no); }
 
@@ -305,7 +300,7 @@
 
 @keyframes value-flash {
   0% { background-color: transparent; }
-  30% { background-color: color-mix(in srgb, var(--color-brand-primary) 12%, transparent); }
+  30% { background-color: rgba(94,106,210,0.12); }
   100% { background-color: transparent; }
 }
 

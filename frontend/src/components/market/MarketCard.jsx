@@ -161,8 +161,8 @@ export function MarketCard({ market }) {
         <button
           className="
             btn-yes
-            text-white font-semibold
-            px-3 py-2 rounded-lg
+            font-semibold
+            px-3 py-2 rounded-md
             text-sm tracking-[0.08em] uppercase
             transition-all duration-150
             min-h-[36px]
@@ -178,8 +178,8 @@ export function MarketCard({ market }) {
         <button
           className="
             btn-no
-            text-white font-semibold
-            px-3 py-2 rounded-lg
+            font-semibold
+            px-3 py-2 rounded-md
             text-sm tracking-[0.08em] uppercase
             transition-all duration-150
             min-h-[36px]

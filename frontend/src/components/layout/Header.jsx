@@ -49,14 +49,14 @@ export function Header() {
             aria-label="MetaPool 홈으로"
           >
             <div className="
-              w-7 h-7 rounded-lg
+              w-7 h-7 rounded-md
               flex items-center justify-center
-              font-bold text-sm
-              bg-brand-primary text-text-inverse
+              font-semibold text-sm
+              bg-brand-primary text-white
             ">
               M
             </div>
-            <span className="font-bold text-lg tracking-[-0.02em] text-brand-primary">
+            <span className="font-semibold text-lg tracking-[-0.03em] text-text-primary">
               MetaPool
             </span>
           </Link>
