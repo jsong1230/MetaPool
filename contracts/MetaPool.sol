@@ -86,6 +86,12 @@ contract MetaPool is Ownable, ReentrancyGuard, Pausable {
     error InvalidMaxBet(uint256 maxBet, uint256 currentMinBet);
     error InvalidFeeRate(uint256 feeRate);
 
+    // Referral Custom Errors
+    error SelfReferral();
+    error ReferrerAlreadySet();
+    error NoReferralReward();
+    error InsufficientReferralPool();
+
     // F-09/F-10 Custom Errors
     error DisputePeriodActive(uint256 marketId, uint256 deadline);
     error DisputePeriodEnded(uint256 marketId);
@@ -136,6 +142,12 @@ contract MetaPool is Ownable, ReentrancyGuard, Pausable {
     event DisputeResolved(uint256 indexed marketId, address indexed disputant, bool accepted, uint256 stakeReturned);
     event MarketReviewTriggered(uint256 indexed marketId, uint256 disputeCount, uint256 totalBettors);
 
+    // Referral Events
+    event ReferrerSet(address indexed user, address indexed referrer);
+    event ReferralRewardEarned(address indexed user, address indexed referrer, uint256 amount);
+    event ReferralRewardClaimed(address indexed user, uint256 amount);
+    event ReferralPoolFunded(uint256 amount, uint256 newBalance);
+
     // ============================================================
     // State Variables
     // ============================================================
@@ -155,6 +167,13 @@ contract MetaPool is Ownable, ReentrancyGuard, Pausable {
     uint256 public constant DISPUTE_PERIOD = 24 hours;
     uint256 public constant DISPUTE_STAKE = 1000 ether;
     uint256 public constant DISPUTE_THRESHOLD = 1000; // 10% (basis points)
+
+    // Referral 상태
+    mapping(address => address) public referrers;         // user → referrer
+    mapping(address => uint256) public referralRewards;   // user → claimable reward
+    mapping(address => bool) public hasPlacedBet;         // user → first bet flag
+    uint256 public referralRewardAmount = 500 ether;      // 500 META per side
+    uint256 public referralPool;                          // owner-funded reward pool
 
     // ============================================================
     // Constructor
@@ -255,6 +274,7 @@ contract MetaPool is Ownable, ReentrancyGuard, Pausable {
         if (bet.amount > 0 && bet.isYes != _isYes) revert OppositeBetExists(_marketId, msg.sender);
 
         // 첫 베팅: 방향 설정 + 참여자 수 증가
+        bool isFirstEverBet = !hasPlacedBet[msg.sender];
         if (bet.amount == 0) {
             bet.isYes = _isYes;
             if (_isYes) {
@@ -275,6 +295,19 @@ contract MetaPool is Ownable, ReentrancyGuard, Pausable {
         }
 
         emit BetPlaced(_marketId, msg.sender, _isYes, msg.value, market.yesPool, market.noPool);
+
+        // Referral: 첫 베팅 시 양쪽 보상 크레딧
+        if (isFirstEverBet) {
+            hasPlacedBet[msg.sender] = true;
+            address ref = referrers[msg.sender];
+            if (ref != address(0) && referralPool >= referralRewardAmount * 2) {
+                referralPool -= referralRewardAmount * 2;
+                referralRewards[ref] += referralRewardAmount;
+                referralRewards[msg.sender] += referralRewardAmount;
+                emit ReferralRewardEarned(msg.sender, ref, referralRewardAmount);
+                emit ReferralRewardEarned(ref, msg.sender, referralRewardAmount);
+            }
+        }
     }
 
     // ============================================================
@@ -717,5 +750,43 @@ contract MetaPool is Ownable, ReentrancyGuard, Pausable {
 
     function getDispute(uint256 _marketId, address _user) external view returns (Dispute memory) {
         return disputes[_marketId][_user];
+    }
+
+    // ============================================================
+    // Referral Program
+    // ============================================================
+
+    /// @notice 레퍼러를 설정한다 (첫 베팅 전 1회만 가능)
+    function setReferrer(address _referrer) external {
+        if (_referrer == msg.sender) revert SelfReferral();
+        if (referrers[msg.sender] != address(0)) revert ReferrerAlreadySet();
+        if (hasPlacedBet[msg.sender]) revert ReferrerAlreadySet();
+
+        referrers[msg.sender] = _referrer;
+        emit ReferrerSet(msg.sender, _referrer);
+    }
+
+    /// @notice 축적된 레퍼럴 보상을 클레임한다
+    function claimReferralReward() external nonReentrant {
+        uint256 reward = referralRewards[msg.sender];
+        if (reward == 0) revert NoReferralReward();
+
+        referralRewards[msg.sender] = 0;
+
+        (bool success, ) = payable(msg.sender).call{value: reward}("");
+        if (!success) revert TransferFailed();
+
+        emit ReferralRewardClaimed(msg.sender, reward);
+    }
+
+    /// @notice Owner가 레퍼럴 풀에 META를 충전한다
+    function fundReferralPool() external payable onlyOwner {
+        referralPool += msg.value;
+        emit ReferralPoolFunded(msg.value, referralPool);
+    }
+
+    /// @notice 레퍼럴 보상 금액을 변경한다
+    function setReferralRewardAmount(uint256 _amount) external onlyOwner {
+        referralRewardAmount = _amount;
     }
 }

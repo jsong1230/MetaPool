@@ -23,9 +23,9 @@ export declare namespace MetaPool {
     }
 
   export interface MetaPoolInterface extends Interface {
-    getFunction(nameOrSignature: "DISPUTE_PERIOD" | "DISPUTE_STAKE" | "DISPUTE_THRESHOLD" | "FEE_DENOMINATOR" | "accumulatedFees" | "bets" | "calculateWinnings" | "claimRefund" | "claimWinnings" | "createMarket" | "disputes" | "getDispute" | "getMarket" | "getOdds" | "getUserBet" | "marketCount" | "markets" | "maxBet" | "minBet" | "owner" | "pause" | "pauseMarket" | "paused" | "placeBet" | "platformFeeRate" | "renounceOwnership" | "resolveDispute" | "resolveMarket" | "resolveReview" | "resumeMarket" | "setMaxBet" | "setMinBet" | "setPlatformFeeRate" | "submitDispute" | "transferOwnership" | "unpause" | "withdrawFees"): FunctionFragment;
+    getFunction(nameOrSignature: "DISPUTE_PERIOD" | "DISPUTE_STAKE" | "DISPUTE_THRESHOLD" | "FEE_DENOMINATOR" | "accumulatedFees" | "bets" | "calculateWinnings" | "claimReferralReward" | "claimRefund" | "claimWinnings" | "createMarket" | "disputes" | "fundReferralPool" | "getDispute" | "getMarket" | "getOdds" | "getUserBet" | "hasPlacedBet" | "marketCount" | "markets" | "maxBet" | "minBet" | "owner" | "pause" | "pauseMarket" | "paused" | "placeBet" | "platformFeeRate" | "referralPool" | "referralRewardAmount" | "referralRewards" | "referrers" | "renounceOwnership" | "resolveDispute" | "resolveMarket" | "resolveReview" | "resumeMarket" | "setMaxBet" | "setMinBet" | "setPlatformFeeRate" | "setReferralRewardAmount" | "setReferrer" | "submitDispute" | "transferOwnership" | "unpause" | "withdrawFees"): FunctionFragment;
 
-    getEvent(nameOrSignatureOrTopic: "BetPlaced" | "DisputeResolved" | "DisputeSubmitted" | "FeesWithdrawn" | "MarketCreated" | "MarketPaused" | "MarketResolved" | "MarketResumed" | "MarketReviewTriggered" | "OwnershipTransferred" | "Paused" | "RefundClaimed" | "SettingsUpdated" | "Unpaused" | "WinningsClaimed"): EventFragment;
+    getEvent(nameOrSignatureOrTopic: "BetPlaced" | "DisputeResolved" | "DisputeSubmitted" | "FeesWithdrawn" | "MarketCreated" | "MarketPaused" | "MarketResolved" | "MarketResumed" | "MarketReviewTriggered" | "OwnershipTransferred" | "Paused" | "ReferralPoolFunded" | "ReferralRewardClaimed" | "ReferralRewardEarned" | "ReferrerSet" | "RefundClaimed" | "SettingsUpdated" | "Unpaused" | "WinningsClaimed"): EventFragment;
 
     encodeFunctionData(functionFragment: 'DISPUTE_PERIOD', values?: undefined): string;
 encodeFunctionData(functionFragment: 'DISPUTE_STAKE', values?: undefined): string;
@@ -34,14 +34,17 @@ encodeFunctionData(functionFragment: 'FEE_DENOMINATOR', values?: undefined): str
 encodeFunctionData(functionFragment: 'accumulatedFees', values?: undefined): string;
 encodeFunctionData(functionFragment: 'bets', values: [BigNumberish, AddressLike]): string;
 encodeFunctionData(functionFragment: 'calculateWinnings', values: [BigNumberish, AddressLike]): string;
+encodeFunctionData(functionFragment: 'claimReferralReward', values?: undefined): string;
 encodeFunctionData(functionFragment: 'claimRefund', values: [BigNumberish]): string;
 encodeFunctionData(functionFragment: 'claimWinnings', values: [BigNumberish]): string;
 encodeFunctionData(functionFragment: 'createMarket', values: [string, string, string, string, BigNumberish, BigNumberish, BigNumberish]): string;
 encodeFunctionData(functionFragment: 'disputes', values: [BigNumberish, AddressLike]): string;
+encodeFunctionData(functionFragment: 'fundReferralPool', values?: undefined): string;
 encodeFunctionData(functionFragment: 'getDispute', values: [BigNumberish, AddressLike]): string;
 encodeFunctionData(functionFragment: 'getMarket', values: [BigNumberish]): string;
 encodeFunctionData(functionFragment: 'getOdds', values: [BigNumberish]): string;
 encodeFunctionData(functionFragment: 'getUserBet', values: [BigNumberish, AddressLike]): string;
+encodeFunctionData(functionFragment: 'hasPlacedBet', values: [AddressLike]): string;
 encodeFunctionData(functionFragment: 'marketCount', values?: undefined): string;
 encodeFunctionData(functionFragment: 'markets', values: [BigNumberish]): string;
 encodeFunctionData(functionFragment: 'maxBet', values?: undefined): string;
@@ -52,6 +55,10 @@ encodeFunctionData(functionFragment: 'pauseMarket', values: [BigNumberish]): str
 encodeFunctionData(functionFragment: 'paused', values?: undefined): string;
 encodeFunctionData(functionFragment: 'placeBet', values: [BigNumberish, boolean]): string;
 encodeFunctionData(functionFragment: 'platformFeeRate', values?: undefined): string;
+encodeFunctionData(functionFragment: 'referralPool', values?: undefined): string;
+encodeFunctionData(functionFragment: 'referralRewardAmount', values?: undefined): string;
+encodeFunctionData(functionFragment: 'referralRewards', values: [AddressLike]): string;
+encodeFunctionData(functionFragment: 'referrers', values: [AddressLike]): string;
 encodeFunctionData(functionFragment: 'renounceOwnership', values?: undefined): string;
 encodeFunctionData(functionFragment: 'resolveDispute', values: [BigNumberish, AddressLike, boolean]): string;
 encodeFunctionData(functionFragment: 'resolveMarket', values: [BigNumberish, BigNumberish]): string;
@@ -60,6 +67,8 @@ encodeFunctionData(functionFragment: 'resumeMarket', values: [BigNumberish, BigN
 encodeFunctionData(functionFragment: 'setMaxBet', values: [BigNumberish]): string;
 encodeFunctionData(functionFragment: 'setMinBet', values: [BigNumberish]): string;
 encodeFunctionData(functionFragment: 'setPlatformFeeRate', values: [BigNumberish]): string;
+encodeFunctionData(functionFragment: 'setReferralRewardAmount', values: [BigNumberish]): string;
+encodeFunctionData(functionFragment: 'setReferrer', values: [AddressLike]): string;
 encodeFunctionData(functionFragment: 'submitDispute', values: [BigNumberish]): string;
 encodeFunctionData(functionFragment: 'transferOwnership', values: [AddressLike]): string;
 encodeFunctionData(functionFragment: 'unpause', values?: undefined): string;
@@ -72,14 +81,17 @@ decodeFunctionResult(functionFragment: 'FEE_DENOMINATOR', data: BytesLike): Resu
 decodeFunctionResult(functionFragment: 'accumulatedFees', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'bets', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'calculateWinnings', data: BytesLike): Result;
+decodeFunctionResult(functionFragment: 'claimReferralReward', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'claimRefund', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'claimWinnings', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'createMarket', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'disputes', data: BytesLike): Result;
+decodeFunctionResult(functionFragment: 'fundReferralPool', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'getDispute', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'getMarket', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'getOdds', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'getUserBet', data: BytesLike): Result;
+decodeFunctionResult(functionFragment: 'hasPlacedBet', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'marketCount', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'markets', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'maxBet', data: BytesLike): Result;
@@ -90,6 +102,10 @@ decodeFunctionResult(functionFragment: 'pauseMarket', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'paused', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'placeBet', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'platformFeeRate', data: BytesLike): Result;
+decodeFunctionResult(functionFragment: 'referralPool', data: BytesLike): Result;
+decodeFunctionResult(functionFragment: 'referralRewardAmount', data: BytesLike): Result;
+decodeFunctionResult(functionFragment: 'referralRewards', data: BytesLike): Result;
+decodeFunctionResult(functionFragment: 'referrers', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'renounceOwnership', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'resolveDispute', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'resolveMarket', data: BytesLike): Result;
@@ -98,6 +114,8 @@ decodeFunctionResult(functionFragment: 'resumeMarket', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'setMaxBet', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'setMinBet', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'setPlatformFeeRate', data: BytesLike): Result;
+decodeFunctionResult(functionFragment: 'setReferralRewardAmount', data: BytesLike): Result;
+decodeFunctionResult(functionFragment: 'setReferrer', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'submitDispute', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'transferOwnership', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'unpause', data: BytesLike): Result;
@@ -229,6 +247,54 @@ decodeFunctionResult(functionFragment: 'withdrawFees', data: BytesLike): Result;
       export type InputTuple = [account: AddressLike];
       export type OutputTuple = [account: string];
       export interface OutputObject {account: string };
+      export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>
+      export type Filter = TypedDeferredTopicFilter<Event>
+      export type Log = TypedEventLog<Event>
+      export type LogDescription = TypedLogDescription<Event>
+    }
+
+  
+
+    export namespace ReferralPoolFundedEvent {
+      export type InputTuple = [amount: BigNumberish, newBalance: BigNumberish];
+      export type OutputTuple = [amount: bigint, newBalance: bigint];
+      export interface OutputObject {amount: bigint, newBalance: bigint };
+      export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>
+      export type Filter = TypedDeferredTopicFilter<Event>
+      export type Log = TypedEventLog<Event>
+      export type LogDescription = TypedLogDescription<Event>
+    }
+
+  
+
+    export namespace ReferralRewardClaimedEvent {
+      export type InputTuple = [user: AddressLike, amount: BigNumberish];
+      export type OutputTuple = [user: string, amount: bigint];
+      export interface OutputObject {user: string, amount: bigint };
+      export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>
+      export type Filter = TypedDeferredTopicFilter<Event>
+      export type Log = TypedEventLog<Event>
+      export type LogDescription = TypedLogDescription<Event>
+    }
+
+  
+
+    export namespace ReferralRewardEarnedEvent {
+      export type InputTuple = [user: AddressLike, referrer: AddressLike, amount: BigNumberish];
+      export type OutputTuple = [user: string, referrer: string, amount: bigint];
+      export interface OutputObject {user: string, referrer: string, amount: bigint };
+      export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>
+      export type Filter = TypedDeferredTopicFilter<Event>
+      export type Log = TypedEventLog<Event>
+      export type LogDescription = TypedLogDescription<Event>
+    }
+
+  
+
+    export namespace ReferrerSetEvent {
+      export type InputTuple = [user: AddressLike, referrer: AddressLike];
+      export type OutputTuple = [user: string, referrer: string];
+      export interface OutputObject {user: string, referrer: string };
       export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>
       export type Filter = TypedDeferredTopicFilter<Event>
       export type Log = TypedEventLog<Event>
@@ -375,6 +441,14 @@ decodeFunctionResult(functionFragment: 'withdrawFees', data: BytesLike): Result;
     
 
     
+    claimReferralReward: TypedContractMethod<
+      [],
+      [void],
+      'nonpayable'
+    >
+    
+
+    
     claimRefund: TypedContractMethod<
       [_marketId: BigNumberish, ],
       [void],
@@ -407,6 +481,14 @@ decodeFunctionResult(functionFragment: 'withdrawFees', data: BytesLike): Result;
     
 
     
+    fundReferralPool: TypedContractMethod<
+      [],
+      [void],
+      'payable'
+    >
+    
+
+    
     getDispute: TypedContractMethod<
       [_marketId: BigNumberish, _user: AddressLike, ],
       [MetaPool.DisputeStructOutput],
@@ -434,6 +516,14 @@ decodeFunctionResult(functionFragment: 'withdrawFees', data: BytesLike): Result;
     getUserBet: TypedContractMethod<
       [_marketId: BigNumberish, _user: AddressLike, ],
       [MetaPool.BetStructOutput],
+      'view'
+    >
+    
+
+    
+    hasPlacedBet: TypedContractMethod<
+      [arg0: AddressLike, ],
+      [boolean],
       'view'
     >
     
@@ -519,6 +609,38 @@ decodeFunctionResult(functionFragment: 'withdrawFees', data: BytesLike): Result;
     
 
     
+    referralPool: TypedContractMethod<
+      [],
+      [bigint],
+      'view'
+    >
+    
+
+    
+    referralRewardAmount: TypedContractMethod<
+      [],
+      [bigint],
+      'view'
+    >
+    
+
+    
+    referralRewards: TypedContractMethod<
+      [arg0: AddressLike, ],
+      [bigint],
+      'view'
+    >
+    
+
+    
+    referrers: TypedContractMethod<
+      [arg0: AddressLike, ],
+      [string],
+      'view'
+    >
+    
+
+    
     renounceOwnership: TypedContractMethod<
       [],
       [void],
@@ -577,6 +699,22 @@ decodeFunctionResult(functionFragment: 'withdrawFees', data: BytesLike): Result;
     
     setPlatformFeeRate: TypedContractMethod<
       [_feeRate: BigNumberish, ],
+      [void],
+      'nonpayable'
+    >
+    
+
+    
+    setReferralRewardAmount: TypedContractMethod<
+      [_amount: BigNumberish, ],
+      [void],
+      'nonpayable'
+    >
+    
+
+    
+    setReferrer: TypedContractMethod<
+      [_referrer: AddressLike, ],
       [void],
       'nonpayable'
     >
@@ -652,6 +790,11 @@ getFunction(nameOrSignature: 'calculateWinnings'): TypedContractMethod<
       [bigint],
       'view'
     >;
+getFunction(nameOrSignature: 'claimReferralReward'): TypedContractMethod<
+      [],
+      [void],
+      'nonpayable'
+    >;
 getFunction(nameOrSignature: 'claimRefund'): TypedContractMethod<
       [_marketId: BigNumberish, ],
       [void],
@@ -672,6 +815,11 @@ getFunction(nameOrSignature: 'disputes'): TypedContractMethod<
       [[bigint, boolean, boolean] & {stake: bigint, resolved: boolean, accepted: boolean }],
       'view'
     >;
+getFunction(nameOrSignature: 'fundReferralPool'): TypedContractMethod<
+      [],
+      [void],
+      'payable'
+    >;
 getFunction(nameOrSignature: 'getDispute'): TypedContractMethod<
       [_marketId: BigNumberish, _user: AddressLike, ],
       [MetaPool.DisputeStructOutput],
@@ -690,6 +838,11 @@ getFunction(nameOrSignature: 'getOdds'): TypedContractMethod<
 getFunction(nameOrSignature: 'getUserBet'): TypedContractMethod<
       [_marketId: BigNumberish, _user: AddressLike, ],
       [MetaPool.BetStructOutput],
+      'view'
+    >;
+getFunction(nameOrSignature: 'hasPlacedBet'): TypedContractMethod<
+      [arg0: AddressLike, ],
+      [boolean],
       'view'
     >;
 getFunction(nameOrSignature: 'marketCount'): TypedContractMethod<
@@ -742,6 +895,26 @@ getFunction(nameOrSignature: 'platformFeeRate'): TypedContractMethod<
       [bigint],
       'view'
     >;
+getFunction(nameOrSignature: 'referralPool'): TypedContractMethod<
+      [],
+      [bigint],
+      'view'
+    >;
+getFunction(nameOrSignature: 'referralRewardAmount'): TypedContractMethod<
+      [],
+      [bigint],
+      'view'
+    >;
+getFunction(nameOrSignature: 'referralRewards'): TypedContractMethod<
+      [arg0: AddressLike, ],
+      [bigint],
+      'view'
+    >;
+getFunction(nameOrSignature: 'referrers'): TypedContractMethod<
+      [arg0: AddressLike, ],
+      [string],
+      'view'
+    >;
 getFunction(nameOrSignature: 'renounceOwnership'): TypedContractMethod<
       [],
       [void],
@@ -782,6 +955,16 @@ getFunction(nameOrSignature: 'setPlatformFeeRate'): TypedContractMethod<
       [void],
       'nonpayable'
     >;
+getFunction(nameOrSignature: 'setReferralRewardAmount'): TypedContractMethod<
+      [_amount: BigNumberish, ],
+      [void],
+      'nonpayable'
+    >;
+getFunction(nameOrSignature: 'setReferrer'): TypedContractMethod<
+      [_referrer: AddressLike, ],
+      [void],
+      'nonpayable'
+    >;
 getFunction(nameOrSignature: 'submitDispute'): TypedContractMethod<
       [_marketId: BigNumberish, ],
       [void],
@@ -814,6 +997,10 @@ getEvent(key: 'MarketResumed'): TypedContractEvent<MarketResumedEvent.InputTuple
 getEvent(key: 'MarketReviewTriggered'): TypedContractEvent<MarketReviewTriggeredEvent.InputTuple, MarketReviewTriggeredEvent.OutputTuple, MarketReviewTriggeredEvent.OutputObject>;
 getEvent(key: 'OwnershipTransferred'): TypedContractEvent<OwnershipTransferredEvent.InputTuple, OwnershipTransferredEvent.OutputTuple, OwnershipTransferredEvent.OutputObject>;
 getEvent(key: 'Paused'): TypedContractEvent<PausedEvent.InputTuple, PausedEvent.OutputTuple, PausedEvent.OutputObject>;
+getEvent(key: 'ReferralPoolFunded'): TypedContractEvent<ReferralPoolFundedEvent.InputTuple, ReferralPoolFundedEvent.OutputTuple, ReferralPoolFundedEvent.OutputObject>;
+getEvent(key: 'ReferralRewardClaimed'): TypedContractEvent<ReferralRewardClaimedEvent.InputTuple, ReferralRewardClaimedEvent.OutputTuple, ReferralRewardClaimedEvent.OutputObject>;
+getEvent(key: 'ReferralRewardEarned'): TypedContractEvent<ReferralRewardEarnedEvent.InputTuple, ReferralRewardEarnedEvent.OutputTuple, ReferralRewardEarnedEvent.OutputObject>;
+getEvent(key: 'ReferrerSet'): TypedContractEvent<ReferrerSetEvent.InputTuple, ReferrerSetEvent.OutputTuple, ReferrerSetEvent.OutputObject>;
 getEvent(key: 'RefundClaimed'): TypedContractEvent<RefundClaimedEvent.InputTuple, RefundClaimedEvent.OutputTuple, RefundClaimedEvent.OutputObject>;
 getEvent(key: 'SettingsUpdated'): TypedContractEvent<SettingsUpdatedEvent.InputTuple, SettingsUpdatedEvent.OutputTuple, SettingsUpdatedEvent.OutputObject>;
 getEvent(key: 'Unpaused'): TypedContractEvent<UnpausedEvent.InputTuple, UnpausedEvent.OutputTuple, UnpausedEvent.OutputObject>;
@@ -863,6 +1050,22 @@ getEvent(key: 'WinningsClaimed'): TypedContractEvent<WinningsClaimedEvent.InputT
 
       'Paused(address)': TypedContractEvent<PausedEvent.InputTuple, PausedEvent.OutputTuple, PausedEvent.OutputObject>;
       Paused: TypedContractEvent<PausedEvent.InputTuple, PausedEvent.OutputTuple, PausedEvent.OutputObject>;
+    
+
+      'ReferralPoolFunded(uint256,uint256)': TypedContractEvent<ReferralPoolFundedEvent.InputTuple, ReferralPoolFundedEvent.OutputTuple, ReferralPoolFundedEvent.OutputObject>;
+      ReferralPoolFunded: TypedContractEvent<ReferralPoolFundedEvent.InputTuple, ReferralPoolFundedEvent.OutputTuple, ReferralPoolFundedEvent.OutputObject>;
+    
+
+      'ReferralRewardClaimed(address,uint256)': TypedContractEvent<ReferralRewardClaimedEvent.InputTuple, ReferralRewardClaimedEvent.OutputTuple, ReferralRewardClaimedEvent.OutputObject>;
+      ReferralRewardClaimed: TypedContractEvent<ReferralRewardClaimedEvent.InputTuple, ReferralRewardClaimedEvent.OutputTuple, ReferralRewardClaimedEvent.OutputObject>;
+    
+
+      'ReferralRewardEarned(address,address,uint256)': TypedContractEvent<ReferralRewardEarnedEvent.InputTuple, ReferralRewardEarnedEvent.OutputTuple, ReferralRewardEarnedEvent.OutputObject>;
+      ReferralRewardEarned: TypedContractEvent<ReferralRewardEarnedEvent.InputTuple, ReferralRewardEarnedEvent.OutputTuple, ReferralRewardEarnedEvent.OutputObject>;
+    
+
+      'ReferrerSet(address,address)': TypedContractEvent<ReferrerSetEvent.InputTuple, ReferrerSetEvent.OutputTuple, ReferrerSetEvent.OutputObject>;
+      ReferrerSet: TypedContractEvent<ReferrerSetEvent.InputTuple, ReferrerSetEvent.OutputTuple, ReferrerSetEvent.OutputObject>;
     
 
       'RefundClaimed(uint256,address,uint256)': TypedContractEvent<RefundClaimedEvent.InputTuple, RefundClaimedEvent.OutputTuple, RefundClaimedEvent.OutputObject>;

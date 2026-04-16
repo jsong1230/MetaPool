@@ -2,18 +2,35 @@
  * LeaderboardPage — 수익률/정확도 기준 상위 예측자 랭킹 (/leaderboard)
  * F-26: 이벤트 로그 기반 온체인 데이터 집계
  */
-import { useState } from 'react';
-import { TrendingUp, Trophy, BarChart2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { TrendingUp, Trophy, BarChart2, BadgeCheck } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useWallet } from '../hooks/useWallet.js';
 import { useLeaderboard } from '../hooks/useLeaderboard.js';
 import { formatMeta } from '../lib/format.js';
+
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
 
 export function LeaderboardPage() {
   const { t } = useTranslation();
   const { account } = useWallet();
   const { rankings, loading, error } = useLeaderboard();
   const [activeTab, setActiveTab] = useState('profit');
+  const [nicknames, setNicknames] = useState({});
+
+  // DID 닉네임 일괄 조회
+  useEffect(() => {
+    if (!rankings.length || !BACKEND_URL) return;
+    const addresses = rankings.map(r => r.address.toLowerCase());
+    fetch(`${BACKEND_URL}/api/did/batch`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ addresses }),
+    })
+      .then(r => r.ok ? r.json() : {})
+      .then(map => setNicknames(map))
+      .catch(() => {});
+  }, [rankings]);
 
   // 탭에 따른 정렬
   const sorted = [...rankings].sort((a, b) => {
@@ -132,11 +149,18 @@ export function LeaderboardPage() {
                     )}
                   </div>
 
-                  {/* 주소 */}
+                  {/* 주소 / 닉네임 */}
                   <div className="flex items-center gap-2 min-w-0">
-                    <span className="text-sm font-mono text-text-primary truncate">
-                      {user.shortAddress}
-                    </span>
+                    {nicknames[user.address.toLowerCase()] ? (
+                      <span className="text-sm font-medium text-text-primary truncate flex items-center gap-1">
+                        {nicknames[user.address.toLowerCase()]}
+                        <BadgeCheck className="w-3.5 h-3.5 text-brand-primary shrink-0" strokeWidth={2} />
+                      </span>
+                    ) : (
+                      <span className="text-sm font-mono text-text-primary truncate">
+                        {user.shortAddress}
+                      </span>
+                    )}
                     {isMe && (
                       <span className="shrink-0 px-1.5 py-0.5 rounded-sm text-xs font-bold bg-brand-primary-muted text-brand-primary">
                         {t('leaderboard.you')}
