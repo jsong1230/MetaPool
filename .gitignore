@@ -62,3 +62,6 @@ frontend/dist/
 .gstack/
 ecosystem.config.cjs
 backend/data/
+
+# C1 어댑터 operator 개인키 (서버에만 존재, chmod 600)
+dispute-operators.json
