@@ -5,6 +5,11 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/Pausable.sol";
 
+/// @notice C5 어댑터: MetaStake FeeDistributor — 수수료 적립(veMETA 스테이커 분배)
+interface IFeeDistributor {
+    function depositFee() external payable;
+}
+
 contract MetaPool is Ownable, ReentrancyGuard, Pausable {
     // ============================================================
     // Enums
@@ -103,6 +108,8 @@ contract MetaPool is Ownable, ReentrancyGuard, Pausable {
     error DisputeNotFound(uint256 marketId, address user);
     error DisputeAlreadyResolved(uint256 marketId, address user);
     error NotAuthorizedResolver(address caller);
+    error FeeDistributorNotSet();
+    error NoFeesToRoute();
 
     // ============================================================
     // Events
@@ -146,6 +153,10 @@ contract MetaPool is Ownable, ReentrancyGuard, Pausable {
     // C1 Adapter: 외부 dispute resolver (MetaStake operator majority vote)
     event DisputeResolverUpdated(address indexed oldResolver, address indexed newResolver);
 
+    // C5 Adapter: MetaStake FeeDistributor로 수수료 라우팅 (veMETA 분배)
+    event FeeDistributorUpdated(address indexed oldDistributor, address indexed newDistributor);
+    event FeesRouted(address indexed distributor, uint256 amount);
+
     // Referral Events
     event ReferrerSet(address indexed user, address indexed referrer);
     event ReferralRewardEarned(address indexed user, address indexed referrer, uint256 amount);
@@ -181,6 +192,9 @@ contract MetaPool is Ownable, ReentrancyGuard, Pausable {
 
     // C1 Adapter (MetaPoolDisputeResolver) — set이면 owner 외에 이 주소도 이의/재심 처리 가능
     address public disputeResolver;
+
+    // C5 Adapter — set이면 routeFees()로 accumulatedFees를 이 FeeDistributor로 보낼 수 있음
+    address public feeDistributor;
 
     // ============================================================
     // Constructor
@@ -526,6 +540,31 @@ contract MetaPool is Ownable, ReentrancyGuard, Pausable {
         if (!success) revert TransferFailed();
 
         emit FeesWithdrawn(owner(), amount);
+    }
+
+    // ============================================================
+    // C5 Adapter: 수수료 → MetaStake FeeDistributor (veMETA 분배)
+    // ============================================================
+
+    /// @notice 수수료를 라우팅할 MetaStake FeeDistributor 주소 설정 (address(0)이면 비활성)
+    function setFeeDistributor(address _feeDistributor) external onlyOwner {
+        emit FeeDistributorUpdated(feeDistributor, _feeDistributor);
+        feeDistributor = _feeDistributor;
+    }
+
+    /// @notice 누적 수수료를 FeeDistributor로 전송 → veMETA 스테이커에게 분배.
+    ///         permissionless (자금은 owner가 설정한 FeeDistributor로만 흐르므로 keeper 자동화 가능).
+    ///         owner가 직접 회수하려면 withdrawFees()를 쓴다.
+    function routeFees() external nonReentrant {
+        if (feeDistributor == address(0)) revert FeeDistributorNotSet();
+        uint256 amount = accumulatedFees;
+        if (amount == 0) revert NoFeesToRoute();
+
+        // CEI 패턴
+        accumulatedFees = 0;
+        IFeeDistributor(feeDistributor).depositFee{value: amount}();
+
+        emit FeesRouted(feeDistributor, amount);
     }
 
     // ============================================================
