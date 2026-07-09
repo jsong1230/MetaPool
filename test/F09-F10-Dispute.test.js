@@ -510,14 +510,15 @@ describe("MetaPool - F-09/F-10 이의제기 기간 & 이의제기", function () 
         .withArgs(marketId, user1.address, false, 0n);
     });
 
-    it("TC-28: 비관리자 resolveDispute 호출 시 OwnableUnauthorizedAccount revert", async function () {
+    it("TC-28: 비인가자 resolveDispute 호출 시 NotAuthorizedResolver revert", async function () {
       const { metaPool, user1, user2, marketId } = await networkHelpers.loadFixture(resolvedMarketFixture);
 
       await metaPool.connect(user1).submitDispute(marketId, { value: DISPUTE_STAKE });
 
+      // C1 v2: onlyOwner → onlyResolver (owner 또는 등록된 disputeResolver만 허용)
       await expect(
         metaPool.connect(user2).resolveDispute(marketId, user1.address, true)
-      ).to.be.revertedWithCustomError(metaPool, "OwnableUnauthorizedAccount")
+      ).to.be.revertedWithCustomError(metaPool, "NotAuthorizedResolver")
         .withArgs(user2.address);
     });
 
@@ -614,15 +615,16 @@ describe("MetaPool - F-09/F-10 이의제기 기간 & 이의제기", function () 
       expect(feesAfter).to.equal(feesBefore);
     });
 
-    it("TC-36: 비관리자 resolveReview 시 OwnableUnauthorizedAccount revert", async function () {
+    it("TC-36: 비인가자 resolveReview 시 NotAuthorizedResolver revert", async function () {
       const { metaPool, bettors, marketId } =
         await networkHelpers.loadFixture(manyBettorsFixture);
 
       await metaPool.connect(bettors[0]).submitDispute(marketId, { value: DISPUTE_STAKE });
 
+      // C1 v2: onlyOwner → onlyResolver (owner 또는 등록된 disputeResolver만 허용)
       await expect(
         metaPool.connect(bettors[1]).resolveReview(marketId, 2)
-      ).to.be.revertedWithCustomError(metaPool, "OwnableUnauthorizedAccount")
+      ).to.be.revertedWithCustomError(metaPool, "NotAuthorizedResolver")
         .withArgs(bettors[1].address);
     });
 

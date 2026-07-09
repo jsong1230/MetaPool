@@ -102,6 +102,7 @@ contract MetaPool is Ownable, ReentrancyGuard, Pausable {
     error MarketNotUnderReview(uint256 marketId);
     error DisputeNotFound(uint256 marketId, address user);
     error DisputeAlreadyResolved(uint256 marketId, address user);
+    error NotAuthorizedResolver(address caller);
 
     // ============================================================
     // Events
@@ -142,6 +143,9 @@ contract MetaPool is Ownable, ReentrancyGuard, Pausable {
     event DisputeResolved(uint256 indexed marketId, address indexed disputant, bool accepted, uint256 stakeReturned);
     event MarketReviewTriggered(uint256 indexed marketId, uint256 disputeCount, uint256 totalBettors);
 
+    // C1 Adapter: 외부 dispute resolver (MetaStake operator majority vote)
+    event DisputeResolverUpdated(address indexed oldResolver, address indexed newResolver);
+
     // Referral Events
     event ReferrerSet(address indexed user, address indexed referrer);
     event ReferralRewardEarned(address indexed user, address indexed referrer, uint256 amount);
@@ -175,6 +179,9 @@ contract MetaPool is Ownable, ReentrancyGuard, Pausable {
     uint256 public referralRewardAmount = 500 ether;      // 500 META per side
     uint256 public referralPool;                          // owner-funded reward pool
 
+    // C1 Adapter (MetaPoolDisputeResolver) — set이면 owner 외에 이 주소도 이의/재심 처리 가능
+    address public disputeResolver;
+
     // ============================================================
     // Constructor
     // ============================================================
@@ -192,6 +199,24 @@ contract MetaPool is Ownable, ReentrancyGuard, Pausable {
         minBet = _minBet;
         maxBet = _maxBet;
         platformFeeRate = _platformFeeRate;
+    }
+
+    // ============================================================
+    // C1 Adapter: Dispute Resolver 권한
+    // ============================================================
+
+    /// @notice owner 또는 등록된 disputeResolver(어댑터 컨트랙트)만 허용
+    modifier onlyResolver() {
+        if (msg.sender != owner() && msg.sender != disputeResolver) {
+            revert NotAuthorizedResolver(msg.sender);
+        }
+        _;
+    }
+
+    /// @notice 이의/재심 처리를 위임할 어댑터 컨트랙트 주소 설정 (address(0)이면 owner 전용)
+    function setDisputeResolver(address _resolver) external onlyOwner {
+        emit DisputeResolverUpdated(disputeResolver, _resolver);
+        disputeResolver = _resolver;
     }
 
     // ============================================================
@@ -657,7 +682,7 @@ contract MetaPool is Ownable, ReentrancyGuard, Pausable {
         uint256 _marketId,
         address _disputant,
         bool _accepted
-    ) external onlyOwner nonReentrant {
+    ) external onlyResolver nonReentrant {
         // 마켓 존재 검증
         if (markets[_marketId].id == 0) revert MarketNotFound(_marketId);
 
@@ -696,7 +721,7 @@ contract MetaPool is Ownable, ReentrancyGuard, Pausable {
     function resolveReview(
         uint256 _marketId,
         MarketOutcome _newOutcome
-    ) external onlyOwner {
+    ) external onlyResolver {
         Market storage market = markets[_marketId];
 
         // 마켓 존재 검증

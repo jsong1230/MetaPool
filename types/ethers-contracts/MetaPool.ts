@@ -23,9 +23,9 @@ export declare namespace MetaPool {
     }
 
   export interface MetaPoolInterface extends Interface {
-    getFunction(nameOrSignature: "DISPUTE_PERIOD" | "DISPUTE_STAKE" | "DISPUTE_THRESHOLD" | "FEE_DENOMINATOR" | "accumulatedFees" | "bets" | "calculateWinnings" | "claimReferralReward" | "claimRefund" | "claimWinnings" | "createMarket" | "disputes" | "fundReferralPool" | "getDispute" | "getMarket" | "getOdds" | "getUserBet" | "hasPlacedBet" | "marketCount" | "markets" | "maxBet" | "minBet" | "owner" | "pause" | "pauseMarket" | "paused" | "placeBet" | "platformFeeRate" | "referralPool" | "referralRewardAmount" | "referralRewards" | "referrers" | "renounceOwnership" | "resolveDispute" | "resolveMarket" | "resolveReview" | "resumeMarket" | "setMaxBet" | "setMinBet" | "setPlatformFeeRate" | "setReferralRewardAmount" | "setReferrer" | "submitDispute" | "transferOwnership" | "unpause" | "withdrawFees"): FunctionFragment;
+    getFunction(nameOrSignature: "DISPUTE_PERIOD" | "DISPUTE_STAKE" | "DISPUTE_THRESHOLD" | "FEE_DENOMINATOR" | "accumulatedFees" | "bets" | "calculateWinnings" | "claimReferralReward" | "claimRefund" | "claimWinnings" | "createMarket" | "disputeResolver" | "disputes" | "fundReferralPool" | "getDispute" | "getMarket" | "getOdds" | "getUserBet" | "hasPlacedBet" | "marketCount" | "markets" | "maxBet" | "minBet" | "owner" | "pause" | "pauseMarket" | "paused" | "placeBet" | "platformFeeRate" | "referralPool" | "referralRewardAmount" | "referralRewards" | "referrers" | "renounceOwnership" | "resolveDispute" | "resolveMarket" | "resolveReview" | "resumeMarket" | "setDisputeResolver" | "setMaxBet" | "setMinBet" | "setPlatformFeeRate" | "setReferralRewardAmount" | "setReferrer" | "submitDispute" | "transferOwnership" | "unpause" | "withdrawFees"): FunctionFragment;
 
-    getEvent(nameOrSignatureOrTopic: "BetPlaced" | "DisputeResolved" | "DisputeSubmitted" | "FeesWithdrawn" | "MarketCreated" | "MarketPaused" | "MarketResolved" | "MarketResumed" | "MarketReviewTriggered" | "OwnershipTransferred" | "Paused" | "ReferralPoolFunded" | "ReferralRewardClaimed" | "ReferralRewardEarned" | "ReferrerSet" | "RefundClaimed" | "SettingsUpdated" | "Unpaused" | "WinningsClaimed"): EventFragment;
+    getEvent(nameOrSignatureOrTopic: "BetPlaced" | "DisputeResolved" | "DisputeResolverUpdated" | "DisputeSubmitted" | "FeesWithdrawn" | "MarketCreated" | "MarketPaused" | "MarketResolved" | "MarketResumed" | "MarketReviewTriggered" | "OwnershipTransferred" | "Paused" | "ReferralPoolFunded" | "ReferralRewardClaimed" | "ReferralRewardEarned" | "ReferrerSet" | "RefundClaimed" | "SettingsUpdated" | "Unpaused" | "WinningsClaimed"): EventFragment;
 
     encodeFunctionData(functionFragment: 'DISPUTE_PERIOD', values?: undefined): string;
 encodeFunctionData(functionFragment: 'DISPUTE_STAKE', values?: undefined): string;
@@ -38,6 +38,7 @@ encodeFunctionData(functionFragment: 'claimReferralReward', values?: undefined):
 encodeFunctionData(functionFragment: 'claimRefund', values: [BigNumberish]): string;
 encodeFunctionData(functionFragment: 'claimWinnings', values: [BigNumberish]): string;
 encodeFunctionData(functionFragment: 'createMarket', values: [string, string, string, string, BigNumberish, BigNumberish, BigNumberish]): string;
+encodeFunctionData(functionFragment: 'disputeResolver', values?: undefined): string;
 encodeFunctionData(functionFragment: 'disputes', values: [BigNumberish, AddressLike]): string;
 encodeFunctionData(functionFragment: 'fundReferralPool', values?: undefined): string;
 encodeFunctionData(functionFragment: 'getDispute', values: [BigNumberish, AddressLike]): string;
@@ -64,6 +65,7 @@ encodeFunctionData(functionFragment: 'resolveDispute', values: [BigNumberish, Ad
 encodeFunctionData(functionFragment: 'resolveMarket', values: [BigNumberish, BigNumberish]): string;
 encodeFunctionData(functionFragment: 'resolveReview', values: [BigNumberish, BigNumberish]): string;
 encodeFunctionData(functionFragment: 'resumeMarket', values: [BigNumberish, BigNumberish, BigNumberish]): string;
+encodeFunctionData(functionFragment: 'setDisputeResolver', values: [AddressLike]): string;
 encodeFunctionData(functionFragment: 'setMaxBet', values: [BigNumberish]): string;
 encodeFunctionData(functionFragment: 'setMinBet', values: [BigNumberish]): string;
 encodeFunctionData(functionFragment: 'setPlatformFeeRate', values: [BigNumberish]): string;
@@ -85,6 +87,7 @@ decodeFunctionResult(functionFragment: 'claimReferralReward', data: BytesLike): 
 decodeFunctionResult(functionFragment: 'claimRefund', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'claimWinnings', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'createMarket', data: BytesLike): Result;
+decodeFunctionResult(functionFragment: 'disputeResolver', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'disputes', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'fundReferralPool', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'getDispute', data: BytesLike): Result;
@@ -111,6 +114,7 @@ decodeFunctionResult(functionFragment: 'resolveDispute', data: BytesLike): Resul
 decodeFunctionResult(functionFragment: 'resolveMarket', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'resolveReview', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'resumeMarket', data: BytesLike): Result;
+decodeFunctionResult(functionFragment: 'setDisputeResolver', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'setMaxBet', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'setMinBet', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'setPlatformFeeRate', data: BytesLike): Result;
@@ -139,6 +143,18 @@ decodeFunctionResult(functionFragment: 'withdrawFees', data: BytesLike): Result;
       export type InputTuple = [marketId: BigNumberish, disputant: AddressLike, accepted: boolean, stakeReturned: BigNumberish];
       export type OutputTuple = [marketId: bigint, disputant: string, accepted: boolean, stakeReturned: bigint];
       export interface OutputObject {marketId: bigint, disputant: string, accepted: boolean, stakeReturned: bigint };
+      export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>
+      export type Filter = TypedDeferredTopicFilter<Event>
+      export type Log = TypedEventLog<Event>
+      export type LogDescription = TypedLogDescription<Event>
+    }
+
+  
+
+    export namespace DisputeResolverUpdatedEvent {
+      export type InputTuple = [oldResolver: AddressLike, newResolver: AddressLike];
+      export type OutputTuple = [oldResolver: string, newResolver: string];
+      export interface OutputObject {oldResolver: string, newResolver: string };
       export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>
       export type Filter = TypedDeferredTopicFilter<Event>
       export type Log = TypedEventLog<Event>
@@ -473,6 +489,14 @@ decodeFunctionResult(functionFragment: 'withdrawFees', data: BytesLike): Result;
     
 
     
+    disputeResolver: TypedContractMethod<
+      [],
+      [string],
+      'view'
+    >
+    
+
+    
     disputes: TypedContractMethod<
       [arg0: BigNumberish, arg1: AddressLike, ],
       [[bigint, boolean, boolean] & {stake: bigint, resolved: boolean, accepted: boolean }],
@@ -681,6 +705,14 @@ decodeFunctionResult(functionFragment: 'withdrawFees', data: BytesLike): Result;
     
 
     
+    setDisputeResolver: TypedContractMethod<
+      [_resolver: AddressLike, ],
+      [void],
+      'nonpayable'
+    >
+    
+
+    
     setMaxBet: TypedContractMethod<
       [_maxBet: BigNumberish, ],
       [void],
@@ -809,6 +841,11 @@ getFunction(nameOrSignature: 'createMarket'): TypedContractMethod<
       [_question: string, _questionKo: string, _questionZh: string, _questionJa: string, _category: BigNumberish, _bettingDeadline: BigNumberish, _resolutionDeadline: BigNumberish, ],
       [bigint],
       'nonpayable'
+    >;
+getFunction(nameOrSignature: 'disputeResolver'): TypedContractMethod<
+      [],
+      [string],
+      'view'
     >;
 getFunction(nameOrSignature: 'disputes'): TypedContractMethod<
       [arg0: BigNumberish, arg1: AddressLike, ],
@@ -940,6 +977,11 @@ getFunction(nameOrSignature: 'resumeMarket'): TypedContractMethod<
       [void],
       'nonpayable'
     >;
+getFunction(nameOrSignature: 'setDisputeResolver'): TypedContractMethod<
+      [_resolver: AddressLike, ],
+      [void],
+      'nonpayable'
+    >;
 getFunction(nameOrSignature: 'setMaxBet'): TypedContractMethod<
       [_maxBet: BigNumberish, ],
       [void],
@@ -988,6 +1030,7 @@ getFunction(nameOrSignature: 'withdrawFees'): TypedContractMethod<
 
     getEvent(key: 'BetPlaced'): TypedContractEvent<BetPlacedEvent.InputTuple, BetPlacedEvent.OutputTuple, BetPlacedEvent.OutputObject>;
 getEvent(key: 'DisputeResolved'): TypedContractEvent<DisputeResolvedEvent.InputTuple, DisputeResolvedEvent.OutputTuple, DisputeResolvedEvent.OutputObject>;
+getEvent(key: 'DisputeResolverUpdated'): TypedContractEvent<DisputeResolverUpdatedEvent.InputTuple, DisputeResolverUpdatedEvent.OutputTuple, DisputeResolverUpdatedEvent.OutputObject>;
 getEvent(key: 'DisputeSubmitted'): TypedContractEvent<DisputeSubmittedEvent.InputTuple, DisputeSubmittedEvent.OutputTuple, DisputeSubmittedEvent.OutputObject>;
 getEvent(key: 'FeesWithdrawn'): TypedContractEvent<FeesWithdrawnEvent.InputTuple, FeesWithdrawnEvent.OutputTuple, FeesWithdrawnEvent.OutputObject>;
 getEvent(key: 'MarketCreated'): TypedContractEvent<MarketCreatedEvent.InputTuple, MarketCreatedEvent.OutputTuple, MarketCreatedEvent.OutputObject>;
@@ -1014,6 +1057,10 @@ getEvent(key: 'WinningsClaimed'): TypedContractEvent<WinningsClaimedEvent.InputT
 
       'DisputeResolved(uint256,address,bool,uint256)': TypedContractEvent<DisputeResolvedEvent.InputTuple, DisputeResolvedEvent.OutputTuple, DisputeResolvedEvent.OutputObject>;
       DisputeResolved: TypedContractEvent<DisputeResolvedEvent.InputTuple, DisputeResolvedEvent.OutputTuple, DisputeResolvedEvent.OutputObject>;
+    
+
+      'DisputeResolverUpdated(address,address)': TypedContractEvent<DisputeResolverUpdatedEvent.InputTuple, DisputeResolverUpdatedEvent.OutputTuple, DisputeResolverUpdatedEvent.OutputObject>;
+      DisputeResolverUpdated: TypedContractEvent<DisputeResolverUpdatedEvent.InputTuple, DisputeResolverUpdatedEvent.OutputTuple, DisputeResolverUpdatedEvent.OutputObject>;
     
 
       'DisputeSubmitted(uint256,address,uint256,uint256)': TypedContractEvent<DisputeSubmittedEvent.InputTuple, DisputeSubmittedEvent.OutputTuple, DisputeSubmittedEvent.OutputObject>;

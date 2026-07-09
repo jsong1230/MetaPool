@@ -11,12 +11,28 @@ import * as Contracts from "./index.js";
 declare module "@nomicfoundation/hardhat-ethers/types" {
   interface HardhatEthersHelpers extends HardhatEthersHelpersBase {
   getContractFactory(name: 'MetaPool', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.MetaPool__factory>
+getContractFactory(name: 'IMetaPool', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.IMetaPool__factory>
+getContractFactory(name: 'IOperatorRegistry', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.IOperatorRegistry__factory>
+getContractFactory(name: 'MetaPoolDisputeResolver', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.MetaPoolDisputeResolver__factory>
+getContractFactory(name: 'MockOperatorRegistry', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.MockOperatorRegistry__factory>
 
   getContractAt(name: 'MetaPool', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.MetaPool>
+getContractAt(name: 'IMetaPool', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.IMetaPool>
+getContractAt(name: 'IOperatorRegistry', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.IOperatorRegistry>
+getContractAt(name: 'MetaPoolDisputeResolver', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.MetaPoolDisputeResolver>
+getContractAt(name: 'MockOperatorRegistry', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.MockOperatorRegistry>
 
   deployContract(name: 'MetaPool', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.MetaPool>
+deployContract(name: 'IMetaPool', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.IMetaPool>
+deployContract(name: 'IOperatorRegistry', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.IOperatorRegistry>
+deployContract(name: 'MetaPoolDisputeResolver', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.MetaPoolDisputeResolver>
+deployContract(name: 'MockOperatorRegistry', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.MockOperatorRegistry>
 
   deployContract(name: 'MetaPool', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.MetaPool>
+deployContract(name: 'IMetaPool', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.IMetaPool>
+deployContract(name: 'IOperatorRegistry', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.IOperatorRegistry>
+deployContract(name: 'MetaPoolDisputeResolver', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.MetaPoolDisputeResolver>
+deployContract(name: 'MockOperatorRegistry', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.MockOperatorRegistry>
 
     // default types
     getContractFactory(
