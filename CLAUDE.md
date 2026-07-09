@@ -35,22 +35,30 @@ Metadium 블록체인 기반 META 토큰 Binary(Yes/No) 예측 마켓 플랫폼
 5. http://localhost:5173 접속 (로컬 모드에서는 MetaMask 없이 Hardhat Account #0으로 자동 서명)
 
 ## 테스트넷 배포
-- 서버: jsong-demo-01 (10.150.254.110)
+- 서버: dev-pc-01 (10.150.255.48, user `ubuntu`, 키 aws-jsong-nopass.pem, 메타 5+1 통합 호스팅)
 - 네트워크: Metadium Testnet (Chain ID: 12)
-- 컨트랙트: `0x69C373702BcB7C4F48ee4D828CD9f90b413c2a16` (referral 포함)
+- MetaPool (v2, referral + C1 dispute resolver): `0x8dc00E4eFf93f40D2A056224d5f59e316FDaC571`
+- C1 어댑터 (MetaPoolDisputeResolver): `0xD9cAd738A0adC781BA4fE5E5d6fE817Fd6397dc3`
+- MetaStake OperatorRegistry (dispute-resolver serviceId=1): `0x19F412E4FB526b3eb89e0bd62A06D2184D915B89`
 - Owner: `0x6FDd10fBa4887d9c523345D33B76d2c84073eC70`
-- 프론트엔드: http://10.150.254.110:3200 (pm2 `metapool`, port 3200)
-- 백엔드 API: http://10.150.254.110:3201 (pm2 `metapool-api`, port 3201)
-- 마켓 19개 생성 (Crypto 5, Sports 4, Weather 2, Politics 3, Entertainment 3, Other 2)
+- 프론트엔드: https://metapool-testnet.metadium.club (pm2 `metapool`, `npx serve -s dist -l 3201`)
+- 백엔드 API: https://api.metapool-testnet.metadium.club (pm2 `metapool-api`, port 3202)
+- 마켓 16개 생성 (Crypto 4, Sports 3, Weather 2, Politics 2, Entertainment 3, Other 2)
+- 구버전(v1 폐기): MetaPool `0x69C373702BcB7C4F48ee4D828CD9f90b413c2a16`
 
 ## 테스트넷 배포 흐름
-1. `ssh -i ~/.ssh/aws-jsong-nopass.pem jsong@10.150.254.110`
+- ⚠️ Hardhat 3는 **Node 22+** 필요. 서버 시스템 node는 20(nodesource)이므로 nvm으로 22 사용:
+  `export NVM_DIR="$HOME/.nvm"; . "$NVM_DIR/nvm.sh"; nvm use 22`
+  (peer deps 누락 시: `npm install --no-save --legacy-peer-deps` 로 toolbox peer 설치)
+1. `ssh -i ~/.ssh/aws-jsong-nopass.pem ubuntu@10.150.255.48`
 2. `cd ~/MetaPool && git pull`
-3. `source ~/.nvm/nvm.sh && npx hardhat compile`
-4. `npx hardhat run scripts/deploy-testnet.js --network metadiumTestnet`
-5. `frontend/.env.production` + `backend/.env`의 `CONTRACT_ADDRESS` 업데이트
-6. `cd frontend && npm run build && pm2 restart metapool`
-7. `cd ../backend && npm install && pm2 restart metapool-api`
+3. `nvm use 22 && npx hardhat compile`
+4. `set -a; . backend/.env; set +a` (배포키 로드) → `npx hardhat run scripts/deploy-testnet.js --network metadiumTestnet`
+5. C1 어댑터: `METAPOOL_ADDRESS=0x... OPERATOR_REGISTRY_ADDRESS=0x19F4... DISPUTE_SERVICE_ID=1 npx hardhat run scripts/deploy-dispute-resolver.js --network metadiumTestnet`
+6. `CONTRACT_ADDRESS=0x... npx hardhat run scripts/create-bulk-markets.js --network metadiumTestnet`
+7. `frontend/.env.production`(VITE_CONTRACT_ADDRESS) + `backend/.env`(CONTRACT_ADDRESS) 업데이트
+8. `cd frontend && npm run build && pm2 restart metapool`
+9. `pm2 restart metapool-api --update-env`
 
 ## 백엔드 API
 - `GET /api/health` — 서버 상태
