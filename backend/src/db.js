@@ -44,6 +44,13 @@ db.exec(`
     created_at  TEXT NOT NULL DEFAULT (datetime('now'))
   );
 
+  -- Key-Value 저장소 (이벤트 폴링 커서 등)
+  CREATE TABLE IF NOT EXISTS kv_store (
+    key        TEXT PRIMARY KEY,
+    value      TEXT NOT NULL,
+    updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+  );
+
   -- Leaderboard 캐시 (이벤트 인덱서)
   CREATE TABLE IF NOT EXISTS leaderboard (
     wallet_address  TEXT PRIMARY KEY,

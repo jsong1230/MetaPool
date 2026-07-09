@@ -126,35 +126,92 @@ app.get('/api/oracle/logs', (req, res) => {
   res.json(rows);
 });
 
-// ── Contract Event Listeners ──
+// ── Contract Event Polling (getLogs 기반) ──
+//
+// ethers `.on()` 은 내부적으로 eth_newFilter + eth_getFilterChanges 를 사용하는데,
+// Metadium 공개 RPC 는 필터를 짧게 만료시켜 "filter not found" 에러가 반복 발생한다.
+// (pm2 metapool-api 로그 급증 원인) → getLogs(queryFilter) 폴링으로 근본 대체.
+
+const POLL_INTERVAL_MS = Number(process.env.EVENT_POLL_INTERVAL_MS) || 15000;
+const MAX_BLOCK_RANGE = Number(process.env.EVENT_MAX_BLOCK_RANGE) || 2000; // getLogs 범위 제한
+const CURSOR_KEY = 'events_last_block';
+
+const getCursor = () => {
+  const row = db.prepare('SELECT value FROM kv_store WHERE key = ?').get(CURSOR_KEY);
+  return row ? Number(row.value) : null;
+};
+const setCursor = (block) => {
+  db.prepare(`
+    INSERT INTO kv_store (key, value, updated_at) VALUES (?, ?, datetime('now'))
+    ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at
+  `).run(CURSOR_KEY, String(block));
+};
+
+async function handleMarketCreated(marketId, question, category, bettingDeadline) {
+  console.log(`[Events] MarketCreated #${marketId}`);
+  const cats = ['Crypto', 'Sports', 'Weather', 'Politics', 'Entertainment', 'Other'];
+  await telegram.notifyNewMarket({
+    id: Number(marketId),
+    question,
+    category: cats[Number(category)] || 'Other',
+    bettingDeadline: Number(bettingDeadline),
+  });
+}
+
+async function handleMarketResolved(marketId, outcome) {
+  console.log(`[Events] MarketResolved #${marketId} outcome=${outcome}`);
+  try {
+    const market = await readContract.getMarket(marketId);
+    await telegram.notifyResolution(Number(marketId), Number(outcome), market.question);
+  } catch (err) {
+    console.error('[Events] MarketResolved notify error:', err.message);
+  }
+}
+
+let polling = false;
+async function pollEvents() {
+  if (polling) return; // 이전 폴링이 아직 진행 중이면 중첩 방지
+  polling = true;
+  try {
+    const latest = await provider.getBlockNumber();
+    let from = getCursor();
+    if (from == null) {
+      // 최초 실행: 과거 이벤트 재알림을 피하기 위해 현재 블록부터 시작
+      setCursor(latest);
+      return;
+    }
+    from += 1;
+    if (from > latest) return;
+
+    // 큰 범위는 청크로 나눠 getLogs 제한 회피
+    for (let start = from; start <= latest; start += MAX_BLOCK_RANGE) {
+      const end = Math.min(start + MAX_BLOCK_RANGE - 1, latest);
+
+      const created = await readContract.queryFilter('MarketCreated', start, end);
+      for (const ev of created) {
+        const { marketId, question, category, bettingDeadline } = ev.args;
+        await handleMarketCreated(marketId, question, category, bettingDeadline);
+      }
+
+      const resolved = await readContract.queryFilter('MarketResolved', start, end);
+      for (const ev of resolved) {
+        const { marketId, outcome } = ev.args;
+        await handleMarketResolved(marketId, outcome);
+      }
+
+      setCursor(end); // 청크 단위로 커서 전진 → 중간 실패 시 재처리 최소화
+    }
+  } catch (err) {
+    console.error('[Events] poll error:', err.message);
+  } finally {
+    polling = false;
+  }
+}
 
 function startEventListeners() {
-  console.log('[Events] Starting contract event listeners...');
-
-  // 새 마켓 생성 → Telegram 알림
-  readContract.on('MarketCreated', async (marketId, question, category, bettingDeadline) => {
-    console.log(`[Events] MarketCreated #${marketId}`);
-    const cats = ['Crypto', 'Sports', 'Weather', 'Politics', 'Entertainment', 'Other'];
-    await telegram.notifyNewMarket({
-      id: Number(marketId),
-      question,
-      category: cats[Number(category)] || 'Other',
-      bettingDeadline: Number(bettingDeadline),
-    });
-  });
-
-  // 마켓 결과 확정 → Telegram 알림
-  readContract.on('MarketResolved', async (marketId, outcome) => {
-    console.log(`[Events] MarketResolved #${marketId} outcome=${outcome}`);
-    try {
-      const market = await readContract.getMarket(marketId);
-      await telegram.notifyResolution(Number(marketId), Number(outcome), market.question);
-    } catch (err) {
-      console.error('[Events] MarketResolved notify error:', err.message);
-    }
-  });
-
-  console.log('[Events] Listening for MarketCreated, MarketResolved');
+  console.log(`[Events] Polling MarketCreated/MarketResolved every ${POLL_INTERVAL_MS}ms (getLogs)`);
+  pollEvents();
+  setInterval(pollEvents, POLL_INTERVAL_MS);
 }
 
 // ── Oracle Cron (매일 KST 09:00 = UTC 00:00) ──
